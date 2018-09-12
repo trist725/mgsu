@@ -6,7 +6,7 @@ import (
 
 	"github.com/astaxie/beego/logs"
 
-	"gitee.com/nggs/util"
+	"github.com/trist725/mgsu/util"
 )
 
 const (
