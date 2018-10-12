@@ -11,7 +11,7 @@ package model
 import "fmt"
 import "encoding/json"
 import "sync"
-import "github.com/name5566/leaf/db/mongodb"
+import "github.com/trist725/myleaf/db/mongodb"
 import "gopkg.in/mgo.v2"
 
 var _ = fmt.Sprintf
