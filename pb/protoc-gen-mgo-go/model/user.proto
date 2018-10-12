@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package model;
+
+/// 用户数据
+//@collection
+message User {
+    /// 用户id
+    //@bson=_id
+    int64 ID = 1;
+    /// 帐号id
+    //@bson=accountid
+    int64 AccountID = 2;
+    /// 服务器ID
+    int32 ServerID = 3;
+    /// 名字
+    string Name = 4;
+    /// 性别
+    int32 Sex = 5;
+    /// 创建时刻
+    int64 CreateTime = 6;
+    /// 测试数组
+    repeated int32 Arr = 7;
+}

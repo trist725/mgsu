@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package enum;
+
+///性别枚举
+enum E_Sex {
+    E_Sex_ = 0;
+    //男性
+    E_Sex_Male = 1;
+    //女性
+    E_Sex_Female = 2;
+}
+
+///测试枚举
+//@enable_0
+enum E_Enable0 {
+    E_Enable0_ = 0;
+    E_Enable0_1 = 1;
+}
+
+message Msg {
+    //消息中的枚举
+    //测试
+    enum E_Error {
+        Msg_E_Error_ = 0;
+        //OK
+        //test
+        Msg_E_Error_OK = 1;
+    }
+    //消息中的枚举2
+    //@enable_0
+    enum E_Enable0 {
+        Msg_E_Enable0_ = 0;
+        //OK
+        Msg_E_Enable0_1 = 1;
+    }
+}
