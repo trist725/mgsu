@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package msg;
+
+enum E_Test {
+    E_Test_ = 0;
+    E_Test_OK = 1;
+}
+
+/// 连接关闭
+//@msg
+message S2C_Close {
+    /// 关闭代码
+    int32 Err = 1;
+}
+
+/// 注册帐号请求
+//@msg
+message C2S_Register {
+    /// 帐号名
+    string AccountName = 1;
+    /// 密码
+    string Passwrod = 2;
+}
+
+/// 注册帐号结果
+//@msg
+message S2C_Register {
+    /// 错误码
+    enum E_Error {
+        Error_ = 0;
+        /// 成功
+        OK = 1;
+        /// 无效帐号名
+        InvalidAccountName = 2;
+        /// 无效密码
+        InvalidPassword = 3;
+        /// 已存在
+        Exist = 4;
+    }
+    /// 错误码
+    E_Error Err = 1;
+    /// 帐号名
+    string AccountName = 2;
+    /// 密码
+    string Password = 3;
+    /// 注册返回的帐号状态
+    enum E_State {
+        State_ = 0;
+        /// 游客
+        Visitor = 1;
+        /// 注册
+        Register = 2;
+        /// 绑定
+        Bind = 3;
+    }
+    /// 状态
+    E_State State = 4;
+}
+
+/// 登录请求
+//@msg
+message C2S_Login {
+    /// 帐号名
+    string Account = 1;
+    /// 密码
+    string Password = 2;
+}
+
+/// 登录回复
+//@msg
+message S2C_Login {
+    /// 登录错误码枚举
+    enum E_Error {
+        S2C_Login_E_Error_ = 0;
+        /// 成功
+        S2C_Login_E_Error_OK = 1;
+        /// 非法帐号
+        S2C_Login_E_Error_InvalidAccount = 2;
+        /// 帐号不存在
+        S2C_Login_E_Error_NotExist = 3;
+        /// 非法密码
+        S2C_Login_E_Error_InvalidPassword = 4;
+        /// 已封号
+        S2C_Login_E_Error_Ban = 5;
+    }
+    /// 错误码
+    E_Error Err = 1;
+    /// 密钥
+    string Key = 2;
+    /// 服务器信息
+    message ServerInfo {
+        /// 服务器ID
+        int32 ID = 1;
+        /// 服务器地址 = ip+端口+path, 例如: ws://127.0.0.1:8080/region1
+        string Addr = 2;
+        /// 服务器名
+        string Name = 3;
+    }
+    /// 服务器列表
+    repeated ServerInfo Server = 3;
+    /// 上次登录服务器ID
+    int32 LastLoginServerID = 4;
+}
