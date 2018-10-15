@@ -1,0 +1,106 @@
+syntax="proto3";
+package msg;
+
+import "version.proto";
+
+/// 测试协议1
+//@msg
+message C2S_Ping {
+    /// 测试协议1字段1
+    string Content = 1;
+    /// 测试协议1字段2
+    double D = 2;
+    /// 测试协议1字段3
+    float F = 3;
+    /// 测试协议1字段4
+    int32 I32 = 4;
+    /// 测试协议1字段5
+    int64 I64 = 5;
+    /// 测试协议1字段6
+    uint32 Ui32 = 6;
+    /// 测试协议1字段7
+    uint64 Ui64 = 7;
+    /// 测试协议1字段8
+    bool B = 8;
+    /// 测试协议1字段9
+    bytes Bytes = 9;
+    /// 测试协议1字段10
+    VersionInfo Info = 10;
+    /// 测试协议1字段11
+    Version V = 11;
+    /// 测试协议1字段12
+    repeated VersionInfo Infos = 12;
+}
+
+/// 测试协议2
+//@msg
+message S2C_Pong {
+    /// 测试协议2字段1
+    string Content = 1;
+    /// 测试协议2字段2
+    double D = 2;
+    /// 测试协议2字段3
+    float F = 3;
+    /// 测试协议2字段4
+    int32 I32 = 4;
+    /// 测试协议2字段5
+    int64 I64 = 5;
+    /// 测试协议2字段6
+    uint32 Ui32 = 6;
+    /// 测试协议2字段7
+    uint64 Ui64 = 7;
+    /// 测试协议2字段8
+    bool B = 8;
+    /// 测试协议2字段9
+    bytes Bytes = 9;
+    /// 测试协议2字段10
+    VersionInfo Info = 10;
+    /// 测试协议1字段11
+    Version V = 11;
+    /// 测试协议1字段12
+    repeated VersionInfo Infos = 12;
+}
+
+/// 测试协议3
+//@msg
+message C2S_TestRepeated {
+    /// 测试协议3字段1
+    repeated string Content = 1;
+    /// 测试协议3字段2
+    repeated double D = 2;
+    /// 测试协议3字段3
+    repeated float F = 3;
+    /// 测试协议3字段4
+    repeated int32 I32 = 4;
+    /// 测试协议3字段5
+    repeated int64 I64 = 5;
+    /// 测试协议3字段6
+    repeated uint32 Ui32 = 6;
+    /// 测试协议3字段7
+    repeated uint64 Ui64 = 7;
+    /// 测试协议3字段8
+    repeated bool B = 8;
+    /// 测试协议3字段9
+    repeated bytes Bytes = 9;
+    /// 测试协议3字段10
+    repeated VersionInfo Infos = 10;
+    /// 测试协议3字段11
+    repeated Version Vs = 11;
+}
+
+/// 物品信息
+message item {
+    /// 唯一id
+    string Uid = 1;
+    /// 堆叠数量
+    int32 Stack = 2;
+    /// 创建时刻
+    int64 CreateTime = 3;
+}
+
+/// 下发物品信息
+//@msg
+message S2C_Items {
+    item Item = 1;
+    repeated item Items = 2;
+}
