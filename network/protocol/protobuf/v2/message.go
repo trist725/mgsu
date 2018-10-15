@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	p "gitee.com/nggs/network/protocol"
+	p "github.com/trist725/mgsu/network/protocol"
 )
 
 type MessageID = string

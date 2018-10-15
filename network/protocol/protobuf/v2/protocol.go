@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	p "gitee.com/nggs/network/protocol"
+	p "github.com/trist725/mgsu/network/protocol"
 )
 
 const (

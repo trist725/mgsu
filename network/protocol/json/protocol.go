@@ -3,8 +3,8 @@ package protocol_json
 import (
 	"fmt"
 
-	p "gitee.com/nggs/network/protocol"
 	jsoniter "github.com/json-iterator/go"
+	p "github.com/trist725/mgsu/network/protocol"
 )
 
 const (
