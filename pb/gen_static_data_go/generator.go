@@ -10,8 +10,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/trist725/mgsu/util"
 	"github.com/tealeg/xlsx"
+	"github.com/trist725/mgsu/util"
 )
 
 type fieldMeta struct {
@@ -164,7 +164,7 @@ import "path/filepath"
 
 	i += `
 	import "github.com/tealeg/xlsx"
-	import "gitee.com/nggs/util"
+	import "github.com/trist725/mgsu/util"
 `
 
 	return i

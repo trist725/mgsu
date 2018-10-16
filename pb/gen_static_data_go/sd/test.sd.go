@@ -9,7 +9,7 @@ import "log"
 import "path/filepath"
 import "time"
 import "github.com/tealeg/xlsx"
-import "gitee.com/nggs/util"
+import "github.com/trist725/mgsu/util"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // TODO 添加扩展import代码
