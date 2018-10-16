@@ -98,7 +98,7 @@ func (sd Test2) Clone() *Test2 {
 }
 
 func (sd *Test2) load(row *xlsx.Row) error {
-	return util.DeserializeStructFromExcelRow(sd, row)
+	return util.DeserializeStructFromXlsxRow(sd, row)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////

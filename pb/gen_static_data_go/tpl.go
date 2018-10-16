@@ -49,7 +49,7 @@ func (sd {{.Name}}) Clone() *{{.Name}} {
 }
 
 func (sd *{{.Name}}) load(row *xlsx.Row) error {
-	return util.DeserializeStructFromExcelRow(sd, row)
+	return util.DeserializeStructFromXlsxRow(sd, row)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
