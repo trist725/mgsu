@@ -171,7 +171,7 @@ func (m *message) NewBody() string {
 		switch *f.dp.Type {
 		case descriptor.FieldDescriptorProto_TYPE_MESSAGE:
 			if !pbplugin.IsRepeated(f.dp) {
-				src += fmt.Sprintf("%s:New%s(),\n", f.CamelCaseName, pbplugin.GoTypeToName(typeName))
+				src += fmt.Sprintf("%s:New_%s(),\n", f.CamelCaseName, pbplugin.GoTypeToName(typeName))
 			} else {
 				src += fmt.Sprintf("%s:%s{},\n", f.CamelCaseName, typeName)
 			}
