@@ -43,6 +43,7 @@ func GenRandomString(size int) string {
 var dice = rand.New(rand.NewSource(time.Now().UnixNano()))
 var diceLock = &sync.Mutex{}
 
+// 注意一下RandomXX函数族得到的是 [min, max)
 func RandomTimeDuration(min time.Duration, max time.Duration) time.Duration {
 	if min == max {
 		return min
