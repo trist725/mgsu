@@ -101,11 +101,11 @@ func RandomInt64(min int64, max int64) int64 {
 }
 
 func HitProbability(prob uint8) bool {
-	if prob > 100 {
+	if prob > 100 || prob == 0 {
 		return false
 	}
 
-	if prob < uint8(RandomInt(0, 100)) {
+	if prob >= uint8(RandomInt(1, 100)) {
 		return true
 	}
 
