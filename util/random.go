@@ -105,7 +105,7 @@ func HitProbability(prob uint8) bool {
 		return false
 	}
 
-	if prob >= uint8(RandomInt(1, 100)) {
+	if prob >= uint8(RandomInt(1, int(100+1))) {
 		return true
 	}
 
