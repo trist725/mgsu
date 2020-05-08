@@ -1,0 +1,10 @@
+syntax="proto3";
+
+package msg;
+
+/// 协议版本枚举
+enum Version {
+    Version_ = 0;
+    /// 协议版本
+    Num = 1;
+}

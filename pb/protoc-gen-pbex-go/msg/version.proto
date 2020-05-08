@@ -1,0 +1,25 @@
+syntax="proto3";
+
+package msg;
+
+/// 版本信息
+message VersionInfo {
+    /// 测试协议5字段1
+    string Content = 1;
+    /// 测试协议5字段2
+    double D = 2;
+    /// 测试协议5字段3
+    float F = 3;
+    /// 测试协议5字段4
+    int32 I32 = 4;
+    /// 测试协议5字段5
+    int64 I64 = 5;
+    /// 测试协议5字段6
+    uint32 Ui32 = 6;
+    /// 测试协议5字段7
+    uint64 Ui64 = 7;
+    /// 测试协议5字段8
+    bool B = 8;
+    /// 测试协议5字段9
+    bytes Bytes = 9;
+}
