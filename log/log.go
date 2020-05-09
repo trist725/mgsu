@@ -2,7 +2,6 @@ package log
 
 import (
 	"fmt"
-	l "log"
 
 	"github.com/astaxie/beego/logs"
 
@@ -42,7 +41,7 @@ func New(logDir string, logFileBaseName string) ILogger {
 
 	//logger.SetLogFuncCallDepth(3)
 
-	config := fmt.Sprintf(`{"filename":"%s/%s.log","level":%d,"maxlines":250000,"separate":["error"]}`,
+	config := fmt.Sprintf(`{"filename":"%s/%s.log","level":%d,"maxlines":50000,"separate":["error"]}`,
 		logDir, logFileBaseName, logs.LevelDebug)
 
 	logger.SetLogger("multifile", config)
@@ -50,50 +49,29 @@ func New(logDir string, logFileBaseName string) ILogger {
 	return logger
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-type ConsoleLogger struct {
-	level int
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+var logger = NewConsoleLogger()
+
+func SetLogger(l ILogger) {
+	logger = l
 }
 
-func NewConsoleLogger() (l ILogger) {
-	l = &ConsoleLogger{
-		level: logs.LevelDebug,
-	}
-	return
+func SetLogLevel(level int) {
+	logger.SetLevel(level)
 }
 
-func (cl ConsoleLogger) Debug(format string, args ...interface{}) {
-	if LevelDebug > cl.level {
-		return
-	}
-	l.Printf("[D] %s\n", fmt.Sprintf(format, args...))
+func Debug(format string, args ...interface{}) {
+	logger.Debug("%s", fmt.Sprintf(format, args...))
 }
 
-func (cl ConsoleLogger) Info(format string, args ...interface{}) {
-	if LevelInformational > cl.level {
-		return
-	}
-	l.Printf("[I] %s\n", fmt.Sprintf(format, args...))
+func Info(format string, args ...interface{}) {
+	logger.Info("%s", fmt.Sprintf(format, args...))
 }
 
-func (cl ConsoleLogger) Warn(format string, args ...interface{}) {
-	if LevelWarning > cl.level {
-		return
-	}
-	l.Printf("[W] %s\n", fmt.Sprintf(format, args...))
+func Warn(format string, args ...interface{}) {
+	logger.Warn("%s", fmt.Sprintf(format, args...))
 }
 
-func (cl ConsoleLogger) Error(format string, args ...interface{}) {
-	if LevelError > cl.level {
-		return
-	}
-	l.Printf("[E] %s\n", fmt.Sprintf(format, args...))
-}
-
-func (cl *ConsoleLogger) SetLevel(level int) {
-	cl.level = level
-}
-
-func (ConsoleLogger) Close() {
-
+func Error(format string, args ...interface{}) {
+	logger.Error("%s", fmt.Sprintf(format, args...))
 }
