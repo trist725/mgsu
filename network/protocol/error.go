@@ -3,28 +3,46 @@ package protocol
 import "fmt"
 
 ////////////////////////////////////////////////////////////////////////////////
-type ErrUnsupportedMessage struct {
+type ErrUnsupported struct {
 	MessageID interface{}
 }
 
-func (e ErrUnsupportedMessage) Error() string {
+func (e ErrUnsupported) Error() string {
 	return fmt.Sprintf("unsupported message, id=[%v]", e.MessageID)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-type ErrNoMessageHandler struct {
+type ErrNoDispatcher struct {
 	MessageID interface{}
 }
 
-func (e ErrNoMessageHandler) Error() string {
-	return fmt.Sprintf("no message handler, id=[%v]", e.MessageID)
+func (e ErrNoDispatcher) Error() string {
+	return fmt.Sprintf("no message dispatcher, id=[%v]", e.MessageID)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-type ErrMessageTooLarge struct {
+type ErrTooLarge struct {
 	MessageID interface{}
 }
 
-func (e ErrMessageTooLarge) Error() string {
+func (e ErrTooLarge) Error() string {
 	return fmt.Sprintf("message too large, id=[%v]", e.MessageID)
+}
+
+////////////////////////////////////////////////////////////////////////////////
+type ErrTooOften struct {
+	MessageID interface{}
+}
+
+func (e ErrTooOften) Error() string {
+	return fmt.Sprintf("message too often, id=[%v]", e.MessageID)
+}
+
+////////////////////////////////////////////////////////////////////////////////
+type ErrDispatcherAlreadyRegister struct {
+	MessageID interface{}
+}
+
+func (e ErrDispatcherAlreadyRegister) Error() string {
+	return fmt.Sprintf("message dispatcher already register, id=[%v]", e.MessageID)
 }
