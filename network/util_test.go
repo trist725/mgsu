@@ -14,7 +14,7 @@ import (
 
 	"math/rand"
 
-	"gitee.com/nggs/util"
+	"github.com/trist725/mgsu/util"
 )
 
 type param struct {
