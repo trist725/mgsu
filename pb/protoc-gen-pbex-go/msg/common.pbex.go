@@ -6,8 +6,8 @@ package msg
 import (
 	json "encoding/json"
 	fmt "fmt"
-	v1 "gitee.com/nggs/network/protocol/protobuf/v1"
 	proto "github.com/gogo/protobuf/proto"
+	v1 "github.com/trist725/mgsu/network/protocol/protobuf/v1"
 	math "math"
 	sync "sync"
 )
