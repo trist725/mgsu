@@ -2,23 +2,51 @@ syntax = "proto3";
 
 package model;
 
+/// 测试结构体
+//@map_key=int64 @slice
+message Test {
+    //@msg=i
+    int32 i32 = 1;
+    //@msg
+    uint32 u32 = 2;
+    //@msg
+    string str = 3;
+}
+
 /// 用户数据
 //@collection
 message User {
     /// 用户id
-    //@bson=_id
+    //@bson=_id @msg
     int64 ID = 1;
     /// 帐号id
-    //@bson=accountid
+    //@bson=accountid @msg
     int64 AccountID = 2;
     /// 服务器ID
+    //@msg
     int32 ServerID = 3;
     /// 名字
+    //@msg
     string Name = 4;
     /// 性别
+    //@msg
     int32 Sex = 5;
     /// 创建时刻
+    //@msg
     int64 CreateTime = 6;
     /// 测试数组
+    //@msg
     repeated int32 Arr = 7;
+    /// 测试字符串数组
+    //@msg
+    repeated string StrArr = 8;
+    /// 测试结构体
+    //@msg
+    Test Test = 9;
+    /// 测试整型map
+    //@msg
+    map<int32, int32> IMap = 10;
+    /// 测试结构体map
+    //@msg
+    map<int32, Test> TestMap = 11;
 }

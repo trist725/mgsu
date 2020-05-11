@@ -4,8 +4,8 @@ import (
 	"time"
 )
 
-func CreateUser(accountID int64, serverID int32, name string, sex int32) (m *User, err error) {
-	nextSeq, err := NextSeq(TblUser)
+func (sc *SimpleClient) CreateUser(accountID int64, serverID int32, name string, sex int32) (m *User, err error) {
+	nextSeq, err := sc.NextSeq(TblUser)
 	if err != nil {
 		return nil, err
 	}

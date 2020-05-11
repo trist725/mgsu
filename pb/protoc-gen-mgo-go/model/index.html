@@ -4,7 +4,7 @@
   <head>
     <title>Protocol Documentation</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic"/>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic"/>
     <style>
       body {
         width: 60em;
@@ -174,21 +174,31 @@
       <ul id="toc">
         
           
-          <a href="#user.proto">user.proto</a>
-          <table class="user.proto-message-table">
-            <thead>
-              <tr><td>Message</td><td>Comment</td></tr>
-            </thead>
-            <tbody>
+          <li>
+            <a href="#user.proto">user.proto</a>
+            <ul>
               
-                <tr id="tr-model.User">
-                  <td><a href="#model.User">User</a></td>
-                  <td><a href="#model.User">用户数据
-@collection</a></td>
-                </tr>
+                <li>
+                  <a href="#model.Test"><span class="badge">M</span>Test</a>
+                </li>
               
-            </tbody>
-          </table>
+                <li>
+                  <a href="#model.User"><span class="badge">M</span>User</a>
+                </li>
+              
+                <li>
+                  <a href="#model.User.IMapEntry"><span class="badge">M</span>User.IMapEntry</a>
+                </li>
+              
+                <li>
+                  <a href="#model.User.TestMapEntry"><span class="badge">M</span>User.TestMapEntry</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
         
         <li><a href="#scalar-value-types">Scalar Value Types</a></li>
       </ul>
@@ -201,6 +211,44 @@
       </div>
       <p></p>
 
+      
+        <h3 id="model.Test">Test</h3>
+        <p>测试结构体</p><p>@map_key=int64 @slice</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>i32</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>@msg=i @rpc=j </p></td>
+                </tr>
+              
+                <tr>
+                  <td>u32</td>
+                  <td><a href="#uint32">uint32</a></td>
+                  <td></td>
+                  <td><p>@msg @rpc </p></td>
+                </tr>
+              
+                <tr>
+                  <td>str</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>@msg @rpc </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
       
         <h3 id="model.User">User</h3>
         <p>用户数据</p><p>@collection</p>
@@ -217,7 +265,7 @@
                   <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>用户id
-@bson=_id </p></td>
+@bson=_id @msg @rpc </p></td>
                 </tr>
               
                 <tr>
@@ -225,47 +273,147 @@
                   <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>帐号id
-@bson=accountid </p></td>
+@bson=accountid @msg @rpc </p></td>
                 </tr>
               
                 <tr>
                   <td>ServerID</td>
                   <td><a href="#int32">int32</a></td>
                   <td></td>
-                  <td><p>服务器ID </p></td>
+                  <td><p>服务器ID
+@msg @rpc </p></td>
                 </tr>
               
                 <tr>
                   <td>Name</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>名字 </p></td>
+                  <td><p>名字
+@msg @rpc </p></td>
                 </tr>
               
                 <tr>
                   <td>Sex</td>
                   <td><a href="#int32">int32</a></td>
                   <td></td>
-                  <td><p>性别 </p></td>
+                  <td><p>性别
+@msg @rpc </p></td>
                 </tr>
               
                 <tr>
                   <td>CreateTime</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
-                  <td><p>创建时刻 </p></td>
+                  <td><p>创建时刻
+@msg @rpc </p></td>
                 </tr>
               
                 <tr>
                   <td>Arr</td>
                   <td><a href="#int32">int32</a></td>
                   <td>repeated</td>
-                  <td><p>测试数组 </p></td>
+                  <td><p>测试数组
+@msg @rpc </p></td>
+                </tr>
+              
+                <tr>
+                  <td>StrArr</td>
+                  <td><a href="#string">string</a></td>
+                  <td>repeated</td>
+                  <td><p>测试字符串数组
+@msg @rpc </p></td>
+                </tr>
+              
+                <tr>
+                  <td>Test</td>
+                  <td><a href="#model.Test">Test</a></td>
+                  <td></td>
+                  <td><p>测试结构体
+@msg @rpc </p></td>
+                </tr>
+              
+                <tr>
+                  <td>IMap</td>
+                  <td><a href="#model.User.IMapEntry">User.IMapEntry</a></td>
+                  <td>repeated</td>
+                  <td><p>测试整型map
+@msg @rpc </p></td>
+                </tr>
+              
+                <tr>
+                  <td>TestMap</td>
+                  <td><a href="#model.User.TestMapEntry">User.TestMapEntry</a></td>
+                  <td>repeated</td>
+                  <td><p>测试结构体map
+@msg @rpc </p></td>
                 </tr>
               
             </tbody>
           </table>
+
+          
+
         
+      
+        <h3 id="model.User.IMapEntry">User.IMapEntry</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>key</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>value</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="model.User.TestMapEntry">User.TestMapEntry</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>key</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>value</td>
+                  <td><a href="#model.Test">Test</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
 
         
       

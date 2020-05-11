@@ -3,58 +3,73 @@ package model
 import (
 	"testing"
 
-	"fmt"
-
-	"gopkg.in/mgo.v2/bson"
+	"github.com/globalsign/mgo/bson"
 )
 
 const (
-	url = "mongodb://admin:admin111@192.168.101.100:27017/admin"
+	url = "mongodb://admin:123456@127.0.0.1:27017/admin"
 )
 
-func testUser(t *testing.T) {
-	if err := Init(url, 1, "game-test"); err != nil {
+func TestUser(t *testing.T) {
+	if err := SC.Init(url, 1, "db_test"); err != nil {
 		t.Error(err)
 		return
 	}
-	defer Release()
+	defer SC.Release()
 
-	session := GetSession()
-	defer PutSession(session)
+	session := SC.GetSession()
+	defer SC.PutSession(session)
 
-	newUser, err := CreateUser(1, 1, "test", 1)
+	newUser, err := SC.CreateUser(1, 1, "test", 1)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	if err := newUser.Insert(session); err != nil {
+	newUser.IMap = map[int32]int32{
+		1: 1,
+		2: 2,
+		3: 3,
+	}
+
+	newUser.TestMap = map[int32]*Test{
+		1: {
+			I32: 1,
+		},
+		2: {
+			I32: 2,
+		},
+	}
+
+	if err := newUser.Insert(session, SC.DBName()); err != nil {
 		t.Error(err)
 		return
 	}
 
-	_, err = FindOne_User(session, bson.M{"_id": newUser.ID})
+	u, err := SC.FindOne_User(session, bson.M{"_id": newUser.ID})
 	if err != nil {
 		t.Error(err)
 	}
 
-	_, err = FindOne_User(session, bson.M{"Name": "test"})
+	t.Logf("%v\n", u)
+
+	_, err = SC.FindOne_User(session, bson.M{"Name": "test"})
 	if err != nil {
 		t.Error(err)
 	}
 
-	some, err := FindSome_User(session, bson.M{"Name": "test"})
+	some, err := SC.FindSome_User(session, bson.M{"Name": "test"})
 	if err != nil || len(some) != 1 {
 		t.Error(err)
 	}
 
-	err = newUser.RemoveByID(session)
+	err = newUser.RemoveByID(session, SC.DBName())
 	if err != nil {
 		t.Error(err)
 	}
 }
 
-func TestClone(t *testing.T) {
+func TestClone_User_Slice(t *testing.T) {
 	var dst = []*User{
 		{ID: 1},
 		{ID: 2},
@@ -62,9 +77,9 @@ func TestClone(t *testing.T) {
 		{ID: 4},
 	}
 
-	fmt.Println("before, dst=")
+	t.Logf("before, dst=\n")
 	for _, i := range dst {
-		fmt.Println(i)
+		t.Log(i)
 	}
 
 	var src = []*User{
@@ -75,24 +90,24 @@ func TestClone(t *testing.T) {
 		{ID: 6},
 	}
 
-	fmt.Println("src=")
+	t.Logf("src=\n")
 	for _, i := range src {
-		fmt.Println(i)
+		t.Log(i)
 	}
 
-	fmt.Printf("dst=%#v, src=%#v\n", dst, src)
+	t.Logf("dst=%#v\nsrc=%#v\n", dst, src)
 
 	dst = Clone_User_Slice(dst, src)
 
-	fmt.Println("after, dst=")
+	t.Logf("after clone, dst=\n")
 	for _, i := range dst {
-		fmt.Println(i)
+		t.Log(i)
 	}
 
-	fmt.Println("src=")
+	t.Logf("src=\n")
 	for _, i := range src {
-		fmt.Println(i)
+		t.Log(i)
 	}
 
-	fmt.Printf("dst=%#v, src=%#v\n", dst, src)
+	t.Logf("dst=%#v\nsrc=%#v\n", dst, src)
 }

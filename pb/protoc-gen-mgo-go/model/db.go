@@ -3,8 +3,9 @@ package model
 import (
 	"fmt"
 
-	"github.com/trist725/myleaf/db/mongodb"
-	"gopkg.in/mgo.v2/bson"
+	"github.com/globalsign/mgo/bson"
+
+	"github.com/trist725/mgsu/db/mongodb"
 )
 
 const (
@@ -12,64 +13,109 @@ const (
 	TblUser     = "user"     // 角色表
 )
 
-var (
-	dbName      string
+// 定义库表的递增序列
+var seqs = []string{
+	TblUser,
+}
+
+// 定义库表的唯一索引
+var uniqueIndexes = map[string][][]string{
+	TblUser: {
+		[]string{"ID"},
+	},
+}
+
+// 定义库表的索引
+var indexes = map[string][][]string{
+	TblUser: {
+		[]string{"VName"},
+		[]string{"Token"},
+	},
+}
+var SC = NewSimpleClient()
+
+type SimpleClient struct {
+	url        string
+	sessionNum int
+	dbName     string
+
 	dialContext *mongodb.DialContext
-)
+}
 
-func Init(url string, sessionNum int, name string) (err error) {
-	dialContext, err = mongodb.Dial(url, sessionNum)
+func NewSimpleClient() (sc *SimpleClient) {
+	sc = &SimpleClient{}
+	return
+}
+
+func (sc *SimpleClient) Init(url string, sessionNum int, dbName string) (err error) {
+	sc.url = url
+	sc.sessionNum = sessionNum
+	sc.dbName = dbName
+
+	sc.dialContext, err = mongodb.Dial(sc.url, sc.sessionNum)
 	if err != nil {
-		err = fmt.Errorf("connect to %s fail, %s", url, err)
+		err = fmt.Errorf("connect to %s fail, %s", sc.url, err)
 		return
 	}
 
-	dbName = name
-
-	err = dialContext.EnsureCounter(dbName, TblCounters, TblUser)
-	if err != nil {
-		err = fmt.Errorf("ensure counters error, %s", err)
-		return
+	for _, seq := range seqs {
+		err = sc.dialContext.EnsureCounter(sc.dbName, TblCounters, seq)
+		if err != nil {
+			err = fmt.Errorf("ensure counters [%s] error, %s", seq, err)
+			return
+		}
 	}
 
-	err = dialContext.EnsureUniqueIndex(dbName, TblUser, []string{"Name"})
-	if err != nil {
-		err = fmt.Errorf("ensure table user unique index error, %s", err)
-		return
+	for tbl, indexes := range uniqueIndexes {
+		for _, index := range indexes {
+			err = sc.dialContext.EnsureUniqueIndex(sc.dbName, tbl, index)
+			if err != nil {
+				err = fmt.Errorf("ensure table[%s] unique index[%+v] error, %s", tbl, index, err)
+				return
+			}
+		}
 	}
 
-	err = dialContext.EnsureIndex(dbName, TblUser, []string{"AccountID", "ServerID"})
-	if err != nil {
-		err = fmt.Errorf("ensure table user index error, %s", err)
-		return
+	for tbl, is := range indexes {
+		for _, index := range is {
+			err = sc.dialContext.EnsureIndex(sc.dbName, tbl, index)
+			if err != nil {
+				err = fmt.Errorf("ensure table[%s] index[%+v] error, %s", tbl, index, err)
+				return
+			}
+		}
 	}
 
 	return
 }
 
-func Release() {
-	if dialContext != nil {
-		dialContext.Close()
-		dialContext = nil
+func (sc *SimpleClient) Release() {
+	if sc.dialContext != nil {
+		sc.dialContext.Close()
+		sc.dialContext = nil
 	}
 }
 
-func DialContext() *mongodb.DialContext {
-	return dialContext
+func (sc *SimpleClient) DialContext() *mongodb.DialContext {
+	return sc.dialContext
 }
 
-func GetSession() *mongodb.Session {
-	return dialContext.Ref()
+func (sc SimpleClient) DBName() string {
+	return sc.dbName
 }
 
-func PutSession(session *mongodb.Session) {
-	dialContext.UnRef(session)
+func (sc *SimpleClient) GetSession() *mongodb.Session {
+	return sc.dialContext.Ref()
 }
 
-func NextSeq(id string) (int, error) {
-	return dialContext.NextSeq(dbName, TblCounters, id)
+func (sc *SimpleClient) PutSession(session *mongodb.Session) {
+	sc.dialContext.UnRef(session)
 }
 
-func NewObjectId() string {
+func (sc *SimpleClient) NextSeq(id string) (int, error) {
+	return sc.dialContext.NextSeq(sc.dbName, TblCounters, id)
+}
+
+func NewObjectID() string {
 	return bson.NewObjectId().Hex()
 }
