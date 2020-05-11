@@ -3,10 +3,10 @@ package main
 import (
 	"io/ioutil"
 
-	"gitee.com/nggs/tools/pbplugin"
-	"gitee.com/nggs/tools/pbplugin/golang"
-	"gitee.com/nggs/tools/pbplugin/golang/command"
-	"gitee.com/nggs/tools/pbplugin/golang/pbex"
+	"github.com/trist725/mgsu/pb/plugin"
+	"github.com/trist725/mgsu/pb/plugin/golang"
+	"github.com/trist725/mgsu/pb/plugin/golang/command"
+	"github.com/trist725/mgsu/pb/plugin/golang/pbex"
 )
 
 func main() {

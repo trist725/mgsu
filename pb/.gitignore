@@ -2,3 +2,4 @@
 vendor
 ~*.xlsm
 ~*.xlsx
+*.exe
