@@ -74,3 +74,17 @@ func MakeFirstUpperCase(s string) string {
 
 	return string(bytes.Join([][]byte{lc, rest}, nil))
 }
+
+func ParseRequestParameterString(input string) (output map[string]string) {
+	output = make(map[string]string)
+	kvs := strings.Split(input, ";")
+	for _, kv := range kvs {
+		pair := strings.Split(kv, ":")
+		if len(pair) == 1 {
+			output[strings.TrimSpace(kv)] = ""
+		} else if len(pair) == 2 {
+			output[strings.TrimSpace(pair[0])] = strings.TrimSpace(pair[1])
+		}
+	}
+	return
+}

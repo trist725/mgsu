@@ -1,4 +1,4 @@
-package pbex
+package rpc
 
 import (
 	"bytes"
@@ -8,52 +8,52 @@ import (
 
 	"github.com/trist725/mgsu/pb/plugin/golang"
 	"github.com/trist725/mgsu/pb/plugin/golang/generator"
+	//"github.com/trist725/mgsu/pb/plugin/log"
 )
 
 var (
-	msgRegexp      = regexp.MustCompile(`@msg(?:\s*=\s*(\d+))?`)
-	responseRegexp = regexp.MustCompile(`\s*@response(?:\s*=\s*(\S+))?\s*`)
+	msgRegexp             = regexp.MustCompile(`\s*@msg(?:\s*=\s*(\d+))?\s*`)
+	responseRegexp        = regexp.MustCompile(`\s*@response(?:\s*=\s*(\S+))?\s*`)
+	responseTimeoutRegexp = regexp.MustCompile(`\s*@response_timeout(?:\s*=\s*(\d+))?\s*`)
+	canIgnoreRegexp       = regexp.MustCompile(`\s*@can_ignore(?:\s*=\s*(\d+))?\s*`)
 )
 
-func init() {
-	generator.RegisterPlugin(New())
-}
-
-type pbex struct {
+type rpc struct {
 	*golang.PluginSuper
-	version string
 }
 
-func New() *pbex {
-	return &pbex{
+func New() *rpc {
+	return &rpc{
 		PluginSuper: golang.NewPluginSuper(),
-		version:     "v1",
 	}
 }
 
-func (p *pbex) Name() string {
-	return PluginName
+func (p *rpc) Name() string {
+	return "rpc-go"
 }
 
-func (p *pbex) Init(g *generator.Generator) {
+func (p *rpc) Init(g *generator.Generator) {
 	p.Generator = g
 }
 
-func (p *pbex) GenerateImports(file *generator.FileDescriptor) {
+func (p *rpc) GenerateImports(file *generator.FileDescriptor) {
 
 }
 
-func (p *pbex) Generate(fd *generator.FileDescriptor) {
+func (p *rpc) Generate(fd *generator.FileDescriptor) {
 	p.PluginImports = generator.NewPluginImports(p.Generator)
+
+	p.AddImport("model")
+	p.AddImport("msg")
 
 	jsonPkg := p.NewImport("encoding/json")
 	syncPkg := p.NewImport("sync")
-
-	protocolImportPath := fmt.Sprintf("github.com/trist725/mgsu/network/protocol/protobuf/%s", p.version)
-	protocolPkg := p.NewImport(protocolImportPath)
+	rpcPkg := p.NewImport("gitee.com/nggs/microservice/rpc")
+	actorPkg := p.NewImport("gitee.com/nggs/protoactor-go/actor")
+	myactorPkg := p.NewImport("gitee.com/nggs/actor")
+	timePkg := p.NewImport("time")
 
 	file := newFile(fd)
-	file.Protocol = p.version
 
 	for _, md := range file.FileDescriptor.Messages() {
 		if md.DescriptorProto.GetOptions().GetMapEntry() {
@@ -72,11 +72,11 @@ func (p *pbex) Generate(fd *generator.FileDescriptor) {
 
 		message := newMessage(p.Generator, md)
 
-		if matches := msgRegexp.FindStringSubmatch(message.Comment); len(matches) > 1 && matches[1] != "" {
+		if matches := msgRegexp.FindStringSubmatch(message.Comment); len(matches) > 1 {
 			message.ID = matches[1]
-			if !protocolPkg.IsUsed() {
-				protocolPkg.Use()
-				p.AddImport(generator.GoImportPath(protocolPkg.Location()))
+			if !rpcPkg.IsUsed() {
+				rpcPkg.Use()
+				p.AddImport(generator.GoImportPath(rpcPkg.Location()))
 			}
 		}
 
@@ -84,7 +84,26 @@ func (p *pbex) Generate(fd *generator.FileDescriptor) {
 		if len(nameWords) > 1 && nameWords[0] == "C2S" {
 			if matches := responseRegexp.FindStringSubmatch(message.Comment); len(matches) > 1 {
 				message.Response = matches[1]
+				if !actorPkg.IsUsed() {
+					actorPkg.Use()
+					p.AddImport(generator.GoImportPath(actorPkg.Location()))
+				}
+				if !myactorPkg.IsUsed() {
+					myactorPkg.Use()
+					p.AddImport(generator.GoImportPath(myactorPkg.Location()))
+				}
+				if !timePkg.IsUsed() {
+					timePkg.Use()
+					p.AddImport(generator.GoImportPath(timePkg.Location()))
+				}
 			}
+			if matches := responseTimeoutRegexp.FindStringSubmatch(message.Comment); len(matches) > 1 {
+				message.ResponseTimeout = matches[1]
+			}
+		}
+
+		if matches := canIgnoreRegexp.FindStringSubmatch(message.Comment); len(matches) > 0 {
+			message.CanIgnore = true
 		}
 
 		for commentIndex, fdp := range md.GetField() {
@@ -109,6 +128,21 @@ func (p *pbex) Generate(fd *generator.FileDescriptor) {
 		response := fmt.Sprintf("S2C_%s", nameWords[1])
 		if _, ok := file.messagesByName[response]; ok {
 			message.Response = response
+			if !actorPkg.IsUsed() {
+				actorPkg.Use()
+				p.AddImport(generator.GoImportPath(actorPkg.Location()))
+			}
+			if !myactorPkg.IsUsed() {
+				myactorPkg.Use()
+				p.AddImport(generator.GoImportPath(myactorPkg.Location()))
+			}
+			if !timePkg.IsUsed() {
+				timePkg.Use()
+				p.AddImport(generator.GoImportPath(timePkg.Location()))
+			}
+			if matches := responseTimeoutRegexp.FindStringSubmatch(message.Comment); len(matches) > 1 {
+				message.ResponseTimeout = matches[1]
+			}
 		}
 	}
 
@@ -133,6 +167,6 @@ func (p *pbex) Generate(fd *generator.FileDescriptor) {
 	p.P(s)
 }
 
-func (p *pbex) SetVersion(version string) {
-	p.version = version
+func init() {
+	generator.RegisterPlugin(New())
 }
