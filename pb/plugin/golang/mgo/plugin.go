@@ -45,7 +45,7 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 
 	jsonPkg := p.NewImport("encoding/json")
 	syncPkg := p.NewImport("sync")
-	mongodbPkg := p.NewImport("gihub.com/nggs/db/mongodb")
+	mongodbPkg := p.NewImport("github.com/trist725/mgsu/db/mongodb")
 	mgoPkg := p.NewImport("github.com/globalsign/mgo")
 
 	file := newFile(fd)
