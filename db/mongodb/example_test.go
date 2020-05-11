@@ -5,7 +5,7 @@ import (
 
 	"github.com/globalsign/mgo"
 
-	"github.com/trist725/mgsu/nggs/db/mongodb"
+	"github.com/trist725/mgsu/db/mongodb"
 )
 
 func TestExample(t *testing.T) {
