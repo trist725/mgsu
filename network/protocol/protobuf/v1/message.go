@@ -3,21 +3,24 @@ package protocol_v1
 import (
 	"fmt"
 	"log"
+	"reflect"
+	"time"
 
+	"github.com/gogo/protobuf/proto"
 	p "github.com/trist725/mgsu/network/protocol"
 )
 
-type MessageID = uint32
+type MessageID = uint16
 
 type IMessage interface {
+	proto.Message
 	V1()
 	MessageID() MessageID
 	Size() int
-	Unmarshal([]byte) error
-	Marshal() ([]byte, error)
 	MarshalTo([]byte) (int, error)
-	Reset()
-	String() string
+	Unmarshal([]byte) error
+	ResetEx()
+	JsonString() string
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,33 +46,44 @@ type IMessageFactoryManager interface {
 	Register(iMsg IMessage, producer messageProducer, recycler messageRecycler)
 	Produce(id MessageID) (IMessage, error)
 	Recycle(iMsg IMessage) error
+	ReflectType(id MessageID) reflect.Type
 }
 
 type messageFactoryManager struct {
 	factories map[MessageID]*messageFactory
+	id2Type   map[MessageID]reflect.Type
 }
 
-func newMessageFactoryManager() IMessageFactoryManager {
+func NewMessageFactoryManager() IMessageFactoryManager {
 	m := &messageFactoryManager{
 		factories: make(map[MessageID]*messageFactory),
+		id2Type:   make(map[MessageID]reflect.Type),
 	}
 	return m
 }
 
 func (m *messageFactoryManager) Register(iMsg IMessage, producer messageProducer, recycler messageRecycler) {
+	rt := reflect.TypeOf(iMsg)
+	if rt.Kind() == reflect.Ptr {
+		rt = rt.Elem()
+	}
+	name := rt.Name()
+
 	if producer == nil {
-		log.Panicf("register message factory fail, producer == nil, id=[%v]", iMsg.MessageID())
+		log.Panicf("register message[%s] factory fail, producer is nil, id=[%v]", name, iMsg.MessageID())
 	}
 
 	if recycler == nil {
-		log.Panicf("register message factory fail, recycler == nil, id=[%v]", iMsg.MessageID())
+		log.Panicf("register message[%s] factory fail, recycler is nil, id=[%v]", name, iMsg.MessageID())
 	}
 
 	if f, ok := m.factories[iMsg.MessageID()]; ok {
-		log.Panicf("duplicate message factory, id=[%v], factory=[%+v]", iMsg.MessageID(), f)
+		log.Panicf("duplicate message[%s] factory, id=[%v], factory=[%+v]", name, iMsg.MessageID(), f)
 	}
 
 	m.factories[iMsg.MessageID()] = newMessageFactory(iMsg.MessageID(), producer, recycler)
+
+	m.id2Type[iMsg.MessageID()] = rt
 }
 
 func (m *messageFactoryManager) Produce(id MessageID) (IMessage, error) {
@@ -88,44 +102,91 @@ func (m *messageFactoryManager) Recycle(iMsg IMessage) error {
 	return fmt.Errorf("unsupported message, id=[%v]", iMsg.MessageID())
 }
 
+func (m messageFactoryManager) ReflectType(id MessageID) reflect.Type {
+	return m.id2Type[id]
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 type MessageHandler func(IMessage, ...interface{})
 
-type IMessageHandlerManager interface {
+type IMessageDispatcher interface {
 	Register(id MessageID, handler MessageHandler)
-	Process(iMsg IMessage, args ...interface{}) error
+	RegisterWithLimit(id MessageID, handler MessageHandler, minDispatchInterval time.Duration)
+	Dispatch(iMsg IMessage, args ...interface{}) error
+	SetLimit(id MessageID, minInterval time.Duration) error
 }
 
-type messageHandlerManager struct {
-	handlerMap map[MessageID][]MessageHandler
+const DefaultMinDispatchInterval = 100 * time.Millisecond
+
+type OneMessageDispatcher struct {
+	Handlers            []MessageHandler
+	MinDispatchInterval time.Duration
+	LastDispatchTime    time.Time
 }
 
-func NewMessageHandlerManager() IMessageHandlerManager {
-	return &messageHandlerManager{
-		handlerMap: make(map[MessageID][]MessageHandler),
+type MessageDispatcher struct {
+	Dispatchers map[MessageID]*OneMessageDispatcher
+}
+
+func NewMessageDispatcher() IMessageDispatcher {
+	return &MessageDispatcher{
+		Dispatchers: map[MessageID]*OneMessageDispatcher{},
 	}
 }
 
-func (m *messageHandlerManager) Register(id MessageID, handler MessageHandler) {
-	if handlers, ok := m.handlerMap[id]; !ok {
-		m.handlerMap[id] = []MessageHandler{handler}
+func (md *MessageDispatcher) Register(id MessageID, handler MessageHandler) {
+	if dispatcher, ok := md.Dispatchers[id]; !ok {
+		md.Dispatchers[id] = &OneMessageDispatcher{
+			Handlers:            []MessageHandler{handler},
+			MinDispatchInterval: DefaultMinDispatchInterval,
+		}
 	} else {
-		m.handlerMap[id] = append(handlers, handler)
+		md.Dispatchers[id].Handlers = append(dispatcher.Handlers, handler)
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
-func (m *messageHandlerManager) Process(iMsg IMessage, args ...interface{}) error {
-	handlers, ok := m.handlerMap[iMsg.MessageID()]
+func (md *MessageDispatcher) RegisterWithLimit(id MessageID, handler MessageHandler, minDispatchInterval time.Duration) {
+	if dispatcher, ok := md.Dispatchers[id]; !ok {
+		md.Dispatchers[id] = &OneMessageDispatcher{
+			Handlers:            []MessageHandler{handler},
+			MinDispatchInterval: minDispatchInterval,
+		}
+	} else {
+		md.Dispatchers[id].Handlers = append(dispatcher.Handlers, handler)
+	}
+}
+
+func (md *MessageDispatcher) Dispatch(iMsg IMessage, args ...interface{}) error {
+	dispatcher, ok := md.Dispatchers[iMsg.MessageID()]
 	if !ok {
-		return &p.ErrNoMessageHandler{
+		return &p.ErrNoDispatcher{
 			MessageID: iMsg.MessageID(),
 		}
 	}
 
-	for _, handler := range handlers {
+	now := time.Now()
+	if now.Sub(dispatcher.LastDispatchTime) < dispatcher.MinDispatchInterval {
+		return &p.ErrTooOften{
+			MessageID: iMsg.MessageID(),
+		}
+	}
+
+	dispatcher.LastDispatchTime = now
+
+	for _, handler := range dispatcher.Handlers {
 		handler(iMsg, args...)
 	}
 
+	return nil
+}
+
+func (md *MessageDispatcher) SetLimit(id MessageID, minInterval time.Duration) error {
+	dispatcher, ok := md.Dispatchers[id]
+	if !ok {
+		return &p.ErrNoDispatcher{
+			MessageID: id,
+		}
+	}
+	dispatcher.MinDispatchInterval = minInterval
 	return nil
 }
