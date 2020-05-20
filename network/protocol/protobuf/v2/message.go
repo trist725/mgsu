@@ -118,7 +118,7 @@ func (m *messageHandlerManager) Register(id MessageID, handler MessageHandler) {
 func (m *messageHandlerManager) Process(iMsg IMessage, args ...interface{}) error {
 	handlers, ok := m.handlerMap[iMsg.MessageID()]
 	if !ok {
-		return &p.ErrNoMessageHandler{
+		return &p.ErrNoDispatcher{
 			MessageID: iMsg.MessageID(),
 		}
 	}
