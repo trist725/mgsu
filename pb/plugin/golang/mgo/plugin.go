@@ -41,7 +41,8 @@ func (p *mgo) GenerateImports(file *generator.FileDescriptor) {
 func (p *mgo) Generate(fd *generator.FileDescriptor) {
 	p.PluginImports = generator.NewPluginImports(p.Generator)
 
-	p.AddImport("msg")
+	// todo 灵活配置
+	p.AddImport("mlgs/src/msg")
 
 	jsonPkg := p.NewImport("encoding/json")
 	syncPkg := p.NewImport("sync")
