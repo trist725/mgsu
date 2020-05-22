@@ -7,10 +7,11 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	mgo "github.com/globalsign/mgo"
+	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	mongodb "github.com/trist725/mgsu/db/mongodb"
 	math "math"
-	msg "msg"
+	msg "mlgs/src/msg"
 	sync "sync"
 )
 
