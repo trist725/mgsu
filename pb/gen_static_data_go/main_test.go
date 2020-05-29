@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"gitee.com/nggs/tools/gen_static_data_go/sd"
+	"github.com/trist725/mgsu/pb/gen_static_data_go/sd"
 )
 
 func TestSourceCodeGenerate(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
 	"github.com/gogo/protobuf/vanity/command"
 
-	"github.com/trist725/mgsu/pb/pbplugin"
+	"github.com/trist725/mgsu/pb/plugin"
 )
 
 const t = `

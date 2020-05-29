@@ -8,7 +8,7 @@ import (
 
 	"time"
 
-	"gitee.com/nggs/util"
+	"github.com/trist725/mgsu/util"
 )
 
 func TestProtocol(t *testing.T) {
