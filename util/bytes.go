@@ -14,7 +14,7 @@ func Uint16ToByteArr(src uint16, littleEndian bool) []byte {
 	return dst
 }
 
-func UInt32ToByteArr(src uint32, littleEndian bool) []byte {
+func Uint32ToByteArr(src uint32, littleEndian bool) []byte {
 	dst := make([]byte, 4)
 	if littleEndian {
 		binary.LittleEndian.PutUint32(dst, src)
