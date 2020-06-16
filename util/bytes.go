@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 )
 
-func Uint16ToByteArr(src uint16, littleEndian bool) []byte {
+func UInt16ToByteArr(src uint16, littleEndian bool) []byte {
 	dst := make([]byte, 2)
 	if littleEndian {
 		binary.LittleEndian.PutUint16(dst, src)
@@ -14,7 +14,7 @@ func Uint16ToByteArr(src uint16, littleEndian bool) []byte {
 	return dst
 }
 
-func Uint32ToByteArr(src uint32, littleEndian bool) []byte {
+func UInt32ToByteArr(src uint32, littleEndian bool) []byte {
 	dst := make([]byte, 4)
 	if littleEndian {
 		binary.LittleEndian.PutUint32(dst, src)
@@ -24,7 +24,7 @@ func Uint32ToByteArr(src uint32, littleEndian bool) []byte {
 	return dst
 }
 
-func Uint64ToByteArr(src uint64, littleEndian bool) []byte {
+func UInt64ToByteArr(src uint64, littleEndian bool) []byte {
 	dst := make([]byte, 8)
 	if littleEndian {
 		binary.LittleEndian.PutUint64(dst, src)
