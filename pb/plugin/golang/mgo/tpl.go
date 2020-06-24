@@ -1,6 +1,7 @@
 package mgo
 
 const DefaultTemplate = `
+var _ = json.Marshal
 var _ = msg.PH
 
 {{range .Messages}}
@@ -21,8 +22,8 @@ func New_{{.Name}}() *{{.Name}} {
 }
 
 func (m {{.Name}}) JsonString() string {
-	bs, _ := json.Marshal(m)
-	return fmt.Sprintf("{\"{{.Name}}\":%s}", string(bs))
+	ba, _ := json.Marshal(m)
+	return "{{.Name}}:" + string(ba)
 }
 
 func (m *{{.Name}}) ResetEx() {
@@ -318,37 +319,41 @@ func (m {{.Name}}) ToMsg(n *msg.{{.Msg}}) *msg.{{.Msg}} {
 }
 {{end}}
 
-{{if .MapKey}}
-type {{.Name}}Map map[{{.MapKey}}]*{{.Name}}
+{{$Msg := .}}
+{{$MsgName := .Msg}}
 
-func To{{.Name}}Map(m map[{{.MapKey}}]*{{.Name}}) *{{.Name}}Map {
+{{range .Maps}}
+
+type {{.Name}} map[{{.Key}}]*{{$Msg.Name}}
+
+func To{{.Name}}(m map[{{.Key}}]*{{$Msg.Name}}) *{{.Name}} {
 	if m == nil {
 		return nil
 	}
-	return (*{{.Name}}Map)(&m)
+	return (*{{.Name}})(&m)
 }
 
-func New{{.Name}}Map() (m *{{.Name}}Map) {
-	m = &{{.Name}}Map{}
+func New{{.Name}}() (m *{{.Name}}) {
+	m = &{{.Name}}{}
 	return
 }
 
-func (m *{{.Name}}Map) Get(key {{.MapKey}}) (value *{{.Name}}, ok bool) {
+func (m *{{.Name}}) Get(key {{.Key}}) (value *{{$Msg.Name}}, ok bool) {
 	value, ok = (*m)[key]
 	return
 }
 
-func (m *{{.Name}}Map) Set(key {{.MapKey}}, value *{{.Name}}) {
+func (m *{{.Name}}) Set(key {{.Key}}, value *{{$Msg.Name}}) {
 	(*m)[key] = value
 }
 
-func (m *{{.Name}}Map) Add(key {{.MapKey}}) (value *{{.Name}}) {
-	value = Get_{{.Name}}()
+func (m *{{.Name}}) Add(key {{.Key}}) (value *{{$Msg.Name}}) {
+	value = Get_{{$Msg.Name}}()
 	(*m)[key] = value
 	return
 }
 
-func (m *{{.Name}}Map) Remove(key {{.MapKey}}) (removed bool) {
+func (m *{{.Name}}) Remove(key {{.Key}}) (removed bool) {
 	if _, ok := (*m)[key]; ok {
 		delete(*m, key)
 		return true
@@ -356,7 +361,7 @@ func (m *{{.Name}}Map) Remove(key {{.MapKey}}) (removed bool) {
 	return false
 }
 
-func (m *{{.Name}}Map) RemoveOne(fn func(key {{.MapKey}}, value *{{.Name}}) (removed bool)) {
+func (m *{{.Name}}) RemoveOne(fn func(key {{.Key}}, value *{{$Msg.Name}}) (removed bool)) {
 	for key, value := range *m {
 		if fn(key, value) {
 			delete(*m, key)
@@ -365,8 +370,8 @@ func (m *{{.Name}}Map) RemoveOne(fn func(key {{.MapKey}}, value *{{.Name}}) (rem
 	}
 }
 
-func (m *{{.Name}}Map) RemoveSome(fn func(key {{.MapKey}}, value *{{.Name}}) (removed bool)) {
-	left := map[{{.MapKey}}]*{{.Name}}{}
+func (m *{{.Name}}) RemoveSome(fn func(key {{.Key}}, value *{{$Msg.Name}}) (removed bool)) {
+	left := map[{{.Key}}]*{{$Msg.Name}}{}
 	for key, value := range *m {
 		if !fn(key, value) {
 			left[key] = value
@@ -375,7 +380,7 @@ func (m *{{.Name}}Map) RemoveSome(fn func(key {{.MapKey}}, value *{{.Name}}) (re
 	*m = left
 }
 
-func (m *{{.Name}}Map) Each(f func(key {{.MapKey}}, value *{{.Name}}) (continued bool)) {
+func (m *{{.Name}}) Each(f func(key {{.Key}}, value *{{$Msg.Name}}) (continued bool)) {
 	for key, value := range *m {
 		if !f(key, value) {
 			break
@@ -383,15 +388,15 @@ func (m *{{.Name}}Map) Each(f func(key {{.MapKey}}, value *{{.Name}}) (continued
 	}
 }
 
-func (m {{.Name}}Map) Size() int {
+func (m {{.Name}}) Size() int {
 	return len(m)
 }
 
-func (m {{.Name}}Map) Clone() (n *{{.Name}}Map) {
+func (m {{.Name}}) Clone() (n *{{.Name}}) {
 	if m.Size() == 0 {
 		return nil
 	}
-	n = To{{.Name}}Map(make(map[{{.MapKey}}]*{{.Name}}, m.Size()))
+	n = To{{.Name}}(make(map[{{.Key}}]*{{$Msg.Name}}, m.Size()))
 	for k, v := range m {
 		if v != nil {
 			(*n)[k] = v.Clone()
@@ -402,26 +407,27 @@ func (m {{.Name}}Map) Clone() (n *{{.Name}}Map) {
 	return n
 }
 
-func (m *{{.Name}}Map) Clear() {
-	*m = *New{{.Name}}Map()
+func (m *{{.Name}}) Clear() {
+	*m = *New{{.Name}}()
 }
 
-{{if .Msg}}
-func (m {{.Name}}Map) ToMsg(n map[{{.MapKey}}]*msg.{{.Name}}) map[{{.MapKey}}]*msg.{{.Name}} {
+{{if $MsgName}}
+func (m {{.Name}}) ToMsg(n map[{{.Key}}]*msg.{{$MsgName}}) map[{{.Key}}]*msg.{{$MsgName}} {
 	if m.Size() == 0 {
 		return nil
 	}
-	n = make(map[{{.MapKey}}]*msg.{{.Name}}, m.Size())
+	n = make(map[{{.Key}}]*msg.{{$MsgName}}, m.Size())
 	for k, v := range m {
 		if v != nil {
 			n[k] = v.ToMsg(nil)
 		} else {
-			n[k] = msg.Get_{{.Name}}()
+			n[k] = msg.Get_{{$Msg.Name}}()
 		}
 	}
 	return n
 }
 {{end}}
+
 {{end}}
 
 {{if .Slice}}

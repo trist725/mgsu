@@ -85,9 +85,20 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 			}
 		}
 
-		if matches := mapKeyRegexp.FindStringSubmatch(message.Comment); len(matches) > 1 && matches[1] != "" {
-			message.MapKey = matches[1]
-			//log.Logger().Debug("message.MapKey=%s", message.MapKey)
+		if matches := mapKeyRegexp.FindAllStringSubmatch(message.Comment, -1); len(matches) > 0 {
+			//log.Logger().Debug("matches=%+v", matches)
+			for i, match := range matches {
+				if len(match) > 1 {
+					if i == 0 {
+						name := fmt.Sprintf("%sMap", message.Name)
+						message.Maps = append(message.Maps, golang.NewMessageMap(name, match[1]))
+					} else {
+						name := fmt.Sprintf("%sTo%sMap", generator.CamelCase(match[1]), message.Name)
+						message.Maps = append(message.Maps, golang.NewMessageMap(name, match[1]))
+					}
+				}
+			}
+			//log.Logger().Debug("message.MapKeys=%+v", message.MapKeys)
 		}
 
 		if matches := sliceRegexp.FindStringSubmatch(message.Comment); len(matches) > 0 {

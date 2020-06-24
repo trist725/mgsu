@@ -28,8 +28,7 @@ type message struct {
 	Msg string
 	Rpc string
 
-	MapKey string
-	Slice  bool
+	Slice bool
 }
 
 func newMessage(g *generator.Generator, d *generator.Descriptor) *message {
