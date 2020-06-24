@@ -61,6 +61,8 @@ github.com/trist725/mgsu/pb/plugin v0.0.0-20200511073117-cfe989eec0db h1:/aRJjFB
 github.com/trist725/mgsu/pb/plugin v0.0.0-20200511073117-cfe989eec0db/go.mod h1:N5/mxFtXuPR8DfiexEemn+JZpm2AD4TLdAf9PaDpsrc=
 github.com/trist725/mgsu/pb/plugin v0.0.0-20200616072828-4a07b7a4c01f h1:YVlh3m0RHHtc6PmS/5vqPAV4agoAaFl7qFZlBESNuMc=
 github.com/trist725/mgsu/pb/plugin v0.0.0-20200616072828-4a07b7a4c01f/go.mod h1:N5/mxFtXuPR8DfiexEemn+JZpm2AD4TLdAf9PaDpsrc=
+github.com/trist725/mgsu/pb/plugin v0.0.0-20200624063935-e0e0834cb6e4 h1:pz/C4txJakAHpPcBnNtHFMuPQJ2jJMIYoo57B41q2KQ=
+github.com/trist725/mgsu/pb/plugin v0.0.0-20200624063935-e0e0834cb6e4/go.mod h1:N5/mxFtXuPR8DfiexEemn+JZpm2AD4TLdAf9PaDpsrc=
 github.com/trist725/mgsu/util v0.0.0-20200423035946-dfa1f25dfaa0/go.mod h1:OJGU196y+to2DkbVAol0wALH58k8SPHzIWI437lquAk=
 github.com/trist725/mgsu/util v0.0.0-20200509033703-729ba4db1192 h1:0oEH7Vd0evV9xGY81oPbXuxue7MLbW64kHhV6ZRrPPQ=
 github.com/trist725/mgsu/util v0.0.0-20200509033703-729ba4db1192/go.mod h1:OJGU196y+to2DkbVAol0wALH58k8SPHzIWI437lquAk=

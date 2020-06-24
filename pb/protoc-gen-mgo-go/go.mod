@@ -10,7 +10,7 @@ require (
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/trist725/mgsu/db v0.0.0-20200616072828-4a07b7a4c01f
 	github.com/trist725/mgsu/log v0.0.0-20200616072828-4a07b7a4c01f // indirect
-	github.com/trist725/mgsu/pb/plugin v0.0.0-20200616072828-4a07b7a4c01f
+	github.com/trist725/mgsu/pb/plugin v0.0.0-20200624063935-e0e0834cb6e4
 	github.com/trist725/mgsu/util v0.0.0-20200616072828-4a07b7a4c01f // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 )
