@@ -171,9 +171,9 @@ func Clone_{{.Name}}_Slice(dst []*{{.Name}}, src []*{{.Name}}) []*{{.Name}} {
 }
 
 {{if .ID}}
-func (sc SimpleClient)FindOne_{{.Name}}(session *mongodb.Session, query interface{}) (one *{{.Name}}, err error) {
+func (sc SimpleClient)FindOne_{{.Name}}(query interface{}) (one *{{.Name}}, err error) {
 	one = Get_{{.Name}}()
-	err = session.DB(sc.dbName).C(Tbl{{.Name}}).Find(query).One(one)
+	err = sc.cli.Database.Collection(Tbl{{.Name}}).Find(context.Background(), query).One(one)
 	if err != nil {
 		Put_{{.Name}}(one)
 		return nil, err
@@ -181,44 +181,44 @@ func (sc SimpleClient)FindOne_{{.Name}}(session *mongodb.Session, query interfac
 	return
 }
 
-func (sc SimpleClient)FindSome_{{.Name}}(session *mongodb.Session, query interface{}) (some []*{{.Name}}, err error) {
+func (sc SimpleClient)FindSome_{{.Name}}(query interface{}) (some []*{{.Name}}, err error) {
 	some = []*{{.Name}}{}
-	err = session.DB(sc.dbName).C(Tbl{{.Name}}).Find(query).All(&some)
+	err = sc.cli.Database.Collection(Tbl{{.Name}}).Find(context.Background(), query).All(&some)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
-func (sc SimpleClient)UpdateSome_{{.Name}}(session *mongodb.Session, selector interface{}, update interface{}) (info *mgo.ChangeInfo, err error) {
-	info, err = session.DB(sc.dbName).C(Tbl{{.Name}}).UpdateAll(selector, update)
+func (sc SimpleClient)UpdateSome_{{.Name}}(selector interface{}, update interface{}) (result *qmgo.UpdateResult, err error) {
+	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).UpdateAll(context.Background(), selector, update)
 	return
 }
 
-func (sc SimpleClient)Upsert_{{.Name}}(session *mongodb.Session, selector interface{}, update interface{}) (info *mgo.ChangeInfo, err error) {
-	info, err = session.DB(sc.dbName).C(Tbl{{.Name}}).Upsert(selector, update)
+func (sc SimpleClient)Upsert_{{.Name}}(selector interface{}, update interface{}) (result *qmgo.UpdateResult, err error) {
+	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).Upsert(context.Background(), selector, update)
 	return
 }
 
-func (sc SimpleClient)UpsertID_{{.Name}}(session *mongodb.Session, id interface{}, update interface{}) (info *mgo.ChangeInfo, err error) {
-	info, err = session.DB(sc.dbName).C(Tbl{{.Name}}).UpsertId(id, update)
+func (sc SimpleClient)UpsertID_{{.Name}}(id interface{}, update interface{}) (result *qmgo.UpdateResult, err error) {
+	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).UpsertId(context.Background(), id, update)
 	return
 }
 
-func (m {{.Name}}) Insert(session *mongodb.Session, dbName string) error {
-	return session.DB(dbName).C(Tbl{{.Name}}).Insert(m)
+func (m {{.Name}}) Insert() (result *qmgo.InsertOneResult, err error) {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).InsertOne(context.Background(), m)
 }
 
-func (m {{.Name}}) Update(session *mongodb.Session, dbName string, selector interface{}, update interface{}) error {
-	return session.DB(dbName).C(Tbl{{.Name}}).Update(selector, update)
+func (m {{.Name}}) Update(selector interface{}, update interface{}) (err error) {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateOne(context.Background(), selector, update)
 }
 
-func (m {{.Name}}) UpdateByID(session *mongodb.Session, dbName string) error {
-	return session.DB(dbName).C(Tbl{{.Name}}).UpdateId(m.ID, m)
+func (m {{.Name}}) UpdateByID() (err error) {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateId(context.Background(), m.ID, m)
 }
 
-func (m {{.Name}}) RemoveByID(session *mongodb.Session, dbName string) error {
-	return session.DB(dbName).C(Tbl{{.Name}}).RemoveId(m.ID)
+func (m {{.Name}}) RemoveByID() error {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).RemoveId(context.Background(), m.ID)
 }
 {{end}}
 

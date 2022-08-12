@@ -46,8 +46,7 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 
 	jsonPkg := p.NewImport("encoding/json")
 	syncPkg := p.NewImport("sync")
-	mongodbPkg := p.NewImport("github.com/trist725/mgsu/db/mongodb")
-	mgoPkg := p.NewImport("github.com/globalsign/mgo")
+	mgoPkg := p.NewImport("github.com/qiniu/qmgo")
 
 	file := newFile(fd)
 
@@ -75,10 +74,6 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 			//log.Logger().Debug("matches=%v", matches)
 			message.ID = message.Name
 			//log.Logger().Debug("message.ID=%s", message.ID)
-			if !mongodbPkg.IsUsed() {
-				mongodbPkg.Use()
-				p.AddImport(generator.GoImportPath(mongodbPkg.Location()))
-			}
 			if !mgoPkg.IsUsed() {
 				mgoPkg.Use()
 				p.AddImport(generator.GoImportPath(mgoPkg.Location()))
