@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package model;
 
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+// 将GOPATH\pkg\mod\github.com\gogo\protobuf@v1.3.2\protobuf\google和github.com/gogo/protobuf/gogoproto/gogo.proto放同级目录
+import "gogo.proto";
 
 /// 测试结构体
 //@map_key=int64 @slice

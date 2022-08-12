@@ -1,24 +1,24 @@
 package model
 
 import (
+	"context"
 	"testing"
+
+	"github.com/qiniu/qmgo"
 
 	"github.com/globalsign/mgo/bson"
 )
 
 const (
-	url = "mongodb://127.0.0.1:27017/admin"
+	uri = "mongodb://127.0.0.1:27017/?connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-256"
 )
 
 func TestUser(t *testing.T) {
-	if err := SC.Init(url, 1, "db_test"); err != nil {
+	if err := SC.Init(context.Background(), uri, &qmgo.Config{Uri: uri, Database: "db_test", Coll: "user"}); err != nil {
 		t.Error(err)
 		return
 	}
 	defer SC.Release()
-
-	session := SC.GetSession()
-	defer SC.PutSession(session)
 
 	newUser, err := SC.CreateUser(1, 1, "test", 1)
 	if err != nil {
@@ -41,29 +41,29 @@ func TestUser(t *testing.T) {
 		},
 	}
 
-	if err := newUser.Insert(session, SC.DBName()); err != nil {
+	if _, err := newUser.Insert(); err != nil {
 		t.Error(err)
 		return
 	}
 
-	u, err := SC.FindOne_User(session, bson.M{"_id": newUser.ID})
+	u, err := SC.FindOne_User(bson.M{"_id": newUser.ID})
 	if err != nil {
 		t.Error(err)
 	}
 
 	t.Logf("%v\n", u)
 
-	_, err = SC.FindOne_User(session, bson.M{"Name": "test"})
+	_, err = SC.FindOne_User(bson.M{"name": "test"})
 	if err != nil {
 		t.Error(err)
 	}
 
-	some, err := SC.FindSome_User(session, bson.M{"Name": "test"})
+	some, err := SC.FindSome_User(bson.M{"name": "test"})
 	if err != nil || len(some) != 1 {
 		t.Error(err)
 	}
 
-	err = newUser.RemoveByID(session, SC.DBName())
+	err = newUser.RemoveByID()
 	if err != nil {
 		t.Error(err)
 	}
