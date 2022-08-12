@@ -55,7 +55,7 @@ func (sc *SimpleClient) Init(ctx context.Context, uri string, conf *qmgo.Config,
 
 	for tbl, is := range indexes {
 		for _, index := range is {
-			err = sc.cli.CreateIndexes(context.Background(), []options.IndexModel{{Key: index}})
+			err = sc.EnsureIndexes(index)
 			if err != nil {
 				err = fmt.Errorf("ensure table[%s] index[%+v] error, %s", tbl, index, err)
 				return
@@ -102,12 +102,18 @@ func (sc *SimpleClient) EnsureCounter(collection, id string) error {
 	}
 }
 
+func (sc *SimpleClient) EnsureIndexes(key []string) error {
+	return sc.cli.CreateIndexes(context.Background(), []options.IndexModel{{Key: key}})
+}
+
 func (sc *SimpleClient) EnsureUniqueIndex(collection string, key []string) error {
 	spares := true
+	unique := true
 	return sc.cli.Database.Collection(collection).CreateOneIndex(context.Background(), options.IndexModel{
 		Key: key,
 		IndexOptions: &officialOpts.IndexOptions{
 			Sparse: &spares,
+			Unique: &unique,
 		},
 	})
 }
