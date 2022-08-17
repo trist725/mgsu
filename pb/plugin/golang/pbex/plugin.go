@@ -48,6 +48,7 @@ func (p *pbex) Generate(fd *generator.FileDescriptor) {
 
 	jsonPkg := p.NewImport("encoding/json")
 	syncPkg := p.NewImport("sync")
+	reflectPkg := p.NewImport("reflect")
 
 	protocolImportPath := fmt.Sprintf("github.com/trist725/mgsu/network/protocol/protobuf/%s", p.version)
 	protocolPkg := p.NewImport(protocolImportPath)
@@ -90,7 +91,16 @@ func (p *pbex) Generate(fd *generator.FileDescriptor) {
 		for commentIndex, fdp := range md.GetField() {
 			field := golang.NewField(p.Generator, md, fdp, commentIndex)
 			p.RecordTypeUse(fdp.GetTypeName())
-			message.Fields = append(message.Fields, field)
+			if !field.IsOneof {
+				message.Fields = append(message.Fields, field)
+			}
+		}
+		for _, oneof := range md.GetOneofDecl() {
+			message.Oneofs = append(message.Oneofs, generator.CamelCase(oneof.GetName()))
+			if !reflectPkg.IsUsed() {
+				reflectPkg.Use()
+				p.AddImport(generator.GoImportPath(reflectPkg.Location()))
+			}
 		}
 
 		p.RecordTypeUse(generator.CamelCaseSlice(md.TypeName()))

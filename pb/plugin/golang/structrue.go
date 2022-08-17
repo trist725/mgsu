@@ -26,7 +26,8 @@ type Field struct {
 	Comment             string
 	DescriptorProtoType string
 
-	IsMap bool
+	IsMap   bool
+	IsOneof bool
 
 	GoType       string
 	GoTypeToName string
@@ -48,6 +49,7 @@ func NewField(g *generator.Generator, d *generator.Descriptor, fdp *descriptor.F
 		Comment:              g.Comments(fmt.Sprintf("%s,%d,%d", d.Path(), 2, commentIndex)),
 		DescriptorProtoType:  fieldDescriptorProtoTypes[*fdp.Type],
 		IsMap:                g.IsMap(fdp),
+		IsOneof:              fdp.OneofIndex != nil,
 	}
 
 	if field.Comment != "" {
@@ -96,6 +98,7 @@ type Message struct {
 	Comment string
 	Fields  []*Field
 	Maps    []*MessageMap
+	Oneofs  []string
 }
 
 func NewMessage(g *generator.Generator, d *generator.Descriptor) *Message {

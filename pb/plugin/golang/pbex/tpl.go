@@ -109,6 +109,11 @@ func (m *{{.Name}}) ResetEx() {
         {{end}}
 	{{end}}
 {{end}}
+
+{{range .Oneofs}}
+ 	v := reflect.ValueOf(m.{{.}}).Elem()
+    v.Set(reflect.Zero(v.Type()))
+{{end}}
 }
 
 func (m {{.Name}}) Clone() *{{.Name}} {
