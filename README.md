@@ -1,8 +1,8 @@
 # mgsu
 My Game Server Utils
 
-# 获取protoc-gen-pbex-go:
+### 获取protoc-gen-pbex-go:
 go install github.com/trist725/mgsu/pb/protoc-gen-pbex-go@latest
 
-# 获取protoc-gen-mgo-go:
+### 获取protoc-gen-mgo-go:
 go install github.com/trist725/mgsu/pb/protoc-gen-mgo-go@latest
