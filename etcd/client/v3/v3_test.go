@@ -9,23 +9,16 @@ import (
 	"time"
 
 	"github.com/trist725/mgsu/util"
-	"github.com/coreos/etcd/clientv3"
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 func Test_Base(t *testing.T) {
-	endpoint := os.Getenv("ETCD_ENDPOINT")
-	if endpoint == "" {
-		t.Error("not found env ETCD_ENDPOINT or ETCD_ENDPOINT is empty string")
-		return
-	}
 
-	fmt.Printf("endpoint=[%s]\n", endpoint)
-
-	Init(endpoint)
+	Init(Endpoint)
 	defer Close()
 
-	key := util.GenRandomString(16)
-	value := util.GenRandomString(16)
+	key := "/service/config/"
+	value := "{ \"address\": \"172.30.0.0/16\", \"port\": 555}"
 
 	_, err := put(key, value)
 	if err != nil {
