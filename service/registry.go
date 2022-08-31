@@ -96,6 +96,9 @@ func (e *EtcdRegistry) Watch(key string, opts ...clientv3.OpOption) clientv3.Wat
 
 func (e *EtcdRegistry) WatchCallBack(watchChan clientv3.WatchChan) {
 	go etcd_v3.WatchLoop(watchChan, func(ev *clientv3.Event) {
-
+		switch ev.Type {
+		case clientv3.EventTypePut:
+		case clientv3.EventTypeDelete:
+		}
 	})
 }

@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/asynkron/protoactor-go v0.0.0-20220616142548-afd2d973a1d1
 	github.com/trist725/mgsu/etcd/client/v3 v3.0.0-20220830065507-80ea1100181d
+	github.com/trist725/mgsu/log v0.0.0-20220830095628-06f4ebfd9d9e
 	github.com/trist725/mgsu/util v0.0.0-20220829094705-a6ac930d188d
 	go.etcd.io/etcd/client/v3 v3.5.4
 	google.golang.org/grpc v1.49.0
@@ -13,6 +14,7 @@ require (
 
 require (
 	github.com/Workiva/go-datastructures v1.0.53 // indirect
+	github.com/astaxie/beego v1.12.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
@@ -30,6 +32,7 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.34.0 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
+	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/tealeg/xlsx v1.0.5 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.4 // indirect

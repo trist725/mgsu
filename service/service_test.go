@@ -1,6 +1,7 @@
 package service
 
 import (
+	"sync"
 	"testing"
 	"time"
 
@@ -22,9 +23,26 @@ func TestBaseService_Start(t *testing.T) {
 func TestBaseService_Register(t *testing.T) {
 	s.IRegistry.Init()
 	s.Register()
-	resp, err := s.IRegistry.(*EtcdRegistry).Get(s.WrapPrefix(), clientv3.WithPrefix())
+	resp, err := s.IRegistry.(*EtcdRegistry).Get("/serv", clientv3.WithPrefix())
 	if err != nil {
 		t.Error(err)
 	}
 	t.Log(resp.Kvs)
+}
+
+func TestBaseService_Sync(t *testing.T) {
+	s.IRegistry.Init()
+	s.Sync()
+	s.Cfgs.Range(func(key, value any) bool {
+		t.Log("prefix:", key)
+		if value != nil {
+			subMap := value.(sync.Map)
+			subMap.Range(func(key, value any) bool {
+				t.Log("key:", key)
+				t.Log("value:", value)
+				return true
+			})
+		}
+		return true
+	})
 }
