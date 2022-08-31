@@ -34,6 +34,7 @@ func NewBaseService(typ, index, name string, registry IRegistry) *BaseService {
 
 func (s *BaseService) Start() {
 	s.IRegistry.Init()
+	s.Register()
 	s.GreeterServiceImpl.Init()
 }
 
@@ -42,6 +43,7 @@ func (s *BaseService) Stop() {
 }
 
 func (s *BaseService) Register() {
+	s.IRegistry.Register(s.WrapPrefix(), map[string]string{"ip": s.IP, "port": Conf.GRPCPort})
 }
 
 func (s *BaseService) GetType() string {
@@ -59,9 +61,14 @@ func (s *BaseService) GetIP() string {
 func (s *BaseService) ID() string {
 	b := strings.Builder{}
 	b.WriteString(s.Typ)
-	b.WriteString("-")
+	b.WriteString("/")
 	b.WriteString(s.Name)
-	b.WriteString("-")
+	b.WriteString("/")
 	b.WriteString(s.Index)
+	b.WriteString("/")
 	return b.String()
+}
+
+func (s *BaseService) WrapPrefix() string {
+	return Conf.BasePrefix + s.ID()
 }

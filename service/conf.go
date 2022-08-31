@@ -7,7 +7,8 @@ import (
 )
 
 var Conf struct {
-	GRPCPort uint16
+	GRPCPort   string
+	BasePrefix string
 }
 
 //go:embed conf.json

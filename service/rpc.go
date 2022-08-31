@@ -15,7 +15,7 @@ type GreeterServiceImpl struct {
 }
 
 func (s *GreeterServiceImpl) Init() {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", Conf.GRPCPort))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", Conf.GRPCPort))
 	if err != nil {
 		panic(err)
 	}

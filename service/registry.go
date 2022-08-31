@@ -18,6 +18,7 @@ type IRegistry interface {
 	Init()
 	Stop()
 	GetType() string
+	Register(string, interface{})
 }
 
 type EtcdRegistry struct {
@@ -30,9 +31,10 @@ type EtcdRegistry struct {
 	Cli *clientv3.Client
 }
 
-func NewEtcdRegistry(cfg *clientv3.Config) *EtcdRegistry {
+func NewEtcdRegistry(cfg *clientv3.Config, timeout time.Duration) *EtcdRegistry {
 	return &EtcdRegistry{
-		Cfg: cfg,
+		Cfg:        cfg,
+		ReqTimeout: timeout,
 	}
 }
 
@@ -56,6 +58,14 @@ func (e *EtcdRegistry) Stop() {
 
 func (e *EtcdRegistry) GetType() string {
 	return e.Typ
+}
+
+func (e *EtcdRegistry) Register(prefix string, kvs interface{}) {
+	for k, v := range kvs.(map[string]string) {
+		if _, err := e.Put(prefix+k, v); err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (e *EtcdRegistry) Put(key, value string, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {

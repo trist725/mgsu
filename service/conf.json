@@ -1,3 +1,4 @@
 {
-  "gRPCPort": 7777
+  "BasePrefix": "/service/",
+  "gRPCPort": "7777"
 }
