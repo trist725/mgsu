@@ -4,6 +4,8 @@ import (
 	"strings"
 	"sync"
 
+	"go.etcd.io/etcd/api/v3/mvccpb"
+
 	clientv3 "go.etcd.io/etcd/client/v3"
 
 	"github.com/trist725/mgsu/log"
@@ -42,6 +44,8 @@ func NewBaseService(typ, index, name string, registry IRegistry) *BaseService {
 func (s *BaseService) Start() {
 	s.IRegistry.Init()
 	s.Register()
+	s.Sync()
+	s.Watch()
 	s.GreeterServiceImpl.Init()
 }
 
@@ -52,32 +56,52 @@ func (s *BaseService) Stop() {
 // Register 必须在s.IRegistry.Init()后调用
 func (s *BaseService) Register() {
 	s.IRegistry.Register(s.WrapPrefix(), map[string]string{"ip": s.IP, "port": Conf.GRPCPort})
-	s.Cfgs.Store("ip", s.IP)
-	s.Cfgs.Store("port", Conf.GRPCPort)
+	m := sync.Map{}
+	m.Store("ip", s.IP)
+	m.Store("port", Conf.GRPCPort)
+	s.Cfgs.Store(s.ID(), m)
 }
 
 // Sync 必须在s.IRegistry.Init()后调用
 func (s *BaseService) Sync() {
-	resp, err := s.IRegistry.(*EtcdRegistry).Get(Conf.BasePrefix, clientv3.WithPrefix())
-	if err != nil {
-		log.Error(err.Error())
-		return
+	switch s.IRegistry.(type) {
+	case *EtcdRegistry:
+		resp, err := s.IRegistry.(*EtcdRegistry).Get(Conf.BasePrefix, clientv3.WithPrefix())
+		if err != nil {
+			log.Error(err.Error())
+			return
+		}
+
+		for _, v := range resp.Kvs {
+			s.etcdSync(v, clientv3.EventTypePut)
+		}
 	}
 
-	for _, kv := range resp.Kvs {
-		subs := strings.Split(string(kv.Key), "/")
-		if len(subs) > 0 {
-			var (
-				subMap sync.Map
-				tmp    any
-			)
-			tmp, _ = s.Cfgs.Load(string(kv.Key)[:len(subs)-1])
-			if tmp != nil {
-				subMap = tmp.(sync.Map)
-			}
-			subMap.Store(subs[len(subs)-1], string(kv.Value))
-			s.Cfgs.Store(string(kv.Key)[len(Conf.BasePrefix):len(string(kv.Key))-len(subs[len(subs)-1])], subMap)
+}
+
+func (s *BaseService) etcdSync(kv *mvccpb.KeyValue, evt mvccpb.Event_EventType) {
+	subs := strings.Split(string(kv.Key), "/")
+	if len(subs) > 0 {
+		var (
+			subMap    sync.Map
+			tmp       any
+			serviceID = string(kv.Key)[len(Conf.BasePrefix) : len(string(kv.Key))-len(subs[len(subs)-1])]
+			key       = subs[len(subs)-1]
+		)
+
+		tmp, _ = s.Cfgs.Load(serviceID)
+		if tmp != nil {
+			subMap = tmp.(sync.Map)
 		}
+		switch evt {
+		case clientv3.EventTypePut:
+			subMap.Store(key, string(kv.Value))
+			log.Info("put %s:%s:%s", serviceID, key, string(kv.Value))
+		case clientv3.EventTypeDelete:
+			subMap.Delete(key)
+			log.Info("delete %s:%s:%s", serviceID, key, string(kv.Value))
+		}
+		s.Cfgs.Store(serviceID, subMap)
 	}
 }
 
@@ -105,4 +129,19 @@ func (s *BaseService) ID() string {
 
 func (s *BaseService) WrapPrefix() string {
 	return Conf.BasePrefix + s.ID()
+}
+
+func (s *BaseService) Watch() {
+	switch s.IRegistry.(type) {
+	case *EtcdRegistry:
+		e := s.IRegistry.(*EtcdRegistry)
+		e.WatchCallBack(e.Watch(Conf.BasePrefix, clientv3.WithPrefix()), func(ev *clientv3.Event) {
+			switch ev.Type {
+			case clientv3.EventTypePut:
+				s.etcdSync(ev.Kv, clientv3.EventTypePut)
+			case clientv3.EventTypeDelete:
+				s.etcdSync(ev.Kv, clientv3.EventTypeDelete)
+			}
+		})
+	}
 }

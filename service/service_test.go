@@ -46,3 +46,11 @@ func TestBaseService_Sync(t *testing.T) {
 		return true
 	})
 }
+
+func TestBaseService_Watch(t *testing.T) {
+	s.IRegistry.Init()
+	s.Sync()
+	s.Watch()
+
+	time.Sleep(10 * time.Second)
+}

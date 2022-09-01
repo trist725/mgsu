@@ -4,6 +4,8 @@ import (
 	context "context"
 	"time"
 
+	"github.com/trist725/mgsu/log"
+
 	etcd_v3 "github.com/trist725/mgsu/etcd/client/v3"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
@@ -61,11 +63,26 @@ func (e *EtcdRegistry) GetType() string {
 }
 
 func (e *EtcdRegistry) Register(prefix string, kvs interface{}) {
+	resp, err := e.Cli.Grant(context.TODO(), Conf.EtcdLease)
+	if err != nil {
+		panic(err)
+	}
+
 	for k, v := range kvs.(map[string]string) {
-		if _, err := e.Put(prefix+k, v); err != nil {
+		if _, err := e.Put(prefix+k, v, clientv3.WithLease(resp.ID)); err != nil {
 			panic(err)
 		}
 	}
+	kaCh, err := e.Cli.KeepAlive(context.TODO(), resp.ID)
+	if err != nil {
+		panic(err)
+	}
+	go func() {
+		for {
+			ka := <-kaCh
+			log.Info("LeaseID:%d ttl:%d keepalive.", ka.ID, ka.TTL)
+		}
+	}()
 }
 
 func (e *EtcdRegistry) Put(key, value string, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {
@@ -94,11 +111,6 @@ func (e *EtcdRegistry) Watch(key string, opts ...clientv3.OpOption) clientv3.Wat
 	return wch
 }
 
-func (e *EtcdRegistry) WatchCallBack(watchChan clientv3.WatchChan) {
-	go etcd_v3.WatchLoop(watchChan, func(ev *clientv3.Event) {
-		switch ev.Type {
-		case clientv3.EventTypePut:
-		case clientv3.EventTypeDelete:
-		}
-	})
+func (e *EtcdRegistry) WatchCallBack(watchChan clientv3.WatchChan, fn etcd_v3.WatchCallback) {
+	go etcd_v3.WatchLoop(watchChan, fn)
 }

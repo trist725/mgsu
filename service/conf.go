@@ -9,6 +9,7 @@ import (
 var Conf struct {
 	GRPCPort   string
 	BasePrefix string
+	EtcdLease  int64
 }
 
 //go:embed conf.json

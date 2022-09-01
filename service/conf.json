@@ -1,4 +1,5 @@
 {
   "BasePrefix": "/service/",
-  "gRPCPort": "7777"
+  "gRPCPort": "7777",
+  "EtcdLease": 10
 }
