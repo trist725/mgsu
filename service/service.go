@@ -21,7 +21,8 @@ type IService interface {
 
 type BaseService struct {
 	IRegistry
-	GreeterServiceImpl
+	IRPCServerImpl
+	IRPCClientImpl
 
 	Index string
 	Name  string
@@ -31,13 +32,15 @@ type BaseService struct {
 	Cfgs sync.Map // serviceID-key-value
 }
 
-func NewBaseService(typ, index, name string, registry IRegistry) *BaseService {
+func NewBaseService(typ, index, name string, registry IRegistry, server IRPCServerImpl, client IRPCClientImpl) *BaseService {
 	return &BaseService{
-		IRegistry: registry,
-		Name:      name,
-		Typ:       typ,
-		Index:     index,
-		IP:        util.GetOutboundIP().String(),
+		IRegistry:      registry,
+		Name:           name,
+		Typ:            typ,
+		Index:          index,
+		IP:             util.GetOutboundIP().String(),
+		IRPCServerImpl: server,
+		IRPCClientImpl: client,
 	}
 }
 
@@ -46,7 +49,7 @@ func (s *BaseService) Start() {
 	s.Register()
 	s.Sync()
 	s.Watch()
-	s.GreeterServiceImpl.Init()
+	s.IRPCServerImpl.Serve()
 }
 
 func (s *BaseService) Stop() {

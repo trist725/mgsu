@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "./service";
+option go_package = "./rpc";
 
 package helloworld;
 

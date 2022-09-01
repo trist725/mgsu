@@ -4,7 +4,7 @@
 // - protoc             v3.21.3
 // source: service.proto
 
-package service
+package rpc
 
 import (
 	context "context"

@@ -5,19 +5,23 @@ import (
 	"testing"
 	"time"
 
+	"github.com/trist725/mgsu/service/rpc"
+
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 var s = NewBaseService("testtype", "1", "testname", NewEtcdRegistry(&clientv3.Config{
-	Endpoints:   []string{"118.195.177.161:12379"},
+	Endpoints:   []string{"localhost:2379"},
 	DialTimeout: 3 * time.Second,
-}, 3*time.Second))
+}, 3*time.Second), &rpc.GreeterServiceImpl{Addr: "[::]:7777"},
+	&rpc.GreeterClientImpl{Addr: "localhost:7777", Timeout: 2 * time.Second})
 
 func TestBaseService_Start(t *testing.T) {
 	t.Log(s.ID())
 	t.Log(s.GetIP())
 	t.Log(Conf.GRPCPort)
-	s.Start()
+	go s.Start()
+	s.IRPCClientImpl.Dial()
 }
 
 func TestBaseService_Register(t *testing.T) {

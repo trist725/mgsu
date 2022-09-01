@@ -1,8 +1,7 @@
-package service
+package rpc
 
 import (
 	context "context"
-	"fmt"
 	"log"
 	"net"
 
@@ -12,10 +11,12 @@ import (
 // GreeterServiceImpl is used to implement GreeterServer.
 type GreeterServiceImpl struct {
 	UnimplementedGreeterServer
+
+	Addr string
 }
 
-func (s *GreeterServiceImpl) Init() {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", Conf.GRPCPort))
+func (s *GreeterServiceImpl) Serve() {
+	lis, err := net.Listen("tcp", s.Addr)
 	if err != nil {
 		panic(err)
 	}
