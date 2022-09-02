@@ -1,6 +1,7 @@
 package service
 
 import (
+	"net"
 	"strings"
 	"sync"
 
@@ -13,6 +14,7 @@ import (
 )
 
 type IService interface {
+	Init()
 	Start()
 	Stop()
 	Register()
@@ -24,16 +26,18 @@ type BaseService struct {
 	IRPCServerImpl
 	IRPCClientImpl
 
-	Index string
-	Name  string
-	Typ   string
-	IP    string
+	Index      string
+	Name       string
+	Typ        string
+	IP         string
+	BasePrefix string
 
 	Cfgs sync.Map // serviceID-key-value
 }
 
 func NewBaseService(typ, index, name string, registry IRegistry, server IRPCServerImpl, client IRPCClientImpl) *BaseService {
 	return &BaseService{
+		BasePrefix:     "/service/",
 		IRegistry:      registry,
 		Name:           name,
 		Typ:            typ,
@@ -44,11 +48,14 @@ func NewBaseService(typ, index, name string, registry IRegistry, server IRPCServ
 	}
 }
 
-func (s *BaseService) Start() {
+func (s *BaseService) Init() {
 	s.IRegistry.Init()
 	s.Register()
 	s.Sync()
 	s.Watch()
+}
+
+func (s *BaseService) Start() {
 	s.IRPCServerImpl.Serve()
 }
 
@@ -58,10 +65,14 @@ func (s *BaseService) Stop() {
 
 // Register 必须在s.IRegistry.Init()后调用
 func (s *BaseService) Register() {
-	s.IRegistry.Register(s.WrapPrefix(), map[string]string{"ip": s.IP, "port": Conf.GRPCPort})
+	_, port, err := net.SplitHostPort(s.IRPCServerImpl.GetAddr())
+	if err != nil {
+		panic(err)
+	}
+	s.IRegistry.Register(s.WrapPrefix(), map[string]string{"ip": s.IP, "port": port})
 	m := sync.Map{}
 	m.Store("ip", s.IP)
-	m.Store("port", Conf.GRPCPort)
+	m.Store("port", port)
 	s.Cfgs.Store(s.ID(), m)
 }
 
@@ -69,7 +80,7 @@ func (s *BaseService) Register() {
 func (s *BaseService) Sync() {
 	switch s.IRegistry.(type) {
 	case *EtcdRegistry:
-		resp, err := s.IRegistry.(*EtcdRegistry).Get(Conf.BasePrefix, clientv3.WithPrefix())
+		resp, err := s.IRegistry.(*EtcdRegistry).Get(s.BasePrefix, clientv3.WithPrefix())
 		if err != nil {
 			log.Error(err.Error())
 			return
@@ -88,7 +99,7 @@ func (s *BaseService) etcdSync(kv *mvccpb.KeyValue, evt mvccpb.Event_EventType) 
 		var (
 			subMap    sync.Map
 			tmp       any
-			serviceID = string(kv.Key)[len(Conf.BasePrefix) : len(string(kv.Key))-len(subs[len(subs)-1])]
+			serviceID = string(kv.Key)[len(s.BasePrefix) : len(string(kv.Key))-len(subs[len(subs)-1])]
 			key       = subs[len(subs)-1]
 		)
 
@@ -131,14 +142,14 @@ func (s *BaseService) ID() string {
 }
 
 func (s *BaseService) WrapPrefix() string {
-	return Conf.BasePrefix + s.ID()
+	return s.BasePrefix + s.ID()
 }
 
 func (s *BaseService) Watch() {
 	switch s.IRegistry.(type) {
 	case *EtcdRegistry:
 		e := s.IRegistry.(*EtcdRegistry)
-		e.WatchCallBack(e.Watch(Conf.BasePrefix, clientv3.WithPrefix()), func(ev *clientv3.Event) {
+		e.WatchCallBack(e.Watch(s.BasePrefix, clientv3.WithPrefix()), func(ev *clientv3.Event) {
 			switch ev.Type {
 			case clientv3.EventTypePut:
 				s.etcdSync(ev.Kv, clientv3.EventTypePut)
@@ -147,4 +158,8 @@ func (s *BaseService) Watch() {
 			}
 		})
 	}
+}
+
+func (s *BaseService) SetBasePrefix(prefix string) {
+	s.BasePrefix = prefix
 }

@@ -38,3 +38,7 @@ func (s *GreeterServiceImpl) SayHelloAgain(ctx context.Context, in *HelloRequest
 	log.Printf("Received: %v", in.GetName())
 	return &HelloReply{Message: "Hello Again" + in.GetName()}, nil
 }
+
+func (s *GreeterServiceImpl) GetAddr() string {
+	return s.Addr
+}

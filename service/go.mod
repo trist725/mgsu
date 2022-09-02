@@ -7,6 +7,7 @@ require (
 	github.com/trist725/mgsu/etcd/client/v3 v3.0.0-20220830065507-80ea1100181d
 	github.com/trist725/mgsu/log v0.0.0-20220830095628-06f4ebfd9d9e
 	github.com/trist725/mgsu/util v0.0.0-20220829094705-a6ac930d188d
+	go.etcd.io/etcd/api/v3 v3.5.4
 	go.etcd.io/etcd/client/v3 v3.5.4
 	google.golang.org/grpc v1.49.0
 	google.golang.org/protobuf v1.28.1
@@ -35,7 +36,6 @@ require (
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/tealeg/xlsx v1.0.5 // indirect
-	go.etcd.io/etcd/api/v3 v3.5.4 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.4 // indirect
 	go.opentelemetry.io/otel v1.7.0 // indirect
 	go.opentelemetry.io/otel/exporters/prometheus v0.30.0 // indirect

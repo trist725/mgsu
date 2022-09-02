@@ -25,18 +25,19 @@ type IRegistry interface {
 
 type EtcdRegistry struct {
 	ReqTimeout time.Duration
-
-	Typ       string
-	Endpoints []string
+	LeaseTTL   int64 // time-to-live in seconds
+	Typ        string
+	Endpoints  []string
 
 	Cfg *clientv3.Config
 	Cli *clientv3.Client
 }
 
-func NewEtcdRegistry(cfg *clientv3.Config, timeout time.Duration) *EtcdRegistry {
+func NewEtcdRegistry(cfg *clientv3.Config, timeout time.Duration, ttl int64) *EtcdRegistry {
 	return &EtcdRegistry{
 		Cfg:        cfg,
 		ReqTimeout: timeout,
+		LeaseTTL:   ttl,
 	}
 }
 
@@ -63,7 +64,7 @@ func (e *EtcdRegistry) GetType() string {
 }
 
 func (e *EtcdRegistry) Register(prefix string, kvs interface{}) {
-	resp, err := e.Cli.Grant(context.TODO(), Conf.EtcdLease)
+	resp, err := e.Cli.Grant(context.TODO(), e.LeaseTTL)
 	if err != nil {
 		panic(err)
 	}
