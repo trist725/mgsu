@@ -80,7 +80,11 @@ func (e *EtcdRegistry) Register(prefix string, kvs interface{}) {
 	}
 	go func() {
 		for {
-			ka := <-kaCh
+			ka, ok := <-kaCh
+			if !ok {
+				log.Warn("etcd KeepAlive failed, chan closed.")
+				break
+			}
 			log.Info("LeaseID:%d ttl:%d keepalive.", ka.ID, ka.TTL)
 		}
 	}()
