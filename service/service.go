@@ -49,6 +49,10 @@ func NewBaseService(typ, index, name string, registry IRegistry, server IRPCServ
 }
 
 func (s *BaseService) Init() {
+	if s.IRegistry == nil {
+		log.Warn("nil Registry")
+		return
+	}
 	s.IRegistry.Init()
 	s.Register()
 	s.Sync()
@@ -56,6 +60,10 @@ func (s *BaseService) Init() {
 }
 
 func (s *BaseService) Start() {
+	if s.IRPCServerImpl == nil {
+		log.Warn("nil RPC srever")
+		return
+	}
 	s.IRPCServerImpl.Serve()
 }
 
