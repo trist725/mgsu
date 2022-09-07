@@ -73,6 +73,10 @@ func (s *BaseService) Stop() {
 
 // Register 必须在s.IRegistry.Init()后调用
 func (s *BaseService) Register() {
+	if s.IRPCServerImpl == nil {
+		log.Warn("Register(): nil RPC srever")
+		return
+	}
 	_, port, err := net.SplitHostPort(s.IRPCServerImpl.GetAddr())
 	if err != nil {
 		panic(err)
