@@ -65,10 +65,6 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 			syncPkg.Use()
 			p.AddImport(generator.GoImportPath(syncPkg.Location()))
 		}
-		if !contextPkg.IsUsed() {
-			contextPkg.Use()
-			p.AddImport(generator.GoImportPath(contextPkg.Location()))
-		}
 
 		message := newMessage(p.Generator, md)
 
@@ -82,6 +78,10 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 			if !mgoPkg.IsUsed() {
 				mgoPkg.Use()
 				p.AddImport(generator.GoImportPath(mgoPkg.Location()))
+			}
+			if !contextPkg.IsUsed() {
+				contextPkg.Use()
+				p.AddImport(generator.GoImportPath(contextPkg.Location()))
 			}
 		}
 
