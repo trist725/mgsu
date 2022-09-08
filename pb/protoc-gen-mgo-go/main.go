@@ -3,7 +3,8 @@ package main
 import (
 	"io/ioutil"
 
-	"github.com/trist725/mgsu/pb/plugin"
+	pbplugin "github.com/trist725/mgsu/pb/plugin"
+
 	"github.com/trist725/mgsu/pb/plugin/golang"
 	"github.com/trist725/mgsu/pb/plugin/golang/command"
 	"github.com/trist725/mgsu/pb/plugin/golang/mgo"

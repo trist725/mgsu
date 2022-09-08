@@ -6,7 +6,7 @@ import (
 
 	"github.com/qiniu/qmgo"
 
-	"github.com/globalsign/mgo/bson"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 const (

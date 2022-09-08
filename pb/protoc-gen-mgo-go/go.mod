@@ -3,7 +3,6 @@ module github.com/trist725/mgsu/pb/protoc-gen-mgo-go
 go 1.19
 
 require (
-	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8
 	github.com/gogo/protobuf v1.3.2
 	github.com/qiniu/qmgo v1.1.1
 	github.com/trist725/mgsu/pb/plugin v0.0.0-20220812033425-e54323d129d7

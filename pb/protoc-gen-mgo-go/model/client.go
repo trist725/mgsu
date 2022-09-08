@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/globalsign/mgo/bson"
 	"github.com/qiniu/qmgo"
 	"github.com/qiniu/qmgo/options"
+	"go.mongodb.org/mongo-driver/bson"
 	officialOpts "go.mongodb.org/mongo-driver/mongo/options"
 )
 
