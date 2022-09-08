@@ -47,6 +47,7 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 	jsonPkg := p.NewImport("encoding/json")
 	syncPkg := p.NewImport("sync")
 	mgoPkg := p.NewImport("github.com/qiniu/qmgo")
+	contextPkg := p.NewImport("context")
 
 	file := newFile(fd)
 
@@ -63,6 +64,10 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 		if !syncPkg.IsUsed() {
 			syncPkg.Use()
 			p.AddImport(generator.GoImportPath(syncPkg.Location()))
+		}
+		if !contextPkg.IsUsed() {
+			contextPkg.Use()
+			p.AddImport(generator.GoImportPath(contextPkg.Location()))
 		}
 
 		message := newMessage(p.Generator, md)
