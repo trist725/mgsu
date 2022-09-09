@@ -1,4 +1,4 @@
-package rpc
+package service
 
 import (
 	context "context"
@@ -36,7 +36,7 @@ func (s *GreeterServiceImpl) SayHello(ctx context.Context, in *HelloRequest) (*H
 
 func (s *GreeterServiceImpl) SayHelloAgain(ctx context.Context, in *HelloRequest) (*HelloReply, error) {
 	log.Printf("Received: %v", in.GetName())
-	return &HelloReply{Message: "Hello Again" + in.GetName()}, nil
+	return &HelloReply{Message: "Hello Again " + in.GetName()}, nil
 }
 
 func (s *GreeterServiceImpl) GetAddr() string {

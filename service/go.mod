@@ -4,9 +4,9 @@ go 1.19
 
 require (
 	github.com/asynkron/protoactor-go v0.0.0-20220616142548-afd2d973a1d1
-	github.com/trist725/mgsu/etcd/client/v3 v3.0.0-20220902032759-abf4b5fa5a73
-	github.com/trist725/mgsu/log v0.0.0-20220902032759-abf4b5fa5a73
-	github.com/trist725/mgsu/util v0.0.0-20220902032759-abf4b5fa5a73
+	github.com/trist725/mgsu/etcd/client/v3 v3.0.0-20220908075116-35d81b1bbf8a
+	github.com/trist725/mgsu/log v0.0.0-20220908075116-35d81b1bbf8a
+	github.com/trist725/mgsu/util v0.0.0-20220908075116-35d81b1bbf8a
 	go.etcd.io/etcd/api/v3 v3.5.4
 	go.etcd.io/etcd/client/v3 v3.5.4
 	google.golang.org/grpc v1.49.0
@@ -47,8 +47,8 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.23.0 // indirect
-	golang.org/x/net v0.0.0-20220826154423-83b083e8dc8b // indirect
-	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
+	golang.org/x/net v0.0.0-20220907135653-1e95f45603a7 // indirect
+	golang.org/x/sys v0.0.0-20220908164124-27713097b956 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/genproto v0.0.0-20220902135211-223410557253 // indirect
+	google.golang.org/genproto v0.0.0-20220908141613-51c1cc9bc6d0 // indirect
 )

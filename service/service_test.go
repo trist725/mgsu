@@ -5,16 +5,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/trist725/mgsu/service/rpc"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 var s = NewBaseService("testtype", "1", "testname", NewEtcdRegistry(&clientv3.Config{
-	Endpoints:   []string{"localhost:2379"},
+	Endpoints:   []string{"118.195.177.161:12379"},
 	DialTimeout: 3 * time.Second,
-}, 3*time.Second, 10), &rpc.GreeterServiceImpl{Addr: "[::]:7777"},
-	&rpc.GreeterClientImpl{Addr: "localhost:7777", Timeout: 2 * time.Second})
+}, 3*time.Second, 10), &GreeterServiceImpl{Addr: "[::]:7777"},
+	&GreeterClientImpl{BaseClient: NewBaseClient("localhost:7777"), Timeout: 2 * time.Second})
 
 func TestBaseService_Start(t *testing.T) {
 	s.Init()
@@ -58,4 +59,12 @@ func TestBaseService_Watch(t *testing.T) {
 	s.Watch()
 
 	time.Sleep(10 * time.Second)
+}
+
+func TestBaseClient(t *testing.T) {
+	s.Init()
+	s.Dial(grpc.WithTransportCredentials(insecure.NewCredentials()))
+	go s.IRPCClientImpl.(*GreeterClientImpl).Do()
+	defer s.Close()
+	s.Start()
 }
