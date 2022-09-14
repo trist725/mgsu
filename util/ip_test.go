@@ -2,6 +2,11 @@ package util
 
 import "testing"
 
-func TestGetOutboundIP(t *testing.T) {
-	t.Log(GetOutboundIP())
+func TestGetLANIP(t *testing.T) {
+	t.Log(GetLANIP())
+}
+
+func TestGetWANIP(t *testing.T) {
+	ip, _ := GetWANIP()
+	t.Log(ip)
 }
