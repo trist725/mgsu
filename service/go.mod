@@ -3,10 +3,10 @@ module github.com/trist725/mgsu/service
 go 1.19
 
 require (
-	github.com/asynkron/protoactor-go v0.0.0-20220616142548-afd2d973a1d1
-	github.com/trist725/mgsu/etcd/client/v3 v3.0.0-20220908075116-35d81b1bbf8a
-	github.com/trist725/mgsu/log v0.0.0-20220908075116-35d81b1bbf8a
-	github.com/trist725/mgsu/util v0.0.0-20220908075116-35d81b1bbf8a
+	github.com/asynkron/protoactor-go v0.0.0-20220910074408-d2ceff064d72
+	github.com/trist725/mgsu/etcd/client/v3 v3.0.0-20220914035234-e9629c258a72
+	github.com/trist725/mgsu/log v0.0.0-20220914035234-e9629c258a72
+	github.com/trist725/mgsu/util v0.0.0-20220914035234-e9629c258a72
 	go.etcd.io/etcd/api/v3 v3.5.4
 	go.etcd.io/etcd/client/v3 v3.5.4
 	google.golang.org/grpc v1.49.0
@@ -37,18 +37,18 @@ require (
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/tealeg/xlsx v1.0.5 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.4 // indirect
-	go.opentelemetry.io/otel v1.9.0 // indirect
+	go.opentelemetry.io/otel v1.10.0 // indirect
 	go.opentelemetry.io/otel/exporters/prometheus v0.31.0 // indirect
 	go.opentelemetry.io/otel/metric v0.31.0 // indirect
-	go.opentelemetry.io/otel/sdk v1.9.0 // indirect
+	go.opentelemetry.io/otel/sdk v1.10.0 // indirect
 	go.opentelemetry.io/otel/sdk/export/metric v0.28.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v0.31.0 // indirect
-	go.opentelemetry.io/otel/trace v1.9.0 // indirect
+	go.opentelemetry.io/otel/trace v1.10.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.23.0 // indirect
-	golang.org/x/net v0.0.0-20220907135653-1e95f45603a7 // indirect
-	golang.org/x/sys v0.0.0-20220908164124-27713097b956 // indirect
+	golang.org/x/net v0.0.0-20220909164309-bea034e7d591 // indirect
+	golang.org/x/sys v0.0.0-20220913175220-63ea55921009 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/genproto v0.0.0-20220908141613-51c1cc9bc6d0 // indirect
+	google.golang.org/genproto v0.0.0-20220913154956-18f8339a66a5 // indirect
 )

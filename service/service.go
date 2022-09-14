@@ -36,13 +36,14 @@ type BaseService struct {
 }
 
 func NewBaseService(typ, index, name string, registry IRegistry, server IRPCServerImpl, client IRPCClientImpl) *BaseService {
+	ip, _ := util.GetWANIP()
 	return &BaseService{
 		BasePrefix:     "/service/",
 		IRegistry:      registry,
 		Name:           name,
 		Typ:            typ,
 		Index:          index,
-		IP:             util.GetOutboundIP().String(),
+		IP:             ip,
 		IRPCServerImpl: server,
 		IRPCClientImpl: client,
 	}
