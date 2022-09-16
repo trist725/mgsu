@@ -9,8 +9,8 @@ import (
 
 	clientv3 "go.etcd.io/etcd/client/v3"
 
-	"github.com/trist725/mgsu/log"
 	"github.com/trist725/mgsu/util"
+	"github.com/trist725/myleaf/log"
 )
 
 type IService interface {
@@ -51,7 +51,7 @@ func NewBaseService(typ, index, name string, registry IRegistry, server IRPCServ
 
 func (s *BaseService) Init() {
 	if s.IRegistry == nil {
-		log.Warn("nil Registry")
+		log.Debug("nil Registry")
 		return
 	}
 	s.IRegistry.Init()
@@ -62,7 +62,7 @@ func (s *BaseService) Init() {
 
 func (s *BaseService) Start() {
 	if s.IRPCServerImpl == nil {
-		log.Warn("nil RPC srever")
+		log.Debug("nil RPC srever")
 		return
 	}
 	s.IRPCServerImpl.Serve()
@@ -75,7 +75,7 @@ func (s *BaseService) Stop() {
 // Register 必须在s.IRegistry.Init()后调用
 func (s *BaseService) Register() {
 	if s.IRPCServerImpl == nil {
-		log.Warn("Register(): nil RPC srever")
+		log.Debug("Register(): nil RPC srever")
 		return
 	}
 	_, port, err := net.SplitHostPort(s.IRPCServerImpl.GetAddr())
@@ -123,10 +123,10 @@ func (s *BaseService) etcdSync(kv *mvccpb.KeyValue, evt mvccpb.Event_EventType) 
 		switch evt {
 		case clientv3.EventTypePut:
 			subMap.Store(key, string(kv.Value))
-			log.Info("put %s:%s:%s", serviceID, key, string(kv.Value))
+			log.Debug("put %s:%s:%s", serviceID, key, string(kv.Value))
 		case clientv3.EventTypeDelete:
 			subMap.Delete(key)
-			log.Info("delete %s:%s:%s", serviceID, key, string(kv.Value))
+			log.Debug("delete %s:%s:%s", serviceID, key, string(kv.Value))
 		}
 		s.Cfgs.Store(serviceID, subMap)
 	}

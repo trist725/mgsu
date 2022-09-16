@@ -4,7 +4,7 @@ import (
 	context "context"
 	"time"
 
-	"github.com/trist725/mgsu/log"
+	"github.com/trist725/myleaf/log"
 
 	etcd_v3 "github.com/trist725/mgsu/etcd/client/v3"
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -82,10 +82,10 @@ func (e *EtcdRegistry) Register(prefix string, kvs interface{}) {
 		for {
 			ka, ok := <-kaCh
 			if !ok {
-				log.Warn("etcd KeepAlive failed, chan closed.")
+				log.Debug("etcd KeepAlive failed, chan closed.")
 				break
 			}
-			log.Info("LeaseID:%d ttl:%d keepalive.", ka.ID, ka.TTL)
+			log.Debug("LeaseID:%d ttl:%d keepalive.", ka.ID, ka.TTL)
 		}
 	}()
 }

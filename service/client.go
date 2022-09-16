@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/trist725/mgsu/log"
+	"github.com/trist725/myleaf/log"
 	"google.golang.org/grpc"
 )
 

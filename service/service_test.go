@@ -1,10 +1,12 @@
 package service
 
 import (
+	"log"
 	"sync"
 	"testing"
 	"time"
 
+	mlog "github.com/trist725/myleaf/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
@@ -62,6 +64,12 @@ func TestBaseService_Watch(t *testing.T) {
 }
 
 func TestBaseClient(t *testing.T) {
+	logger, err := mlog.New("debug", "./log", log.LstdFlags)
+	if err != nil {
+		panic(err)
+	}
+	mlog.Export(logger)
+	defer logger.Close()
 	s.Init()
 	s.Dial(grpc.WithTransportCredentials(insecure.NewCredentials()))
 	go s.IRPCClientImpl.(*GreeterClientImpl).Do()
