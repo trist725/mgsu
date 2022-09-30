@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/qiniu/qmgo v1.1.2
-	github.com/trist725/mgsu/pb/plugin v0.0.0-20220930081623-58064676cd94
+	github.com/trist725/mgsu/pb/plugin v0.0.0-20220930084933-040d7010fb1b
 	go.mongodb.org/mongo-driver v1.10.2
 )
 
