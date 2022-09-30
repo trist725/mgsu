@@ -84,10 +84,6 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 				contextPkg.Use()
 				p.AddImport(generator.GoImportPath(contextPkg.Location()))
 			}
-			if !contextPkg.IsUsed() {
-				contextPkg.Use()
-				p.AddImport(generator.GoImportPath(contextPkg.Location()))
-			}
 			if !bsonPkg.IsUsed() {
 				bsonPkg.Use()
 				p.AddImport(generator.GoImportPath(bsonPkg.Location()))
