@@ -213,8 +213,8 @@ func (m {{.Name}}) Update(selector interface{}, update interface{}) (err error) 
 	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateOne(context.Background(), selector, update)
 }
 
-func (m {{.Name}}) UpdateByID() (err error) {
-	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateId(context.Background(), m.ID, m)
+func (m {{.Name}}) UpdateByObjID(id string) (err error) {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateId(context.Background(), id, bson.D{{"$set", m}})
 }
 
 func (m {{.Name}}) RemoveByID() error {
