@@ -83,7 +83,7 @@ func (s *BaseService) Register() {
 		panic(err)
 	}
 	s.IRegistry.Register(s.WrapPrefix(), map[string]string{"ip": s.IP, "port": port})
-	m := sync.Map{}
+	m := &sync.Map{}
 	m.Store("ip", s.IP)
 	m.Store("port", port)
 	s.Cfgs.Store(s.ID(), m)
@@ -110,7 +110,7 @@ func (s *BaseService) etcdSync(kv *mvccpb.KeyValue, evt mvccpb.Event_EventType) 
 	subs := strings.Split(string(kv.Key), "/")
 	if len(subs) > 0 {
 		var (
-			subMap    sync.Map
+			subMap    = new(sync.Map)
 			tmp       any
 			serviceID = string(kv.Key)[len(s.BasePrefix) : len(string(kv.Key))-len(subs[len(subs)-1])]
 			key       = subs[len(subs)-1]
@@ -118,7 +118,7 @@ func (s *BaseService) etcdSync(kv *mvccpb.KeyValue, evt mvccpb.Event_EventType) 
 
 		tmp, _ = s.Cfgs.Load(serviceID)
 		if tmp != nil {
-			subMap = tmp.(sync.Map)
+			subMap = tmp.(*sync.Map)
 		}
 		switch evt {
 		case clientv3.EventTypePut:
@@ -149,6 +149,7 @@ func (s *BaseService) ID() string {
 	b.WriteString(s.Typ)
 	b.WriteString("/")
 	b.WriteString(s.Name)
+	b.WriteString("/")
 	b.WriteString(s.Index)
 	b.WriteString("/")
 	return b.String()
@@ -175,4 +176,29 @@ func (s *BaseService) Watch() {
 
 func (s *BaseService) SetBasePrefix(prefix string) {
 	s.BasePrefix = prefix
+}
+
+func (s *BaseService) GetCfgByTyp(typ string) (res []map[string]string) {
+	s.Cfgs.Range(func(key, value any) bool {
+		serviceID := key.(string)
+		subs := strings.Split(serviceID, "/")
+		if len(subs) < 1 {
+			log.Debug("unexpect serviceID: [%s]", serviceID)
+			return true
+		}
+
+		if subs[0] == typ {
+			if kvs, ok := s.Cfgs.Load(serviceID); ok {
+				subMap := kvs.(*sync.Map)
+				r := make(map[string]string)
+				subMap.Range(func(k, v any) bool {
+					r[k.(string)] = v.(string)
+					return true
+				})
+				res = append(res, r)
+			}
+		}
+		return true
+	})
+	return
 }

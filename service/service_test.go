@@ -76,3 +76,18 @@ func TestBaseClient(t *testing.T) {
 	defer s.Close()
 	s.Start()
 }
+func TestBaseService_GetCfgByTyp(t *testing.T) {
+	s.Init()
+	t.Log(s.ID())
+	t.Log(s.GetIP())
+	t.Log(s.GetAddr())
+	go s.Start()
+
+	res := s.GetCfgByTyp("amax")
+	for _, v := range res {
+		for k, v2 := range v {
+			t.Logf("key:%s, value:%s", k, v2)
+		}
+	}
+
+}
