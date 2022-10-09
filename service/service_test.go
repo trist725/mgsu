@@ -44,7 +44,7 @@ func TestBaseService_Sync(t *testing.T) {
 	s.Cfgs.Range(func(key, value any) bool {
 		t.Log("prefix:", key)
 		if value != nil {
-			subMap := value.(sync.Map)
+			subMap := value.(*sync.Map)
 			subMap.Range(func(key, value any) bool {
 				t.Log("key:", key)
 				t.Log("value:", value)
@@ -76,6 +76,7 @@ func TestBaseClient(t *testing.T) {
 	defer s.Close()
 	s.Start()
 }
+
 func TestBaseService_GetCfgByTyp(t *testing.T) {
 	s.Init()
 	t.Log(s.ID())
@@ -84,9 +85,9 @@ func TestBaseService_GetCfgByTyp(t *testing.T) {
 	go s.Start()
 
 	res := s.GetCfgByTyp("amax")
-	for _, v := range res {
+	for i, v := range res {
 		for k, v2 := range v {
-			t.Logf("key:%s, value:%s", k, v2)
+			t.Logf("%d: %s:%s", i, k, v2)
 		}
 	}
 

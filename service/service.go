@@ -2,6 +2,7 @@ package service
 
 import (
 	"net"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -178,11 +179,12 @@ func (s *BaseService) SetBasePrefix(prefix string) {
 	s.BasePrefix = prefix
 }
 
+// GetCfgByTyp 返回一个res切片,切片的索引是 typ 类型的service的索引,切片元素是service的配置
 func (s *BaseService) GetCfgByTyp(typ string) (res []map[string]string) {
 	s.Cfgs.Range(func(key, value any) bool {
 		serviceID := key.(string)
 		subs := strings.Split(serviceID, "/")
-		if len(subs) < 1 {
+		if len(subs) < 3 {
 			log.Debug("unexpect serviceID: [%s]", serviceID)
 			return true
 		}
@@ -195,7 +197,12 @@ func (s *BaseService) GetCfgByTyp(typ string) (res []map[string]string) {
 					r[k.(string)] = v.(string)
 					return true
 				})
-				res = append(res, r)
+				idx, err := strconv.Atoi(subs[2])
+				if err != nil {
+					log.Debug("GetCfgByTyp err:[%s]", err.Error())
+					return true
+				}
+				res[idx] = r
 			}
 		}
 		return true
