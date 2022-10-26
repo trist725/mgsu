@@ -1,6 +1,6 @@
-module github.com/trist725/mgsu/pb/gen_static_data_go
+module github.com/trist725/mgsu/gen-static-data-go
 
-go 1.14
+go 1.19
 
 require (
 	github.com/tealeg/xlsx v1.0.5

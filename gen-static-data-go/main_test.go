@@ -1,9 +1,8 @@
 package main
 
 import (
+	"github.com/trist725/mgsu/gen-static-data-go/sd"
 	"testing"
-
-	"github.com/trist725/mgsu/pb/gen_static_data_go/sd"
 )
 
 func TestSourceCodeGenerate(t *testing.T) {

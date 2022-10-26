@@ -2,6 +2,5 @@
     "ExcelDir": ".",
     "SourceCodeDir": "./sd",
     "Debug": true,
-    "WhiteList": ["test", "test2"],
     "BlackList": ["test3"]
 }

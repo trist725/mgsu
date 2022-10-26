@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	flagConfigFilePath = flag.String("c", "./gen_static_data_go.json", "config file path, default=./gen_static_data_go.json")
+	flagConfigFilePath = flag.String("c", "./sd.json", "config file path, default=./sd.json")
 
 	gCfg *config
 )
