@@ -1,6 +1,6 @@
 package main
 
-const t = `// 本文件由gen_static_data_go生成
+const t = `// 本文件由gen-static-data-go生成
 // 请遵照提示添加修改！！！
 
 package sd
@@ -233,7 +233,7 @@ func (mgr *{{.Name}}Manager) AfterLoadAll(excelFilePath string) (success bool) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 `
 
-const globalT = `// 本文件由gen_static_data_go生成
+const globalT = `// 本文件由gen-static-data-go生成
 // 请勿修改！！！
 
 package sd
