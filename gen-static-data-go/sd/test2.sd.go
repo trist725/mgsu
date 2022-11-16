@@ -1,83 +1,133 @@
-package main
-
-const t = `// 本文件由gen-static-data-go生成
+// 本文件由gen-static-data-go生成
 // 请遵照提示添加修改！！！
 
 package sd
 
-{{.Import}}
+import "encoding/json"
+import "fmt"
+import "log"
+
+import "github.com/tealeg/xlsx"
+import "github.com/trist725/mgsu/util"
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // TODO 添加扩展import代码
-//import_extend_begin{{.ImportExtend}}//import_extend_end
+//import_extend_begin
+//import_extend_end
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-type {{.Name}} struct {
-    {{range .FieldMetas}}
-    {{.Name}} {{.TypeName}} ` + "`excel_column:\"{{.Column}}\" excel_name:\"{{.XlsxName}}\"`" + ` // {{.Comment}}
-	{{end}}
-	
+type Test2 struct {
+	ID int64 `excel_column:"1" excel_name:"id"` // 船只ID
+
+	Name string `excel_column:"3" excel_name:"name"` // 名字
+
+	Icon string `excel_column:"4" excel_name:"icon"` // 头像资源
+
+	Quality int `excel_column:"5" excel_name:"quality"` // 品质
+
+	Type int `excel_column:"6" excel_name:"type"` // 类型
+
+	Str int `excel_column:"7" excel_name:"str"` // 船只初始攻击
+
+	SailorStr int `excel_column:"8" excel_name:"sailor_str"` // 水手初始攻击
+
+	Def int `excel_column:"9" excel_name:"def"` // 船只初始耐久
+
+	Sailors int `excel_column:"10" excel_name:"sailors"` // 船只搭载水手数量
+
+	SailorLimit int `excel_column:"11" excel_name:"sailor_limit"` // 出港保底水手数
+
+	Power int `excel_column:"12" excel_name:"power"` // 船只初始推进力
+
+	Carrying int `excel_column:"13" excel_name:"carrying"` // 船只初始载货量
+
+	StrLimit int `excel_column:"14" excel_name:"str_limit"` // 船只攻击改造上限值
+
+	DefLimit int `excel_column:"15" excel_name:"def_limit"` // 船只耐久改造上限值
+
+	SailorsLimit int `excel_column:"16" excel_name:"sailors_limit"` // 船只搭载水手数量改造上限值
+
+	PowerLimit int `excel_column:"17" excel_name:"power_limit"` // 船只推进力改造上限值
+
+	CarryingLimit int `excel_column:"18" excel_name:"carrying_limit"` // 船只载货量改造上限值
+
+	ItemTypeID int `excel_column:"19" excel_name:"item_type_id"` // 材料表中对应专属订造材料id
+
+	MakeMoney int `excel_column:"20" excel_name:"make_money"` // 订造价格
+
+	TransformationMoney int `excel_column:"21" excel_name:"transformation_money"` // 改造价格
+
+	SellMoney int `excel_column:"22" excel_name:"sell_money"` // 出售价格
+
+	FormulaShipID int `excel_column:"23" excel_name:"formula_ship_id"` // 对应合成表中船图纸id
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	// TODO 添加结构体扩展字段
-	//struct_extend_begin{{.StructExtend}}//struct_extend_end
+	//struct_extend_begin
+	//struct_extend_end
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
-func New{{.Name}}() *{{.Name}} {
-	sd := &{{.Name}}{}
+func NewTest2() *Test2 {
+	sd := &Test2{}
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	// TODO 添加结构体New代码
-	//struct_new_begin{{.StructNew}}//struct_new_end
+	//struct_new_begin
+	//struct_new_end
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	return sd
 }
 
-func (sd {{.Name}}) String() string {
-    ba, _ := json.Marshal(sd)
-    return string(ba)
+func (sd Test2) String() string {
+	ba, _ := json.Marshal(sd)
+	return string(ba)
 }
 
-func (sd {{.Name}}) Clone() *{{.Name}} {
-    n := New{{.Name}}()
-    *n = sd
-	{{.CloneFieldSourceCode}}
+func (sd Test2) Clone() *Test2 {
+	n := NewTest2()
+	*n = sd
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	// TODO 添加结构体Clone代码
-	//struct_clone_begin{{.StructClone}}//struct_clone_end
+	//struct_clone_begin
+	//struct_clone_end
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
-    return n
+	return n
 }
 
-func (sd *{{.Name}}) load(row *xlsx.Row) error {
+func (sd *Test2) load(row *xlsx.Row) error {
 	return util.DeserializeStructFromXlsxRow(sd, row)
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-type {{.Name}}Manager struct {
-	dataArray []*{{.Name}}
-	dataMap   map[int64]*{{.Name}}
+// ////////////////////////////////////////////////////////////////////////////////////////////////////
+type Test2Manager struct {
+	dataArray []*Test2
+	dataMap   map[int64]*Test2
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
-    // TODO 添加manager扩展字段
-	//manager_extend_begin{{.ManagerExtend}}//manager_extend_end
+	// TODO 添加manager扩展字段
+	//manager_extend_begin
+	//manager_extend_end
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
-func new{{.Name}}Manager() *{{.Name}}Manager {
-	mgr := &{{.Name}}Manager{
-		dataArray: []*{{.Name}}{},
-		dataMap:   make(map[int64]*{{.Name}}),
+func newTest2Manager() *Test2Manager {
+	mgr := &Test2Manager{
+		dataArray: []*Test2{},
+		dataMap:   make(map[int64]*Test2),
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
-    // TODO 添加manager的New代码
-	//manager_new_begin{{.ManagerNew}}//manager_new_end
+	// TODO 添加manager的New代码
+	//manager_new_begin
+	//manager_new_end
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
 	return mgr
 }
 
-func (mgr *{{.Name}}Manager) Load(data []byte, fileName string) (success bool) {
+func (mgr *Test2Manager) Load(data []byte, fileName string) (success bool) {
 	success = true
 
 	xl, err := xlsx.OpenBinary(data)
@@ -105,19 +155,19 @@ func (mgr *{{.Name}}Manager) Load(data []byte, fileName string) (success bool) {
 	for i := 3; i < len(dataSheet.Rows); i++ {
 		row := dataSheet.Rows[i]
 		if len(row.Cells) <= 0 {
-		    continue
+			continue
 		}
 
 		firstColumn := row.Cells[0]
 		firstComment := firstColumn.String()
 		if firstComment != "" {
-		    if firstComment[0] == '#' {
-		        // 跳过被注释掉的行
-		        continue
-		    }
+			if firstComment[0] == '#' {
+				// 跳过被注释掉的行
+				continue
+			}
 		}
 
-		sd := New{{.Name}}()
+		sd := NewTest2()
 		err = sd.load(row)
 		if err != nil {
 			log.Printf("%s 加载第%d行失败, %s\n", fileName, i+1, err)
@@ -130,8 +180,9 @@ func (mgr *{{.Name}}Manager) Load(data []byte, fileName string) (success bool) {
 		}
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////
-        // TODO 添加结构体加载代码
-		//struct_load_begin{{.StructLoad}}//struct_load_end
+		// TODO 添加结构体加载代码
+		//struct_load_begin
+		//struct_load_end
 		//////////////////////////////////////////////////////////////////////////////////////////////////
 
 		if err := mgr.check(fileName, i+1, sd); err != nil {
@@ -144,19 +195,20 @@ func (mgr *{{.Name}}Manager) Load(data []byte, fileName string) (success bool) {
 		mgr.dataMap[sd.ID] = sd
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////
-        // TODO 添加manager加载代码
-		//manager_load_begin{{.ManagerLoad}}//manager_load_end
+		// TODO 添加manager加载代码
+		//manager_load_begin
+		//manager_load_end
 		//////////////////////////////////////////////////////////////////////////////////////////////////
 	}
 
 	return
 }
 
-func (mgr {{.Name}}Manager) Size() int {
+func (mgr Test2Manager) Size() int {
 	return len(mgr.dataArray)
 }
 
-func (mgr {{.Name}}Manager) Get(id int64) *{{.Name}} {
+func (mgr Test2Manager) Get(id int64) *Test2 {
 	sd, ok := mgr.dataMap[id]
 	if !ok {
 		return nil
@@ -164,7 +216,7 @@ func (mgr {{.Name}}Manager) Get(id int64) *{{.Name}} {
 	return sd.Clone()
 }
 
-func (mgr {{.Name}}Manager) Each(f func(sd *{{.Name}}) bool) {
+func (mgr Test2Manager) Each(f func(sd *Test2) bool) {
 	for _, sd := range mgr.dataArray {
 		if !f(sd.Clone()) {
 			break
@@ -172,7 +224,7 @@ func (mgr {{.Name}}Manager) Each(f func(sd *{{.Name}}) bool) {
 	}
 }
 
-func (mgr *{{.Name}}Manager) each(f func(sd *{{.Name}}) bool) {
+func (mgr *Test2Manager) each(f func(sd *Test2) bool) {
 	for _, sd := range mgr.dataArray {
 		if !f(sd) {
 			break
@@ -180,7 +232,7 @@ func (mgr *{{.Name}}Manager) each(f func(sd *{{.Name}}) bool) {
 	}
 }
 
-func (mgr {{.Name}}Manager) findIf(f func(sd *{{.Name}}) bool) *{{.Name}} {
+func (mgr Test2Manager) findIf(f func(sd *Test2) bool) *Test2 {
 	for _, sd := range mgr.dataArray {
 		if f(sd) {
 			return sd
@@ -189,7 +241,7 @@ func (mgr {{.Name}}Manager) findIf(f func(sd *{{.Name}}) bool) *{{.Name}} {
 	return nil
 }
 
-func (mgr {{.Name}}Manager) FindIf(f func(sd *{{.Name}}) bool) *{{.Name}} {
+func (mgr Test2Manager) FindIf(f func(sd *Test2) bool) *Test2 {
 	for _, sd := range mgr.dataArray {
 		n := sd.Clone()
 		if f(n) {
@@ -199,70 +251,32 @@ func (mgr {{.Name}}Manager) FindIf(f func(sd *{{.Name}}) bool) *{{.Name}} {
 	return nil
 }
 
-func (mgr {{.Name}}Manager) check(fileName string, row int, sd *{{.Name}}) error {
+func (mgr Test2Manager) check(fileName string, row int, sd *Test2) error {
 	if _, ok := mgr.dataMap[sd.ID]; ok {
 		return fmt.Errorf("%s 第%d行的id重复", fileName, row)
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	// TODO 添加检查代码
-	//check_begin{{.Check}}//check_end
+	//check_begin
+	//check_end
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
 	return nil
 }
 
-func (mgr *{{.Name}}Manager) AfterLoadAll(fileName string) (success bool) {
+func (mgr *Test2Manager) AfterLoadAll(fileName string) (success bool) {
 	success = true
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	// TODO 添加加载后处理代码
-	//after_load_all_begin{{.AfterLoadAll}}//after_load_all_end
+	//after_load_all_begin
+	//after_load_all_end
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	return
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // TODO 添加扩展代码
-//extend_begin{{.Extend}}//extend_end
+//extend_begin
+//extend_end
 //////////////////////////////////////////////////////////////////////////////////////////////////
-`
-
-const globalT = `// 本文件由gen-static-data-go生成
-// 请勿修改！！！
-
-package sd
-
-import "embed"
-
-var (
-    {{range .StaticDataMetas}}{{.Name}}Mgr = new{{.Name}}Manager()
-    {{end}}
-)
-
-{{range .StaticDataMetas}}
-//go:embed xlsx/{{.ExcelFileBaseName -}}
-{{end}}
-var f embed.FS
-
-func LoadAll() (success bool) {
-	var data []byte
-	success = true
-
-    {{range .StaticDataMetas}}
-	data, _ = f.ReadFile("xlsx/{{.ExcelFileBaseName}}")
-	success = {{.Name}}Mgr.Load(data, "{{.ExcelFileBaseName}}") && success
-    {{- end}}
-
-	return
-}
-
-func AfterLoadAll() (success bool) {
-	success = true
-
-	{{range .StaticDataMetas}}
-	success = {{.Name}}Mgr.AfterLoadAll("{{.ExcelFileBaseName}}") && success
-    {{- end}}
-
-	return
-}
-`

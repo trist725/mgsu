@@ -147,7 +147,6 @@ func (sdm staticDataMeta) Import() string {
 	i := `import "encoding/json"
 import "fmt"
 import "log"
-import "path/filepath"
 `
 
 	needImportTime := false

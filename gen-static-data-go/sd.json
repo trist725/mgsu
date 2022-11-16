@@ -1,5 +1,5 @@
 {
-    "ExcelDir": ".",
+    "ExcelDir": "./sd/xlsx",
     "SourceCodeDir": "./sd",
     "Debug": true,
     "BlackList": ["test3"]
