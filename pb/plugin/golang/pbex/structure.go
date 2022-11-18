@@ -12,6 +12,7 @@ const (
 type message struct {
 	*golang.Message
 	Response string
+	Model    string
 }
 
 func newMessage(g *generator.Generator, d *generator.Descriptor) *message {

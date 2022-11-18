@@ -12,6 +12,7 @@ import (
 
 var (
 	msgRegexp      = regexp.MustCompile(`@msg(?:\s*=\s*(\d+))?`)
+	modelRegexp    = regexp.MustCompile(`@model(?:\s*=\s*(\d+))?`)
 	responseRegexp = regexp.MustCompile(`\s*@response(?:\s*=\s*(\S+))?\s*`)
 )
 
