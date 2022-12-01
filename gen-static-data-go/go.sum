@@ -13,8 +13,6 @@ github.com/rogpeppe/go-internal v1.8.0 h1:FCbCCtXNOY3UtUuHUYaghJg4y7Fd14rXifAYUA
 github.com/rogpeppe/go-internal v1.8.0/go.mod h1:WmiCO8CzOY8rg0OYDC4/i/2WRWAB6poM+XZ2dLUbcbE=
 github.com/tealeg/xlsx v1.0.5 h1:+f8oFmvY8Gw1iUXzPk+kz+4GpbDZPK1FhPiQRd+ypgE=
 github.com/tealeg/xlsx v1.0.5/go.mod h1:btRS8dz54TDnvKNosuAqxrM1QgN1udgk9O34bDCnORM=
-github.com/trist725/mgsu/util v0.0.0-20200529024947-769457096813 h1:mOE3Fa33Bf76zTYof+CELHM8YFBcfLT+JKQYIVQtbDA=
-github.com/trist725/mgsu/util v0.0.0-20200529024947-769457096813/go.mod h1:OJGU196y+to2DkbVAol0wALH58k8SPHzIWI437lquAk=
 github.com/trist725/mgsu/util v0.0.0-20221201054554-5ffef5403c16 h1:r6DVICovFwpAnpFR6Av0uq5aIeA0NY+I92wVh92IPKg=
 github.com/trist725/mgsu/util v0.0.0-20221201054554-5ffef5403c16/go.mod h1:T8MVDLMYFU5O+FMrEviPK1QpQKP+QN5H7IykM8IlkW8=
 gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
