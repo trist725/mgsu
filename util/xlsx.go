@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/tealeg/xlsx"
 )
@@ -62,6 +63,9 @@ func DeserializeStructFromXlsxRow(e interface{}, row *xlsx.Row) (err error) {
 				return fmt.Errorf("could not set %s %s to %s, %s", kind.String(), tf.Name, cell.Value, err)
 			}
 
+		case reflect.Bool:
+			vef.SetBool(CellToBool(cell.Value))
+
 		default:
 			if err := json.Unmarshal([]byte(cell.String()), vef.Interface()); err != nil {
 				return fmt.Errorf("could not set %s %s to %s, %s", kind.String(), tf.Name, cell.Value, err)
@@ -70,4 +74,20 @@ func DeserializeStructFromXlsxRow(e interface{}, row *xlsx.Row) (err error) {
 	}
 
 	return nil
+}
+
+func CellToBool(v string) (b bool) {
+	v = strings.ToLower(v)
+	switch v {
+	case "true", "1":
+		b = true
+	case "false", "0":
+		b = false
+	default:
+		i, _ := strconv.Atoi(v)
+		if i > 0 {
+			b = true
+		}
+	}
+	return
 }
