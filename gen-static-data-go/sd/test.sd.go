@@ -19,7 +19,7 @@ import "github.com/trist725/mgsu/util"
 type Test struct {
 	ID int64 `excel_column:"1" excel_name:"id"` // 整型
 
-	S235235 string `excel_column:"3" excel_name:"s235235"` // 字符串
+	Tb bool `excel_column:"2" excel_name:"tb"` // sfsg
 
 	Time time.Duration `excel_column:"4" excel_name:"time"` // 时间
 

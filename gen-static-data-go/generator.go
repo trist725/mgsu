@@ -432,6 +432,10 @@ func (sdcg *staticDataCodeGenerator) generate() error {
 				continue
 			}
 
+			if []byte(fm.XlsxName)[0] == '#' {
+				continue
+			}
+
 			//fm.Name, err = nameRow.Cells[i].String()
 			//if err != nil || fm.Name == "" {
 			//	continue
