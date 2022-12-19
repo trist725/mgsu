@@ -52,14 +52,14 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 
 	file := newFile(fd)
 
+	if !jsonPkg.IsUsed() {
+		jsonPkg.Use()
+		p.AddImport(generator.GoImportPath(jsonPkg.Location()))
+	}
+
 	for _, md := range file.FileDescriptor.Messages() {
 		if md.DescriptorProto.GetOptions().GetMapEntry() {
 			continue
-		}
-
-		if !jsonPkg.IsUsed() {
-			jsonPkg.Use()
-			p.AddImport(generator.GoImportPath(jsonPkg.Location()))
 		}
 
 		if !syncPkg.IsUsed() {
