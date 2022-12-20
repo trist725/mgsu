@@ -42,7 +42,7 @@ func (m *{{.Name}}) ResetEx() {
             }
             {{end}}
         {{end}}
-        //m.{{.Name}} = {{.GoType}}{}
+        // m.{{.Name}} = {{.GoType}}{}
         m.{{.Name}} = nil
     {{else}}
         {{if or (eq .DescriptorProtoType "int32") (eq .DescriptorProtoType "uint32") (eq .DescriptorProtoType "int64") (eq .DescriptorProtoType "uint64") }}
@@ -82,9 +82,9 @@ func (m {{.Name}}) Clone() *{{.Name}} {
 	}
 {{range .Fields}}
     {{if (eq .DescriptorProtoType "message") }}
-        {{if .IsRepeated}}
+        {{if .IsRepeated -}}
             if len(m.{{.Name}}) > 0 {
-                n.{{.Name}} = make({{.GoType}}, len(m.{{.Name}}))
+                n.{{.Name}} = make({{.GoType}}, len(m.{{.Name -}}))
                 for i, e := range m.{{.Name}} {
                     {{if .IsMap}}
                     {{if and (not .ValueField.IsScalar) (not .ValueField.IsString) (not .ValueField.IsEnum)}}
@@ -101,7 +101,7 @@ func (m {{.Name}}) Clone() *{{.Name}} {
                     {{end}}
                 }
             } else {
-                //n.{{.Name}} = {{.GoType}}{}
+                // n.{{.Name}} = {{.GoType}}{}
                 n.{{.Name}} = nil
             }
         {{else}}
@@ -110,7 +110,7 @@ func (m {{.Name}}) Clone() *{{.Name}} {
             }
         {{end}}
     {{else if (eq .DescriptorProtoType "bytes")}}
-        {{if .IsRepeated}}
+        {{if .IsRepeated -}}
             if len(m.{{.Name}}) > 0 {
                 for _, b := range m.{{.Name}} {
                     if len(b) > 0 {
@@ -118,30 +118,30 @@ func (m {{.Name}}) Clone() *{{.Name}} {
                         copy(nb, b)
                         n.{{.Name}} = append(n.{{.Name}}, nb)
                     } else {
-                        //n.{{.Name}} = append(n.{{.Name}}, []byte{})
+                        // n.{{.Name}} = append(n.{{.Name}}, []byte{})
                         n.{{.Name}} = append(n.{{.Name}}, nil)
                     }
                 }
             } else {
-                //n.{{.Name}} = [][]byte{}
+                // n.{{.Name}} = [][]byte{}
                 n.{{.Name}} = nil
             }
-        {{else}}
+        {{else -}}
             if len(m.{{.Name}}) > 0 {
                 n.{{.Name}} = make([]byte, len(m.{{.Name}}))
                 copy(n.{{.Name}}, m.{{.Name}})
             } else {
-                //n.{{.Name}} = []byte{}
+                // n.{{.Name}} = []byte{}
                 n.{{.Name}} = nil
             }
         {{end}}
     {{else}}
-        {{if .IsRepeated}}
+        {{if .IsRepeated -}}
             if len(m.{{.Name}}) > 0 {
                 n.{{.Name}} = make([]{{.GoTypeToName}}, len(m.{{.Name}}))
                 copy(n.{{.Name}}, m.{{.Name}})
             } else {
-                //n.{{.Name}} = []{{.GoTypeToName}}{}
+                // n.{{.Name}} = []{{.GoTypeToName}}{}
                 n.{{.Name}} = nil
             }
         {{else}}
@@ -164,7 +164,7 @@ func Clone_{{.Name}}_Slice(dst []*{{.Name}}, src []*{{.Name}}) []*{{.Name}} {
 			}
 		}
 	} else {
-		//dst = []*{{.Name}}{}
+		// dst = []*{{.Name}}{}
 		dst = nil
 	}
 	return dst
@@ -230,10 +230,10 @@ func (m {{.Name}}) ToMsg(n *msg.{{.Msg}}) *msg.{{.Msg}} {
 {{range .Fields}}
 {{if .Msg}}
     {{if .IsMessage }}
-        {{if .IsRepeated}}
+        {{- if .IsRepeated -}}
             if len(m.{{.Name}}) > 0 {
 				{{if .IsMap}}
-					{{if and (not .ValueField.IsScalar) (not .ValueField.IsString) (not .ValueField.IsEnum)}}
+					{{- if and (not .ValueField.IsScalar) (not .ValueField.IsString) (not .ValueField.IsEnum) -}}
 						n.{{.Msg}} = make({{.MsgRepeatedMessageGoType}}, len(m.{{.Name}}))
 						for i, e := range m.{{.Name}} {
 							if e != nil {
@@ -242,14 +242,19 @@ func (m {{.Name}}) ToMsg(n *msg.{{.Msg}}) *msg.{{.Msg}} {
 								n.{{.Msg}}[i] = msg.Get_{{.ValueTypeToName}}()
 							}
 						}
-					{{else}}
+					{{- else if .ValueField.IsEnum -}}
+						n.{{.Msg}} = make({{.MsgRepeatedMessageGoType}}, len(m.{{.Name}}))
+						for i, e := range m.{{.Name}} {
+							n.{{.Msg}}[i] = msg.{{.ValueTypeToName}}(e)
+						}
+					{{- else -}}
 						n.{{.Msg}} = make({{.GoType}}, len(m.{{.Name}}))
 						for i, e := range m.{{.Name}} {
 							n.{{.Msg}}[i] = e
 						}
-					{{end}}
-				{{else}}
-					{{if and (not .IsScalar) (not .IsString) (not .IsEnum)}}
+					{{- end -}}
+				{{- else -}}
+					{{- if and (not .IsScalar) (not .IsString) (not .IsEnum) -}}
 						n.{{.Msg}} = make({{.MsgRepeatedMessageGoType}}, len(m.{{.Name}}))
 						for i, e := range m.{{.Name}} {
 							if e != nil {
@@ -258,60 +263,67 @@ func (m {{.Name}}) ToMsg(n *msg.{{.Msg}}) *msg.{{.Msg}} {
 								n.{{.Msg}}[i] = msg.Get_{{.GoTypeToName}}()
 							}
 						}
-					{{else}}
+					{{- else -}}
 						n.{{.Msg}} = make({{.GoType}}, len(m.{{.Name}}))
 						for i, e := range m.{{.Name}} {
 							n.{{.Msg}}[i] = e
 						}
-					{{end}}
-				{{end}}
+					{{- end -}}
+				{{- end -}}
             } else {
-                //n.{{.Msg}} = {{.GoType}}{}
+                // n.{{.Msg}} = {{.GoType}}{}
                 n.{{.Msg}} = nil
             }
-        {{else}}
+        {{- else -}}
             if m.{{.Msg}} != nil {
                 n.{{.Msg}} = m.{{.Name}}.ToMsg(n.{{.Msg}})
             }
         {{end}}
     {{else if .IsBytes}}
-        {{if .IsRepeated}}
+        {{if .IsRepeated -}}
             if len(m.{{.Name}}) > 0 {
-                for _, b := range m.{{.Name}} {
+                for _, b := range m.{{.Name -}} {
                     if len(b) > 0 {
                         nb := make([]byte, len(b))
                         copy(nb, b)
                         n.{{.Msg}} = append(n.{{.Msg}}, nb)
                     } else {
-                        //n.{{.Msg}} = append(n.{{.Msg}}, []byte{})
+                        // n.{{.Msg}} = append(n.{{.Msg}}, []byte{})
                         n.{{.Msg}} = append(n.{{.Msg}}, nil)
                     }
                 }
             } else {
-                //n.{{.Msg}} = [][]byte{}
+                // n.{{.Msg}} = [][]byte{}
                 n.{{.Msg}} = nil
             }
-        {{else}}
+        {{- else -}}
             if len(m.{{.Name}}) > 0 {
                 n.{{.Msg}} = make([]byte, len(m.{{.Name}}))
                 copy(n.{{.Msg}}, m.{{.Name}})
             } else {
-                //n.{{.Msg}} = []byte{}
+                // n.{{.Msg}} = []byte{}
                 n.{{.Msg}} = nil
             }
-        {{end}}
+        {{- end -}}
     {{else}}
-        {{if .IsRepeated}}
-            if len(m.{{.Name}}) > 0 {
-                n.{{.Msg}} = make([]{{.GoTypeToName}}, len(m.{{.Name}}))
-                copy(n.{{.Msg}}, m.{{.Name}})
+        {{if .IsRepeated -}}
+			if len(m.{{.Name}}) > 0 {
+			{{if .IsEnumSlice -}}
+				for _, e := range m.{{.Name}} {
+					n.{{.Msg}} = append(n.{{.Msg}}, msg.{{.GoTypeToName}}(e))  
+				}
+			{{- else -}}
+				copy(n.{{.Msg}}, m.{{.Name}})
+			{{- end -}}
             } else {
-                //n.{{.Msg}} = []{{.GoTypeToName}}{}
+                // n.{{.Msg}} = []{{.GoTypeToName}}{}
                 n.{{.Msg}} = nil
             }
+		{{else if .IsEnum}}
+			n.{{.Msg}} = msg.{{.GoType}}(m.{{.Name}})
         {{else}}
             n.{{.Msg}} = m.{{.Name}}
-        {{end}}
+        {{- end}}
     {{end}}
 {{end}}
 {{end}}

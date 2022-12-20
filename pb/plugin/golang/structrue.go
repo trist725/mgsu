@@ -26,8 +26,9 @@ type Field struct {
 	Comment             string
 	DescriptorProtoType string
 
-	IsMap   bool
-	IsOneof bool
+	IsMap       bool
+	IsOneof     bool
+	IsEnumSlice bool
 
 	GoType       string
 	GoTypeToName string
@@ -58,6 +59,10 @@ func NewField(g *generator.Generator, d *generator.Descriptor, fdp *descriptor.F
 
 	field.GoType, _ = g.GoType(d, fdp)
 	field.GoTypeToName = generator.GoTypeToName(field.GoType)
+
+	if strings.Contains(field.GoType, "[]") && strings.HasPrefix(field.GoTypeToName, "E_") {
+		field.IsEnumSlice = true
+	}
 
 	if field.IsMap {
 		desc := g.ObjectNamed(fdp.GetTypeName())

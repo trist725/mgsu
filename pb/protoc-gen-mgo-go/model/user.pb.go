@@ -23,6 +23,50 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// / 任务状态
+type E_Quest_Status int32
+
+const (
+	/// 未解锁
+	E_Quest_Status_Lock E_Quest_Status = 0
+	/// 已解锁 未接受
+	E_Quest_Status_Unlocked E_Quest_Status = 1
+	/// 已解锁 已接受
+	E_Quest_Status_Progress E_Quest_Status = 2
+	/// 已完成 奖励未领取
+	E_Quest_Status_Unclaimed E_Quest_Status = 3
+	/// 已完成 奖励已领取
+	E_Quest_Status_Claimed E_Quest_Status = 4
+	/// 已结束
+	E_Quest_Status_Closed E_Quest_Status = 5
+)
+
+var E_Quest_Status_name = map[int32]string{
+	0: "Lock",
+	1: "Unlocked",
+	2: "Progress",
+	3: "Unclaimed",
+	4: "Claimed",
+	5: "Closed",
+}
+
+var E_Quest_Status_value = map[string]int32{
+	"Lock":      0,
+	"Unlocked":  1,
+	"Progress":  2,
+	"Unclaimed": 3,
+	"Claimed":   4,
+	"Closed":    5,
+}
+
+func (x E_Quest_Status) String() string {
+	return proto.EnumName(E_Quest_Status_name, int32(x))
+}
+
+func (E_Quest_Status) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_116e343673f7ffaf, []int{0}
+}
+
 // / 测试结构体
 // @map_key=int64 @slice
 type Test struct {
@@ -88,6 +132,71 @@ func (m *Test) GetStr() string {
 	return ""
 }
 
+// / 测试结构体
+// @map_key=int64 @slice
+type Test2 struct {
+	//@msg=i
+	I32 int32 `protobuf:"varint,1,opt,name=i32,proto3" json:"i32,omitempty"`
+	//@msg
+	U32 uint32 `protobuf:"varint,2,opt,name=u32,proto3" json:"u32,omitempty"`
+	//@msg
+	Ts []*Test `protobuf:"bytes,3,rep,name=ts,proto3" json:"ts,omitempty"`
+}
+
+func (m *Test2) Reset()         { *m = Test2{} }
+func (m *Test2) String() string { return proto.CompactTextString(m) }
+func (*Test2) ProtoMessage()    {}
+func (*Test2) Descriptor() ([]byte, []int) {
+	return fileDescriptor_116e343673f7ffaf, []int{1}
+}
+func (m *Test2) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Test2) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Test2.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Test2) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Test2.Merge(m, src)
+}
+func (m *Test2) XXX_Size() int {
+	return m.Size()
+}
+func (m *Test2) XXX_DiscardUnknown() {
+	xxx_messageInfo_Test2.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Test2 proto.InternalMessageInfo
+
+func (m *Test2) GetI32() int32 {
+	if m != nil {
+		return m.I32
+	}
+	return 0
+}
+
+func (m *Test2) GetU32() uint32 {
+	if m != nil {
+		return m.U32
+	}
+	return 0
+}
+
+func (m *Test2) GetTs() []*Test {
+	if m != nil {
+		return m.Ts
+	}
+	return nil
+}
+
 // / 用户数据
 // @collection
 type User struct {
@@ -124,13 +233,22 @@ type User struct {
 	/// 测试结构体map
 	//@msg
 	TestMap map[int32]*Test `protobuf:"bytes,11,rep,name=TestMap,proto3" json:"TestMap,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	/// 测试枚举
+	//@msg
+	Quest E_Quest_Status `protobuf:"varint,12,opt,name=Quest,proto3,enum=model.E_Quest_Status" json:"Quest,omitempty"`
+	/// 测试枚举map
+	//@msg
+	QuestMap map[int64]E_Quest_Status `protobuf:"bytes,13,rep,name=QuestMap,proto3" json:"QuestMap,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3,enum=model.E_Quest_Status"`
+	/// 测试枚举slice
+	//@msg
+	QuestSlice []E_Quest_Status `protobuf:"varint,14,rep,packed,name=QuestSlice,proto3,enum=model.E_Quest_Status" json:"QuestSlice,omitempty"`
 }
 
 func (m *User) Reset()         { *m = User{} }
 func (m *User) String() string { return proto.CompactTextString(m) }
 func (*User) ProtoMessage()    {}
 func (*User) Descriptor() ([]byte, []int) {
-	return fileDescriptor_116e343673f7ffaf, []int{1}
+	return fileDescriptor_116e343673f7ffaf, []int{2}
 }
 func (m *User) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -236,42 +354,76 @@ func (m *User) GetTestMap() map[int32]*Test {
 	return nil
 }
 
+func (m *User) GetQuest() E_Quest_Status {
+	if m != nil {
+		return m.Quest
+	}
+	return E_Quest_Status_Lock
+}
+
+func (m *User) GetQuestMap() map[int64]E_Quest_Status {
+	if m != nil {
+		return m.QuestMap
+	}
+	return nil
+}
+
+func (m *User) GetQuestSlice() []E_Quest_Status {
+	if m != nil {
+		return m.QuestSlice
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterEnum("model.E_Quest_Status", E_Quest_Status_name, E_Quest_Status_value)
 	proto.RegisterType((*Test)(nil), "model.Test")
+	proto.RegisterType((*Test2)(nil), "model.Test2")
 	proto.RegisterType((*User)(nil), "model.User")
 	proto.RegisterMapType((map[int32]int32)(nil), "model.User.IMapEntry")
+	proto.RegisterMapType((map[int64]E_Quest_Status)(nil), "model.User.QuestMapEntry")
 	proto.RegisterMapType((map[int32]*Test)(nil), "model.User.TestMapEntry")
 }
 
 func init() { proto.RegisterFile("user.proto", fileDescriptor_116e343673f7ffaf) }
 
 var fileDescriptor_116e343673f7ffaf = []byte{
-	// 392 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x52, 0xcd, 0xce, 0x93, 0x40,
-	0x14, 0xed, 0x30, 0xd0, 0x96, 0x8b, 0x1a, 0x33, 0x51, 0x33, 0x21, 0x66, 0x8a, 0xac, 0x70, 0xc3,
-	0x82, 0x2e, 0x34, 0x8d, 0x9b, 0x56, 0x8c, 0x61, 0xa1, 0x8b, 0xa1, 0xae, 0x0d, 0x6d, 0x27, 0x4d,
-	0xd3, 0x1f, 0x9a, 0x01, 0x9a, 0xf6, 0x2d, 0x7c, 0x2c, 0x97, 0x8d, 0x2b, 0x57, 0xc6, 0xb4, 0x6f,
-	0xe0, 0x13, 0x98, 0x19, 0xfa, 0x43, 0xbe, 0x7c, 0xbb, 0x73, 0x0f, 0xe7, 0x9c, 0x7b, 0x39, 0x00,
-	0x50, 0x15, 0x42, 0x86, 0x5b, 0x99, 0x97, 0x39, 0xb1, 0xd6, 0xf9, 0x4c, 0xac, 0x5c, 0x98, 0xe7,
-	0xf3, 0xbc, 0xa6, 0xfc, 0x0f, 0x60, 0x8e, 0x45, 0x51, 0x92, 0xe7, 0x80, 0x17, 0xfd, 0x88, 0x22,
-	0x0f, 0x05, 0x16, 0x57, 0x50, 0x31, 0x55, 0x3f, 0xa2, 0x86, 0x87, 0x82, 0xa7, 0x5c, 0x41, 0xc5,
-	0x14, 0xa5, 0xa4, 0xd8, 0x43, 0x81, 0xcd, 0x15, 0xf4, 0x7f, 0x61, 0x30, 0xbf, 0x15, 0x42, 0x12,
-	0x06, 0x46, 0x12, 0x6b, 0x37, 0x1e, 0x3d, 0xfb, 0xf7, 0xa7, 0x07, 0x93, 0x22, 0xdf, 0x0c, 0xfc,
-	0xef, 0x8b, 0x99, 0xcf, 0x8d, 0x24, 0x26, 0xaf, 0xc1, 0x1e, 0x4e, 0xa7, 0x79, 0xb5, 0x29, 0x93,
-	0x58, 0x47, 0x62, 0x7e, 0x27, 0x88, 0x0b, 0xdd, 0x54, 0xc8, 0x9d, 0x90, 0x49, 0xac, 0xd3, 0x2d,
-	0x7e, 0x9b, 0x09, 0x01, 0xf3, 0x6b, 0xb6, 0x16, 0xd4, 0xd4, 0x5b, 0x35, 0x56, 0x87, 0xa4, 0x62,
-	0x4f, 0xad, 0xfa, 0xd8, 0x54, 0xec, 0x09, 0x03, 0xf8, 0x28, 0x45, 0x56, 0x8a, 0xf1, 0x62, 0x2d,
-	0x68, 0x5b, 0x2f, 0x68, 0x30, 0xca, 0x31, 0x94, 0x92, 0x76, 0x3c, 0xac, 0x1c, 0x43, 0x29, 0xc9,
-	0x2b, 0x68, 0xa7, 0xa5, 0x54, 0x64, 0xd7, 0xc3, 0x81, 0xcd, 0x2f, 0x13, 0xe9, 0xd5, 0x85, 0x50,
-	0xdb, 0x43, 0x81, 0x13, 0x39, 0xa1, 0xae, 0x2c, 0x54, 0x14, 0xaf, 0x9b, 0x7a, 0x0b, 0x66, 0xf2,
-	0x25, 0xdb, 0x52, 0xf0, 0x70, 0xe0, 0x44, 0x2f, 0x2f, 0x02, 0xd5, 0x42, 0xa8, 0xf8, 0x4f, 0x9b,
-	0x52, 0x1e, 0xb8, 0x96, 0x90, 0x08, 0x3a, 0xca, 0xa2, 0xd4, 0x8e, 0x56, 0xd3, 0xa6, 0xfa, 0xf2,
-	0xa8, 0x36, 0x5c, 0x85, 0xee, 0x3b, 0xb0, 0x6f, 0x31, 0xea, 0xec, 0xa5, 0x38, 0x5c, 0xbf, 0xca,
-	0x52, 0x1c, 0xc8, 0x0b, 0xb0, 0x76, 0xd9, 0xaa, 0x12, 0xba, 0x44, 0x8b, 0xd7, 0xc3, 0xc0, 0x78,
-	0x8f, 0xdc, 0xcf, 0xf0, 0xa4, 0x99, 0xf8, 0x88, 0xf7, 0x4d, 0xd3, 0xfb, 0xe0, 0xdd, 0xee, 0x41,
-	0x23, 0xfa, 0xf3, 0xc4, 0xd0, 0xf1, 0xc4, 0xd0, 0xdf, 0x13, 0x43, 0x3f, 0xce, 0xac, 0x75, 0x3c,
-	0xb3, 0xd6, 0xef, 0x33, 0x6b, 0x4d, 0xda, 0xfa, 0x9f, 0xe9, 0xff, 0x0f, 0x00, 0x00, 0xff, 0xff,
-	0x39, 0x16, 0x86, 0x15, 0x54, 0x02, 0x00, 0x00,
+	// 553 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x53, 0xcd, 0x8e, 0x12, 0x4d,
+	0x14, 0xa5, 0xff, 0x80, 0xbe, 0xfc, 0xa4, 0x53, 0xf9, 0x3e, 0x53, 0xa2, 0xe9, 0x69, 0x59, 0xb5,
+	0x4e, 0xc2, 0x02, 0x32, 0xd1, 0x4c, 0xdc, 0x30, 0x30, 0x51, 0x12, 0x35, 0x5a, 0x3d, 0x6c, 0x25,
+	0x3d, 0x4d, 0x85, 0x10, 0x1a, 0x6a, 0x52, 0x55, 0x3d, 0x19, 0xde, 0xc2, 0x57, 0x72, 0xe7, 0x72,
+	0x96, 0xae, 0x8c, 0x81, 0x37, 0xf0, 0x09, 0x4c, 0x55, 0x03, 0xf6, 0x4c, 0x9c, 0xc4, 0xdd, 0xbd,
+	0xa7, 0xce, 0x39, 0xf7, 0xde, 0x03, 0x0d, 0x90, 0x09, 0xca, 0x3b, 0x57, 0x9c, 0x49, 0x86, 0x9c,
+	0x25, 0x9b, 0xd2, 0xb4, 0x05, 0x33, 0x36, 0x63, 0x39, 0xd4, 0x7e, 0x0d, 0xf6, 0x05, 0x15, 0x12,
+	0x79, 0x60, 0xcd, 0x7b, 0x5d, 0x6c, 0x04, 0x46, 0xe8, 0x10, 0x55, 0x2a, 0x24, 0xeb, 0x75, 0xb1,
+	0x19, 0x18, 0x61, 0x83, 0xa8, 0x52, 0x21, 0x42, 0x72, 0x6c, 0x05, 0x46, 0xe8, 0x12, 0x55, 0xb6,
+	0xdf, 0x82, 0xa3, 0xd4, 0xdd, 0x7f, 0x92, 0x3f, 0x01, 0x53, 0x0a, 0x6c, 0x05, 0x56, 0x58, 0xeb,
+	0xd6, 0x3a, 0x7a, 0x95, 0x8e, 0x52, 0x13, 0x53, 0x8a, 0xf6, 0x57, 0x07, 0xec, 0xb1, 0xa0, 0x1c,
+	0xf9, 0x60, 0x8e, 0x86, 0xda, 0xc8, 0x3a, 0x6b, 0xfe, 0xfa, 0x71, 0x04, 0x97, 0x82, 0xad, 0x4e,
+	0xdb, 0x93, 0xf9, 0xb4, 0x4d, 0xcc, 0xd1, 0x10, 0x3d, 0x05, 0xb7, 0x9f, 0x24, 0x2c, 0x5b, 0xc9,
+	0xd1, 0x50, 0xbb, 0x5b, 0xe4, 0x0f, 0x80, 0x5a, 0x50, 0x8d, 0x28, 0xbf, 0xa6, 0x7c, 0x34, 0xd4,
+	0x7b, 0x3a, 0xe4, 0xd0, 0x23, 0x04, 0xf6, 0x87, 0x78, 0x49, 0xb1, 0xad, 0xf7, 0xd7, 0xb5, 0xda,
+	0x32, 0xa2, 0x37, 0xd8, 0xc9, 0xf7, 0x8e, 0xe8, 0x0d, 0xf2, 0x01, 0x06, 0x9c, 0xc6, 0x92, 0x5e,
+	0xcc, 0x97, 0x14, 0x97, 0xf5, 0x80, 0x02, 0xa2, 0x14, 0x7d, 0xce, 0x71, 0x25, 0xb0, 0x94, 0xa2,
+	0xcf, 0x39, 0x7a, 0x04, 0xe5, 0x48, 0x72, 0x05, 0x56, 0x03, 0x2b, 0x74, 0xc9, 0xae, 0x43, 0x47,
+	0x79, 0xb4, 0xd8, 0x0d, 0x8c, 0xfb, 0x17, 0xe7, 0x99, 0x3f, 0x07, 0x7b, 0xf4, 0x3e, 0xbe, 0xc2,
+	0xa0, 0x23, 0xf9, 0x7f, 0x47, 0x50, 0x29, 0x74, 0x14, 0x7e, 0xbe, 0x92, 0x7c, 0x4d, 0x34, 0x05,
+	0x75, 0xa1, 0xa2, 0x24, 0x8a, 0x5d, 0xd3, 0x6c, 0x5c, 0x64, 0xef, 0x9e, 0x72, 0xc1, 0x9e, 0x88,
+	0x8e, 0xc1, 0xf9, 0x94, 0xa9, 0x05, 0xea, 0x81, 0x11, 0x36, 0x0f, 0xfe, 0xe7, 0x13, 0x8d, 0x4e,
+	0x22, 0x19, 0xcb, 0x4c, 0x90, 0x9c, 0x83, 0x4e, 0xa0, 0xaa, 0x0b, 0x35, 0xa1, 0xa1, 0x27, 0x3c,
+	0x2e, 0x4e, 0xd8, 0xbf, 0xe5, 0x23, 0x0e, 0x54, 0x74, 0x02, 0xa0, 0xeb, 0x28, 0x9d, 0x27, 0x14,
+	0x37, 0x03, 0xeb, 0xe1, 0x41, 0x05, 0x62, 0xeb, 0x25, 0xb8, 0x87, 0x0b, 0x55, 0xa2, 0x0b, 0xba,
+	0xde, 0xff, 0x77, 0x16, 0x74, 0x8d, 0xfe, 0x03, 0xe7, 0x3a, 0x4e, 0x33, 0xaa, 0x7f, 0x5f, 0x87,
+	0xe4, 0xcd, 0xa9, 0xf9, 0xca, 0x68, 0xbd, 0x81, 0x7a, 0xf1, 0xd8, 0xbf, 0x68, 0x9f, 0x15, 0xb5,
+	0xf7, 0x62, 0x2f, 0x18, 0x11, 0x68, 0xdc, 0xb9, 0xa9, 0xe8, 0x64, 0xe5, 0x4e, 0xc7, 0x45, 0xa7,
+	0x87, 0xf3, 0x3b, 0x78, 0xbe, 0xf8, 0x0c, 0xcd, 0xbb, 0x8f, 0xa8, 0x0a, 0xf6, 0x3b, 0x96, 0x2c,
+	0xbc, 0x12, 0xaa, 0x43, 0x75, 0xbc, 0x4a, 0x59, 0xb2, 0xa0, 0x53, 0xcf, 0x50, 0xdd, 0x47, 0xce,
+	0x66, 0x9c, 0x0a, 0xe1, 0x99, 0xa8, 0x01, 0xee, 0x78, 0x95, 0xa4, 0xf1, 0x7c, 0x49, 0xa7, 0x9e,
+	0x85, 0x6a, 0x50, 0x19, 0xec, 0x1a, 0x1b, 0x01, 0x94, 0x07, 0x29, 0x13, 0x74, 0xea, 0x39, 0x67,
+	0xf8, 0xdb, 0xc6, 0x37, 0x6e, 0x37, 0xbe, 0xf1, 0x73, 0xe3, 0x1b, 0x5f, 0xb6, 0x7e, 0xe9, 0x76,
+	0xeb, 0x97, 0xbe, 0x6f, 0xfd, 0xd2, 0x65, 0x59, 0x7f, 0xcc, 0xbd, 0xdf, 0x01, 0x00, 0x00, 0xff,
+	0xff, 0x0d, 0x92, 0x96, 0xe5, 0xed, 0x03, 0x00, 0x00,
 }
 
 func (m *Test) Marshal() (dAtA []byte, err error) {
@@ -314,6 +466,53 @@ func (m *Test) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *Test2) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Test2) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Test2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Ts) > 0 {
+		for iNdEx := len(m.Ts) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Ts[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintUser(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.U32 != 0 {
+		i = encodeVarintUser(dAtA, i, uint64(m.U32))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.I32 != 0 {
+		i = encodeVarintUser(dAtA, i, uint64(m.I32))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *User) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -334,6 +533,44 @@ func (m *User) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.QuestSlice) > 0 {
+		dAtA2 := make([]byte, len(m.QuestSlice)*10)
+		var j1 int
+		for _, num := range m.QuestSlice {
+			for num >= 1<<7 {
+				dAtA2[j1] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j1++
+			}
+			dAtA2[j1] = uint8(num)
+			j1++
+		}
+		i -= j1
+		copy(dAtA[i:], dAtA2[:j1])
+		i = encodeVarintUser(dAtA, i, uint64(j1))
+		i--
+		dAtA[i] = 0x72
+	}
+	if len(m.QuestMap) > 0 {
+		for k := range m.QuestMap {
+			v := m.QuestMap[k]
+			baseI := i
+			i = encodeVarintUser(dAtA, i, uint64(v))
+			i--
+			dAtA[i] = 0x10
+			i = encodeVarintUser(dAtA, i, uint64(k))
+			i--
+			dAtA[i] = 0x8
+			i = encodeVarintUser(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x6a
+		}
+	}
+	if m.Quest != 0 {
+		i = encodeVarintUser(dAtA, i, uint64(m.Quest))
+		i--
+		dAtA[i] = 0x60
+	}
 	if len(m.TestMap) > 0 {
 		for k := range m.TestMap {
 			v := m.TestMap[k]
@@ -395,21 +632,21 @@ func (m *User) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 	}
 	if len(m.Arr) > 0 {
-		dAtA4 := make([]byte, len(m.Arr)*10)
-		var j3 int
+		dAtA6 := make([]byte, len(m.Arr)*10)
+		var j5 int
 		for _, num1 := range m.Arr {
 			num := uint64(num1)
 			for num >= 1<<7 {
-				dAtA4[j3] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA6[j5] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j3++
+				j5++
 			}
-			dAtA4[j3] = uint8(num)
-			j3++
+			dAtA6[j5] = uint8(num)
+			j5++
 		}
-		i -= j3
-		copy(dAtA[i:], dAtA4[:j3])
-		i = encodeVarintUser(dAtA, i, uint64(j3))
+		i -= j5
+		copy(dAtA[i:], dAtA6[:j5])
+		i = encodeVarintUser(dAtA, i, uint64(j5))
 		i--
 		dAtA[i] = 0x3a
 	}
@@ -478,6 +715,27 @@ func (m *Test) Size() (n int) {
 	return n
 }
 
+func (m *Test2) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.I32 != 0 {
+		n += 1 + sovUser(uint64(m.I32))
+	}
+	if m.U32 != 0 {
+		n += 1 + sovUser(uint64(m.U32))
+	}
+	if len(m.Ts) > 0 {
+		for _, e := range m.Ts {
+			l = e.Size()
+			n += 1 + l + sovUser(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *User) Size() (n int) {
 	if m == nil {
 		return 0
@@ -540,6 +798,24 @@ func (m *User) Size() (n int) {
 			mapEntrySize := 1 + sovUser(uint64(k)) + l
 			n += mapEntrySize + 1 + sovUser(uint64(mapEntrySize))
 		}
+	}
+	if m.Quest != 0 {
+		n += 1 + sovUser(uint64(m.Quest))
+	}
+	if len(m.QuestMap) > 0 {
+		for k, v := range m.QuestMap {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + sovUser(uint64(k)) + 1 + sovUser(uint64(v))
+			n += mapEntrySize + 1 + sovUser(uint64(mapEntrySize))
+		}
+	}
+	if len(m.QuestSlice) > 0 {
+		l = 0
+		for _, e := range m.QuestSlice {
+			l += sovUser(uint64(e))
+		}
+		n += 1 + sovUser(uint64(l)) + l
 	}
 	return n
 }
@@ -648,6 +924,128 @@ func (m *Test) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Str = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipUser(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthUser
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Test2) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowUser
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Test2: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Test2: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field I32", wireType)
+			}
+			m.I32 = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.I32 |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field U32", wireType)
+			}
+			m.U32 = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.U32 |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ts", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthUser
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ts = append(m.Ts, &Test{})
+			if err := m.Ts[len(m.Ts)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1184,6 +1582,193 @@ func (m *User) Unmarshal(dAtA []byte) error {
 			}
 			m.TestMap[mapkey] = mapvalue
 			iNdEx = postIndex
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Quest", wireType)
+			}
+			m.Quest = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Quest |= E_Quest_Status(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QuestMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthUser
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.QuestMap == nil {
+				m.QuestMap = make(map[int64]E_Quest_Status)
+			}
+			var mapkey int64
+			var mapvalue E_Quest_Status
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowUser
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowUser
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapkey |= int64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+				} else if fieldNum == 2 {
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowUser
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapvalue |= E_Quest_Status(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipUser(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if (skippy < 0) || (iNdEx+skippy) < 0 {
+						return ErrInvalidLengthUser
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.QuestMap[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 14:
+			if wireType == 0 {
+				var v E_Quest_Status
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowUser
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= E_Quest_Status(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.QuestSlice = append(m.QuestSlice, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowUser
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthUser
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthUser
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.QuestSlice) == 0 {
+					m.QuestSlice = make([]E_Quest_Status, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v E_Quest_Status
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowUser
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= E_Quest_Status(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.QuestSlice = append(m.QuestSlice, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field QuestSlice", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipUser(dAtA[iNdEx:])

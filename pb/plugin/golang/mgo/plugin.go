@@ -122,7 +122,6 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 
 		for commentIndex, fdp := range md.GetField() {
 			field := newField(p.Generator, md, fdp, commentIndex)
-
 			//log.Logger().Debug("field.Comment=%s", field.Comment)
 
 			if matches := msgRegexp.FindStringSubmatch(field.Comment); len(matches) > 0 {
@@ -138,7 +137,11 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 				}
 				if field.IsMessage() && field.IsRepeated() {
 					if field.IsMap {
-						field.MsgRepeatedMessageGoType = fmt.Sprintf("map[%s]*msg.%s", field.KeyType, field.ValueTypeToName)
+						if field.ValueField.IsEnum() || field.ValueField.IsRepeated() {
+							field.MsgRepeatedMessageGoType = fmt.Sprintf("map[%s]msg.%s", field.KeyType, field.ValueTypeToName)
+						} else {
+							field.MsgRepeatedMessageGoType = fmt.Sprintf("map[%s]*msg.%s", field.KeyType, field.ValueTypeToName)
+						}
 					} else {
 						field.MsgRepeatedMessageGoType = fmt.Sprintf("[]*msg.%s", field.GoTypeToName)
 					}

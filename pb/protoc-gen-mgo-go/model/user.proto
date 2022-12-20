@@ -16,6 +16,17 @@ message Test {
     string str = 3;
 }
 
+/// 测试结构体
+//@map_key=int64 @slice
+message Test2 {
+    //@msg=i
+    int32 i32 = 1;
+    //@msg
+    uint32 u32 = 2;
+    //@msg
+    repeated Test ts = 3;
+}
+
 /// 用户数据
 //@collection
 message User {
@@ -52,4 +63,29 @@ message User {
     /// 测试结构体map
     //@msg
     map<int32, Test> TestMap = 11;
+    /// 测试枚举
+    //@msg
+    E_Quest_Status Quest = 12;
+    /// 测试枚举map
+    //@msg
+    map<int64, E_Quest_Status> QuestMap = 13;
+    /// 测试枚举slice
+    //@msg
+    repeated E_Quest_Status QuestSlice = 14;
+}
+
+/// 任务状态
+enum E_Quest_Status {
+    /// 未解锁
+    Lock = 0;
+    /// 已解锁 未接受
+    Unlocked = 1;
+    /// 已解锁 已接受
+    Progress = 2;
+    /// 已完成 奖励未领取
+    Unclaimed = 3;
+    /// 已完成 奖励已领取
+    Claimed = 4;
+    /// 已结束
+    Closed = 5;
 }
