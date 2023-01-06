@@ -313,6 +313,7 @@ func (m {{.Name}}) ToMsg(n *msg.{{.Msg}}) *msg.{{.Msg}} {
 					n.{{.Msg}} = append(n.{{.Msg}}, msg.{{.GoTypeToName}}(e))  
 				}
 			{{- else -}}
+				n.{{.Msg}} = make([]{{.GoTypeToName}}, len(m.{{.Name}}))
 				copy(n.{{.Msg}}, m.{{.Name}})
 			{{- end -}}
             } else {
