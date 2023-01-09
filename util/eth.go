@@ -8,8 +8,8 @@ import (
 )
 
 // SignVerify 验证以太坊签名
-// addr: 钱包地址Hex
-// signedMsg: 用私钥对原始数据签名后的密文Hex
+// addrHex: 钱包地址Hex
+// signedHex: 用私钥对原始数据签名后的密文Hex
 // message: 原始数据
 func SignVerify(addrHex, signedHex, message string) bool {
 	signed, err := hexutil.Decode(signedHex)
