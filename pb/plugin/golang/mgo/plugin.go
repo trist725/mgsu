@@ -47,6 +47,7 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 	jsonPkg := p.NewImport("encoding/json")
 	syncPkg := p.NewImport("sync")
 	mgoPkg := p.NewImport("github.com/qiniu/qmgo")
+	mgoOptPkg := p.NewImport("github.com/qiniu/qmgo/options")
 	contextPkg := p.NewImport("context")
 	bsonPkg := p.NewImport("go.mongodb.org/mongo-driver/bson")
 
@@ -79,6 +80,10 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 			if !mgoPkg.IsUsed() {
 				mgoPkg.Use()
 				p.AddImport(generator.GoImportPath(mgoPkg.Location()))
+			}
+			if !mgoOptPkg.IsUsed() {
+				mgoOptPkg.Use()
+				p.AddImport(generator.GoImportPath(mgoOptPkg.Location()))
 			}
 			if !contextPkg.IsUsed() {
 				contextPkg.Use()

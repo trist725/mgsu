@@ -171,9 +171,9 @@ func Clone_{{.Name}}_Slice(dst []*{{.Name}}, src []*{{.Name}}) []*{{.Name}} {
 }
 
 {{if .ID}}
-func (sc SimpleClient)FindOne_{{.Name}}(query interface{}) (one *{{.Name}}, err error) {
+func (sc SimpleClient)FindOne_{{.Name}}(ctx context.Context, query interface{}, opts ...options.FindOptions) (one *{{.Name}}, err error) {
 	one = Get_{{.Name}}()
-	err = sc.cli.Database.Collection(Tbl{{.Name}}).Find(context.Background(), query).One(one)
+	err = sc.cli.Database.Collection(Tbl{{.Name}}).Find(ctx, query, opts...).One(one)
 	if err != nil {
 		Put_{{.Name}}(one)
 		return nil, err
@@ -181,36 +181,40 @@ func (sc SimpleClient)FindOne_{{.Name}}(query interface{}) (one *{{.Name}}, err 
 	return
 }
 
-func (sc SimpleClient)FindSome_{{.Name}}(query interface{}) (some []*{{.Name}}, err error) {
+func (sc SimpleClient)FindSome_{{.Name}}(ctx context.Context, query interface{}, opts ...options.FindOptions) (some []*{{.Name}}, err error) {
 	some = []*{{.Name}}{}
-	err = sc.cli.Database.Collection(Tbl{{.Name}}).Find(context.Background(), query).All(&some)
+	err = sc.cli.Database.Collection(Tbl{{.Name}}).Find(ctx, query, opts...).All(&some)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
-func (sc SimpleClient)UpdateSome_{{.Name}}(selector interface{}, update interface{}) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).UpdateAll(context.Background(), selector, update)
+func (sc SimpleClient)UpdateSome_{{.Name}}(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpdateOptions) (result *qmgo.UpdateResult, err error) {
+	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).UpdateAll(ctx, selector, update, opts...)
 	return
 }
 
-func (sc SimpleClient)Upsert_{{.Name}}(selector interface{}, update interface{}) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).Upsert(context.Background(), selector, update)
+func (sc SimpleClient)Upsert_{{.Name}}(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).Upsert(ctx, selector, update, opts...)
 	return
 }
 
-func (sc SimpleClient)UpsertID_{{.Name}}(id interface{}, update interface{}) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).UpsertId(context.Background(), id, update)
+func (sc SimpleClient)UpsertID_{{.Name}}(ctx context.Context, id interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).UpsertId(ctx, id, update, opts...)
 	return
 }
 
-func (m {{.Name}}) Insert() (result *qmgo.InsertOneResult, err error) {
-	return SC.cli.Database.Collection(Tbl{{.Name}}).InsertOne(context.Background(), m)
+func (m {{.Name}}) Insert(ctx context.Context, opts ...options.InsertOneOptions) (result *qmgo.InsertOneResult, err error) {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).InsertOne(ctx, m, opts...)
 }
 
-func (m {{.Name}}) Update(selector interface{}, update interface{}) (err error) {
-	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateOne(context.Background(), selector, update)
+func (m {{.Name}}) Update(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpdateOptions) (err error) {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateOne(ctx, selector, update, opts...)
+}
+
+func (m {{.Name}}) Upsert(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).Upsert(ctx, selector, update, opts...)
 }
 
 func (m {{.Name}}) UpdateByObjID(id string) (err error) {

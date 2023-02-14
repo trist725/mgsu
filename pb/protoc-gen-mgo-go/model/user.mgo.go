@@ -10,6 +10,7 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	qmgo "github.com/qiniu/qmgo"
+	options "github.com/qiniu/qmgo/options"
 	bson "go.mongodb.org/mongo-driver/bson"
 	math "math"
 	msg "mlgs/src/msg"
@@ -784,9 +785,9 @@ func Clone_User_Slice(dst []*User, src []*User) []*User {
 	return dst
 }
 
-func (sc SimpleClient) FindOne_User(query interface{}) (one *User, err error) {
+func (sc SimpleClient) FindOne_User(ctx context.Context, query interface{}, opts ...options.FindOptions) (one *User, err error) {
 	one = Get_User()
-	err = sc.cli.Database.Collection(TblUser).Find(context.Background(), query).One(one)
+	err = sc.cli.Database.Collection(TblUser).Find(ctx, query, opts...).One(one)
 	if err != nil {
 		Put_User(one)
 		return nil, err
@@ -794,36 +795,40 @@ func (sc SimpleClient) FindOne_User(query interface{}) (one *User, err error) {
 	return
 }
 
-func (sc SimpleClient) FindSome_User(query interface{}) (some []*User, err error) {
+func (sc SimpleClient) FindSome_User(ctx context.Context, query interface{}, opts ...options.FindOptions) (some []*User, err error) {
 	some = []*User{}
-	err = sc.cli.Database.Collection(TblUser).Find(context.Background(), query).All(&some)
+	err = sc.cli.Database.Collection(TblUser).Find(ctx, query, opts...).All(&some)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
-func (sc SimpleClient) UpdateSome_User(selector interface{}, update interface{}) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(TblUser).UpdateAll(context.Background(), selector, update)
+func (sc SimpleClient) UpdateSome_User(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpdateOptions) (result *qmgo.UpdateResult, err error) {
+	result, err = sc.cli.Database.Collection(TblUser).UpdateAll(ctx, selector, update, opts...)
 	return
 }
 
-func (sc SimpleClient) Upsert_User(selector interface{}, update interface{}) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(TblUser).Upsert(context.Background(), selector, update)
+func (sc SimpleClient) Upsert_User(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	result, err = sc.cli.Database.Collection(TblUser).Upsert(ctx, selector, update, opts...)
 	return
 }
 
-func (sc SimpleClient) UpsertID_User(id interface{}, update interface{}) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(TblUser).UpsertId(context.Background(), id, update)
+func (sc SimpleClient) UpsertID_User(ctx context.Context, id interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	result, err = sc.cli.Database.Collection(TblUser).UpsertId(ctx, id, update, opts...)
 	return
 }
 
-func (m User) Insert() (result *qmgo.InsertOneResult, err error) {
-	return SC.cli.Database.Collection(TblUser).InsertOne(context.Background(), m)
+func (m User) Insert(ctx context.Context, opts ...options.InsertOneOptions) (result *qmgo.InsertOneResult, err error) {
+	return SC.cli.Database.Collection(TblUser).InsertOne(ctx, m, opts...)
 }
 
-func (m User) Update(selector interface{}, update interface{}) (err error) {
-	return SC.cli.Database.Collection(TblUser).UpdateOne(context.Background(), selector, update)
+func (m User) Update(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpdateOptions) (err error) {
+	return SC.cli.Database.Collection(TblUser).UpdateOne(ctx, selector, update, opts...)
+}
+
+func (m User) Upsert(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	return SC.cli.Database.Collection(TblUser).Upsert(ctx, selector, update, opts...)
 }
 
 func (m User) UpdateByObjID(id string) (err error) {
