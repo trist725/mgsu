@@ -213,8 +213,8 @@ func (m {{.Name}}) Update(ctx context.Context, selector interface{}, update inte
 	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateOne(ctx, selector, update, opts...)
 }
 
-func (m {{.Name}}) Upsert(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
-	return SC.cli.Database.Collection(Tbl{{.Name}}).Upsert(ctx, selector, update, opts...)
+func (m {{.Name}}) Upsert(ctx context.Context, selector interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).Upsert(ctx, selector, m, opts...)
 }
 
 func (m {{.Name}}) UpdateByObjID(id string) (err error) {
