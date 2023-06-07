@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/qiniu/qmgo v1.1.4
-	github.com/trist725/mgsu/pb/plugin v0.0.0-20220930084933-040d7010fb1b
+	github.com/trist725/mgsu/pb/plugin v0.0.0-20230525032829-b0fe8f7a83ed
 	go.mongodb.org/mongo-driver v1.10.3
 )
 
@@ -27,6 +27,6 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	golang.org/x/crypto v0.0.0-20221010152910-d6f0a8c073c2 // indirect
 	golang.org/x/sync v0.0.0-20220929204114-8fcdb60fdcc0 // indirect
-	golang.org/x/sys v0.0.0-20221010170243-090e33056c14 // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
 )
