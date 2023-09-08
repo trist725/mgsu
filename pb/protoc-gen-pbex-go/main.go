@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	pbplugin "github.com/trist725/mgsu/pb/plugin"
 
 	"github.com/trist725/mgsu/pb/plugin/golang"
