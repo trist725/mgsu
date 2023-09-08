@@ -1,8 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
-
 	pbplugin "github.com/trist725/mgsu/pb/plugin"
 
 	"github.com/trist725/mgsu/pb/plugin/golang"
@@ -21,7 +19,7 @@ func main() {
 	p := mgo.New()
 
 	if templateFilePath, ok := reqParams["tpl"]; ok {
-		templateContent, err := ioutil.ReadFile(templateFilePath)
+		templateContent, err := os.ReadFile(templateFilePath)
 		if err != nil {
 			panic(err)
 		}

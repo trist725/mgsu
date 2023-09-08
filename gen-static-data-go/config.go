@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 
 	"github.com/trist725/mgsu/util"
 )
@@ -33,7 +33,7 @@ func (c *config) load(cfgFilePath string) {
 		panic(err)
 	}
 
-	data, err := ioutil.ReadFile(cfgFilePath)
+	data, err := os.ReadFile(cfgFilePath)
 	if err != nil {
 		panic(err)
 	}

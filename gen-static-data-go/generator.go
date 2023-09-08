@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"go/format"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -24,8 +23,8 @@ type fieldMeta struct {
 	ElementTypeName string // 字段元素类型名, 如果字段是数组或者二维数组, 则记录数组的元素类型, 否则等同于TypeName
 	ElementType     int    // 字段元素类型, 如果字段是数组或者二维数组, 则记录数组的元素类型, 否则等同于Type
 	Comment         string // 字段注释
-	//IsArray         bool   // 是否数组
-	//Is2DArray       bool   // 是否二维数组
+	// IsArray         bool   // 是否数组
+	// Is2DArray       bool   // 是否二维数组
 }
 
 func (fm fieldMeta) String() string {
@@ -229,7 +228,7 @@ func (sdm staticDataMeta) generate(absSourceCodeDir string, tpl *template.Templa
 	sourceCodePath := filepath.Join(absSourceCodeDir, sourceCodeBaseName)
 
 	if err := util.IsDirOrFileExist(sourceCodePath); err == nil {
-		old, err := ioutil.ReadFile(sourceCodePath)
+		old, err := os.ReadFile(sourceCodePath)
 		if err != nil {
 			panic(err)
 		}
@@ -313,7 +312,7 @@ func (sdm staticDataMeta) generate(absSourceCodeDir string, tpl *template.Templa
 		panicf("could't format source code, %s", err)
 	}
 
-	if err := ioutil.WriteFile(sourceCodePath, ba, 0666); err != nil {
+	if err := os.WriteFile(sourceCodePath, ba, 0666); err != nil {
 		panic(err)
 	}
 
@@ -355,9 +354,9 @@ func (sdcg *staticDataCodeGenerator) generate() error {
 
 	sdcg.StaticDataMetas = []*staticDataMeta{}
 
-	filepath.Walk(absExcelDir, func(path string, info os.FileInfo, err error) error {
-		isXlsx, err := filepath.Match("*.xlsx", info.Name())
-		if err != nil {
+	errW := filepath.Walk(absExcelDir, func(path string, info os.FileInfo, _ error) error {
+		isXlsx, errM := filepath.Match("*.xlsx", info.Name())
+		if errM != nil {
 			return nil
 		}
 		if !isXlsx {
@@ -436,10 +435,10 @@ func (sdcg *staticDataCodeGenerator) generate() error {
 				continue
 			}
 
-			//fm.Name, err = nameRow.Cells[i].String()
-			//if err != nil || fm.Name == "" {
+			// fm.Name, err = nameRow.Cells[i].String()
+			// if err != nil || fm.Name == "" {
 			//	continue
-			//}
+			// }
 
 			if typeRow.Cells[i].Type() != xlsx.CellTypeString {
 				continue
@@ -467,12 +466,15 @@ func (sdcg *staticDataCodeGenerator) generate() error {
 			sdm.FieldMetas = append(sdm.FieldMetas, fm)
 		}
 
-		//fmt.Println(sdm)
+		// fmt.Println(sdm)
 
 		sdcg.StaticDataMetas = append(sdcg.StaticDataMetas, sdm)
 
 		return nil
 	})
+	if errW != nil {
+		panicf("filepath.Walk, %s", errW)
+	}
 
 	for _, sdm := range sdcg.StaticDataMetas {
 		// 生成每个xlsx对应的go代码
@@ -493,7 +495,7 @@ func (sdcg *staticDataCodeGenerator) generate() error {
 	}
 
 	sourceFilePath := filepath.Join(absSourceCodeDir, "static_data.sd.go")
-	if err := ioutil.WriteFile(sourceFilePath, ba, 0666); err != nil {
+	if err := os.WriteFile(sourceFilePath, ba, 0666); err != nil {
 		panic(err)
 	}
 

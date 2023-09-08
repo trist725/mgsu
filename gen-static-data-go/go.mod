@@ -4,11 +4,14 @@ go 1.19
 
 require (
 	github.com/tealeg/xlsx v1.0.5
-	github.com/trist725/mgsu/util v0.0.0-20221201054554-5ffef5403c16
+	github.com/trist725/mgsu/util v0.0.0-20230908032403-b723e413e882
 )
 
 require (
-	github.com/kr/pretty v0.3.0 // indirect
-	github.com/rogpeppe/go-internal v1.8.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
+	github.com/ethereum/go-ethereum v1.12.2 // indirect
+	github.com/holiman/uint256 v1.2.3 // indirect
+	golang.org/x/crypto v0.13.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
 )

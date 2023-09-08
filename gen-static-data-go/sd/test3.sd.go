@@ -6,7 +6,6 @@ package sd
 import "encoding/json"
 import "fmt"
 import "log"
-import "path/filepath"
 
 import "github.com/tealeg/xlsx"
 import "github.com/trist725/mgsu/util"
@@ -128,40 +127,34 @@ func newTest3Manager() *Test3Manager {
 	return mgr
 }
 
-func (mgr *Test3Manager) Load(excelFilePath string) (success bool) {
+func (mgr *Test3Manager) Load(data []byte, fileName string) (success bool) {
 	success = true
 
-	absExcelFilePath, err := filepath.Abs(excelFilePath)
+	xl, err := xlsx.OpenBinary(data)
 	if err != nil {
-		log.Printf("获取 %s 的绝对路径失败, %s", excelFilePath, err)
-		return false
-	}
-
-	xl, err := xlsx.OpenFile(absExcelFilePath)
-	if err != nil {
-		log.Printf("打开 %s 失败, %s\n", excelFilePath, err)
+		log.Printf("打开 %s 失败, %s\n", fileName, err)
 		return false
 	}
 
 	if len(xl.Sheets) == 0 {
-		log.Printf("%s 没有分页可加载\n", excelFilePath)
+		log.Printf("%s 没有分页可加载\n", fileName)
 		return false
 	}
 
 	dataSheet, ok := xl.Sheet["data"]
 	if !ok {
-		log.Printf("%s 没有data分页\n", excelFilePath)
+		log.Printf("%s 没有data分页\n", fileName)
 		return false
 	}
 
 	if len(dataSheet.Rows) < 3 {
-		log.Printf("%s 数据少于3行\n", excelFilePath)
+		log.Printf("%s 数据少于3行\n", fileName)
 		return false
 	}
 
 	for i := 3; i < len(dataSheet.Rows); i++ {
 		row := dataSheet.Rows[i]
-		if len(row.Cells) <= 0 {
+		if len(row.Cells) == 0 {
 			continue
 		}
 
@@ -177,7 +170,7 @@ func (mgr *Test3Manager) Load(excelFilePath string) (success bool) {
 		sd := NewTest3()
 		err = sd.load(row)
 		if err != nil {
-			log.Printf("%s 加载第%d行失败, %s\n", excelFilePath, i+1, err)
+			log.Printf("%s 加载第%d行失败, %s\n", fileName, i+1, err)
 			success = false
 			continue
 		}
@@ -192,7 +185,7 @@ func (mgr *Test3Manager) Load(excelFilePath string) (success bool) {
 		//struct_load_end
 		//////////////////////////////////////////////////////////////////////////////////////////////////
 
-		if err := mgr.check(excelFilePath, i+1, sd); err != nil {
+		if err := mgr.check(fileName, i+1, sd); err != nil {
 			log.Println(err)
 			success = false
 			continue
@@ -258,9 +251,9 @@ func (mgr Test3Manager) FindIf(f func(sd *Test3) bool) *Test3 {
 	return nil
 }
 
-func (mgr Test3Manager) check(excelFilePath string, row int, sd *Test3) error {
+func (mgr Test3Manager) check(fileName string, row int, sd *Test3) error {
 	if _, ok := mgr.dataMap[sd.ID]; ok {
-		return fmt.Errorf("%s 第%d行的id重复", excelFilePath, row)
+		return fmt.Errorf("%s 第%d行的id重复", fileName, row)
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -272,7 +265,7 @@ func (mgr Test3Manager) check(excelFilePath string, row int, sd *Test3) error {
 	return nil
 }
 
-func (mgr *Test3Manager) AfterLoadAll(excelFilePath string) (success bool) {
+func (mgr *Test3Manager) AfterLoadAll(fileName string) (success bool) {
 	success = true
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	// TODO 添加加载后处理代码

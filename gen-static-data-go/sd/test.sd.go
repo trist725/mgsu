@@ -189,7 +189,7 @@ func (mgr *TestManager) Load(data []byte, fileName string) (success bool) {
 
 	for i := 3; i < len(dataSheet.Rows); i++ {
 		row := dataSheet.Rows[i]
-		if len(row.Cells) <= 0 {
+		if len(row.Cells) == 0 {
 			continue
 		}
 

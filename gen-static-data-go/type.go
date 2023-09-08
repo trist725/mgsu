@@ -2,13 +2,13 @@ package main
 
 // 字段类型
 const (
-	//基本类型
+	// 基本类型
 	fieldTypeBase = iota
-	//结构体
+	// 结构体
 	fieldTypeStruct
-	//数组
+	// 数组
 	fieldTypeArray
-	//二维数组
+	// 二维数组
 	fieldType2dArray
 )
 
