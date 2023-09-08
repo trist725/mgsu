@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/tealeg/xlsx v1.0.5
-	github.com/trist725/mgsu/util v0.0.0-20230908032403-b723e413e882
+	github.com/trist725/mgsu/util v0.0.0-20230908071919-e1e86d19286c
 )
 
 require (

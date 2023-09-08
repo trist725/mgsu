@@ -28,7 +28,7 @@ run:
   # If it's not please let us know.
   # "/" will be replaced by current OS file path separator to properly work on Windows.
   skip-files:
-   # - ".*\\.sd\\.go$"
+    - ".*\\.sd\\.go$"
     # - lib/bad.go
 
 linters:
