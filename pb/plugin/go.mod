@@ -1,18 +1,21 @@
 module github.com/trist725/mgsu/pb/plugin
 
-go 1.19
+go 1.21
 
 require (
 	github.com/gogo/protobuf v1.3.2
-	github.com/trist725/mgsu/log v0.0.0-20220725083802-e770aef4ca74
+	github.com/trist725/mgsu/log v0.0.0-20230911053847-b6d5e385d4ac
 )
 
 require (
 	github.com/astaxie/beego v1.12.3 // indirect
-	github.com/kr/pretty v0.3.0 // indirect
-	github.com/rogpeppe/go-internal v1.8.0 // indirect
-	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
+	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
+	github.com/ethereum/go-ethereum v1.12.2 // indirect
+	github.com/holiman/uint256 v1.2.3 // indirect
+	github.com/shiena/ansicolor v0.0.0-20230509054315-a9deabde6e02 // indirect
 	github.com/tealeg/xlsx v1.0.5 // indirect
-	github.com/trist725/mgsu/util v0.0.0-20220812032506-4bd0984e590a // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+	github.com/trist725/mgsu/util v0.0.0-20230911053847-b6d5e385d4ac // indirect
+	golang.org/x/crypto v0.13.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
 )

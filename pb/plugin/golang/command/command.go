@@ -76,7 +76,7 @@ func Read() *plugin.CodeGeneratorRequest {
 	return g.Request
 }
 
-// filenameSuffix replaces the .pb.go at the end of each filename.
+// GeneratePlugin filenameSuffix replaces the .pb.go at the end of each filename.
 func GeneratePlugin(req *plugin.CodeGeneratorRequest, p generator2.Plugin, filenameSuffix string) *plugin.CodeGeneratorResponse {
 	g := generator.New()
 	g.Request = req

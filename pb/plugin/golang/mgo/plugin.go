@@ -42,7 +42,9 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 	p.PluginImports = generator.NewPluginImports(p.Generator)
 
 	// todo 灵活配置
-	p.AddImport("mlgs/src/msg")
+	if loc, ok := p.Param["extra_import"]; ok {
+		p.AddImport(generator.GoImportPath(p.NewImport(loc).Location()))
+	}
 
 	jsonPkg := p.NewImport("encoding/json")
 	syncPkg := p.NewImport("sync")
@@ -70,13 +72,13 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 
 		message := newMessage(p.Generator, md)
 
-		//log.Logger().Debug("message=%v", message)
-		//log.Logger().Debug("message.Comment=[%s]", message.Comment)
+		// log.Logger().Debug("message=%v", message)
+		// log.Logger().Debug("message.Comment=[%s]", message.Comment)
 
 		if matches := collectionRegexp.FindStringSubmatch(message.Comment); len(matches) > 0 {
-			//log.Logger().Debug("matches=%v", matches)
+			// log.Logger().Debug("matches=%v", matches)
 			message.ID = message.Name
-			//log.Logger().Debug("message.ID=%s", message.ID)
+			// log.Logger().Debug("message.ID=%s", message.ID)
 			if !mgoPkg.IsUsed() {
 				mgoPkg.Use()
 				p.AddImport(generator.GoImportPath(mgoPkg.Location()))
@@ -96,7 +98,7 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 		}
 
 		if matches := mapKeyRegexp.FindAllStringSubmatch(message.Comment, -1); len(matches) > 0 {
-			//log.Logger().Debug("matches=%+v", matches)
+			// log.Logger().Debug("matches=%+v", matches)
 			for i, match := range matches {
 				if len(match) > 1 {
 					if i == 0 {
@@ -108,16 +110,16 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 					}
 				}
 			}
-			//log.Logger().Debug("message.MapKeys=%+v", message.MapKeys)
+			// log.Logger().Debug("message.MapKeys=%+v", message.MapKeys)
 		}
 
 		if matches := sliceRegexp.FindStringSubmatch(message.Comment); len(matches) > 0 {
 			message.Slice = true
-			//log.Logger().Debug("message.Slice=%v", message.Slice)
+			// log.Logger().Debug("message.Slice=%v", message.Slice)
 		}
 
 		if matches := msgRegexp.FindStringSubmatch(message.Comment); len(matches) > 0 {
-			//log.Logger().Debug("matches=%v", matches)
+			// log.Logger().Debug("matches=%v", matches)
 			if len(matches) > 1 && matches[1] != "" {
 				message.Msg = matches[1]
 			} else {
@@ -127,13 +129,13 @@ func (p *mgo) Generate(fd *generator.FileDescriptor) {
 
 		for commentIndex, fdp := range md.GetField() {
 			field := newField(p.Generator, md, fdp, commentIndex)
-			//log.Logger().Debug("field.Comment=%s", field.Comment)
+			// log.Logger().Debug("field.Comment=%s", field.Comment)
 
 			if matches := msgRegexp.FindStringSubmatch(field.Comment); len(matches) > 0 {
 				if message.Msg == "" {
 					message.Msg = message.Name
 				}
-				//log.Logger().Debug("matches=%v", matches)
+				// log.Logger().Debug("matches=%v", matches)
 
 				if len(matches) > 1 && matches[1] != "" {
 					field.Msg = matches[1]
