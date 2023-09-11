@@ -5,11 +5,12 @@ package model
 
 import (
 	fmt "fmt"
-	_ "github.com/gogo/protobuf/gogoproto"
-	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -68,13 +69,12 @@ func (E_Quest_Status) EnumDescriptor() ([]byte, []int) {
 }
 
 // / 测试结构体
-// @map_key=int64 @slice
 type Test struct {
-	//@msg=i
+	// @msg=i
 	I32 int32 `protobuf:"varint,1,opt,name=i32,proto3" json:"i32,omitempty"`
-	//@msg
+	// @msg
 	U32 uint32 `protobuf:"varint,2,opt,name=u32,proto3" json:"u32,omitempty"`
-	//@msg
+	// @msg
 	Str string `protobuf:"bytes,3,opt,name=str,proto3" json:"str,omitempty"`
 }
 
@@ -132,14 +132,14 @@ func (m *Test) GetStr() string {
 	return ""
 }
 
-// / 测试结构体
+// /测试结构体
 // @map_key=int64 @slice
 type Test2 struct {
-	//@msg=i
+	// @msg=i
 	I32 int32 `protobuf:"varint,1,opt,name=i32,proto3" json:"i32,omitempty"`
-	//@msg
+	// @msg
 	U32 uint32 `protobuf:"varint,2,opt,name=u32,proto3" json:"u32,omitempty"`
-	//@msg
+	// @msg
 	Ts []*Test `protobuf:"bytes,3,rep,name=ts,proto3" json:"ts,omitempty"`
 }
 
@@ -200,47 +200,47 @@ func (m *Test2) GetTs() []*Test {
 // / 用户数据
 // @collection
 type User struct {
-	/// 用户id
-	//@msg
+	// / 用户id
+	// @msg
 	ID int64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty" bson:"_id"`
-	/// 帐号id
-	//@msg
+	// / 帐号id
+	// @msg
 	AccountID int64 `protobuf:"varint,2,opt,name=AccountID,proto3" json:"AccountID,omitempty"`
-	/// 服务器ID
-	//@msg
+	// / 服务器ID
+	// @msg
 	ServerID int32 `protobuf:"varint,3,opt,name=ServerID,proto3" json:"ServerID,omitempty"`
-	/// 名字
-	//@msg
+	// / 名字
+	// @msg
 	Name string `protobuf:"bytes,4,opt,name=Name,proto3" json:"Name,omitempty"`
-	/// 性别
-	//@msg
+	// / 性别
+	// @msg
 	Sex int32 `protobuf:"varint,5,opt,name=Sex,proto3" json:"Sex,omitempty"`
-	/// 创建时刻
-	//@msg
+	// / 创建时刻
+	// @msg
 	CreateTime int64 `protobuf:"varint,6,opt,name=CreateTime,proto3" json:"CreateTime,omitempty"`
-	/// 测试数组
-	//@msg
+	// / 测试数组
+	// @msg
 	Arr []int32 `protobuf:"varint,7,rep,packed,name=Arr,proto3" json:"Arr,omitempty"`
-	/// 测试字符串数组
-	//@msg
+	// / 测试字符串数组
+	// @msg
 	StrArr []string `protobuf:"bytes,8,rep,name=StrArr,proto3" json:"StrArr,omitempty"`
-	/// 测试结构体
-	//@msg
+	// / 测试结构体
+	// @msg
 	Test *Test `protobuf:"bytes,9,opt,name=Test,proto3" json:"Test,omitempty"`
-	/// 测试整型map
-	//@msg
+	// / 测试整型map
+	// @msg
 	IMap map[int32]int32 `protobuf:"bytes,10,rep,name=IMap,proto3" json:"IMap,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
-	/// 测试结构体map
-	//@msg
+	// / 测试结构体map
+	// @msg
 	TestMap map[int32]*Test `protobuf:"bytes,11,rep,name=TestMap,proto3" json:"TestMap,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	/// 测试枚举
-	//@msg
+	// / 测试枚举
+	// @msg
 	Quest E_Quest_Status `protobuf:"varint,12,opt,name=Quest,proto3,enum=model.E_Quest_Status" json:"Quest,omitempty"`
-	/// 测试枚举map
-	//@msg
+	// / 测试枚举map
+	// @msg
 	QuestMap map[int64]E_Quest_Status `protobuf:"bytes,13,rep,name=QuestMap,proto3" json:"QuestMap,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3,enum=model.E_Quest_Status"`
-	/// 测试枚举slice
-	//@msg
+	// / 测试枚举slice
+	// @msg
 	QuestSlice []E_Quest_Status `protobuf:"varint,14,rep,packed,name=QuestSlice,proto3,enum=model.E_Quest_Status" json:"QuestSlice,omitempty"`
 }
 

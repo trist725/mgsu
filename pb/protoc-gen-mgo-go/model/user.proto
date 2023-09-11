@@ -6,7 +6,6 @@ package model;
 import "gogo.proto";
 
 /// 测试结构体
-//@map_key=int64 @slice
 message Test {
     //@msg=i
     int32 i32 = 1;
@@ -16,7 +15,7 @@ message Test {
     string str = 3;
 }
 
-/// 测试结构体
+///测试结构体
 //@map_key=int64 @slice
 message Test2 {
     //@msg=i

@@ -41,24 +41,24 @@ func TestUser(t *testing.T) {
 		},
 	}
 
-	if _, err := newUser.Insert(); err != nil {
+	if _, err := newUser.Insert(context.Background()); err != nil {
 		t.Error(err)
 		return
 	}
 
-	u, err := SC.FindOne_User(bson.M{"_id": newUser.ID})
+	u, err := SC.FindOne_User(context.Background(), bson.M{"_id": newUser.ID})
 	if err != nil {
 		t.Error(err)
 	}
 
 	t.Logf("%v\n", u)
 
-	_, err = SC.FindOne_User(bson.M{"name": "test"})
+	_, err = SC.FindOne_User(context.Background(), bson.M{"name": "test"})
 	if err != nil {
 		t.Error(err)
 	}
 
-	some, err := SC.FindSome_User(bson.M{"name": "test"})
+	some, err := SC.FindSome_User(context.Background(), bson.M{"name": "test"})
 	if err != nil || len(some) != 1 {
 		t.Error(err)
 	}
@@ -110,4 +110,23 @@ func TestClone_User_Slice(t *testing.T) {
 	}
 
 	t.Logf("dst=%#v\nsrc=%#v\n", dst, src)
+}
+
+func TestMapAndSlice(t *testing.T) {
+	sl := NewTest2Slice()
+	m := NewTest2Map()
+	sl.Add()
+	m.Add(1)
+	t.Logf("slice len:%d", sl.Size())
+	t.Logf("map len:%d", m.Size())
+	m2 := m.Clone()
+	t.Logf("map 2 len:%d", m2.Size())
+	m2.Clear()
+	m2.Set(1, &Test2{I32: 1, U32: 2})
+	m2.Each(func(key int64, value *Test2) (continued bool) {
+		t.Logf("m2 key:%d,value:%+v", key, value)
+		return true
+	})
+	m2.Remove(1)
+	t.Logf("map 2 len:%d", m2.Size())
 }

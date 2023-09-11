@@ -44,6 +44,8 @@ linters:
     - exportloopref
     - gocritic
     - revive
+    - gosec
+    - goimports
     # - golint        # Carry out the stylistic conventions put forth in Effective Go and CodeReviewComments
 
 linters-settings:

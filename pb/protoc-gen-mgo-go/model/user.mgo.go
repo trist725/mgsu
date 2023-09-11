@@ -7,14 +7,14 @@ import (
 	context "context"
 	json "encoding/json"
 	fmt "fmt"
+	math "math"
+	sync "sync"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	qmgo "github.com/qiniu/qmgo"
 	options "github.com/qiniu/qmgo/options"
 	bson "go.mongodb.org/mongo-driver/bson"
-	math "math"
-	msg "mlgs/src/msg"
-	sync "sync"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -92,192 +92,6 @@ func (m Test) ToMsg(n *msg.Test) *msg.Test {
 
 	n.Str = m.Str
 
-	return n
-}
-
-type TestMap map[int64]*Test
-
-func ToTestMap(m map[int64]*Test) *TestMap {
-	if m == nil {
-		return nil
-	}
-	return (*TestMap)(&m)
-}
-
-func NewTestMap() (m *TestMap) {
-	m = &TestMap{}
-	return
-}
-
-func (m *TestMap) Get(key int64) (value *Test, ok bool) {
-	value, ok = (*m)[key]
-	return
-}
-
-func (m *TestMap) Set(key int64, value *Test) {
-	(*m)[key] = value
-}
-
-func (m *TestMap) Add(key int64) (value *Test) {
-	value = Get_Test()
-	(*m)[key] = value
-	return
-}
-
-func (m *TestMap) Remove(key int64) (removed bool) {
-	if _, ok := (*m)[key]; ok {
-		delete(*m, key)
-		return true
-	}
-	return false
-}
-
-func (m *TestMap) RemoveOne(fn func(key int64, value *Test) (removed bool)) {
-	for key, value := range *m {
-		if fn(key, value) {
-			delete(*m, key)
-			break
-		}
-	}
-}
-
-func (m *TestMap) RemoveSome(fn func(key int64, value *Test) (removed bool)) {
-	left := map[int64]*Test{}
-	for key, value := range *m {
-		if !fn(key, value) {
-			left[key] = value
-		}
-	}
-	*m = left
-}
-
-func (m *TestMap) Each(f func(key int64, value *Test) (continued bool)) {
-	for key, value := range *m {
-		if !f(key, value) {
-			break
-		}
-	}
-}
-
-func (m TestMap) Size() int {
-	return len(m)
-}
-
-func (m TestMap) Clone() (n *TestMap) {
-	if m.Size() == 0 {
-		return nil
-	}
-	n = ToTestMap(make(map[int64]*Test, m.Size()))
-	for k, v := range m {
-		if v != nil {
-			(*n)[k] = v.Clone()
-		} else {
-			(*n)[k] = nil
-		}
-	}
-	return n
-}
-
-func (m *TestMap) Clear() {
-	*m = *NewTestMap()
-}
-
-func (m TestMap) ToMsg(n map[int64]*msg.Test) map[int64]*msg.Test {
-	if m.Size() == 0 {
-		return nil
-	}
-	n = make(map[int64]*msg.Test, m.Size())
-	for k, v := range m {
-		if v != nil {
-			n[k] = v.ToMsg(nil)
-		} else {
-			n[k] = msg.Get_Test()
-		}
-	}
-	return n
-}
-
-type TestSlice []*Test
-
-func NewTestSlice() *TestSlice {
-	return &TestSlice{}
-}
-
-func ToTestSlice(s []*Test) *TestSlice {
-	return (*TestSlice)(&s)
-}
-
-func (s *TestSlice) Add() *Test {
-	return s.AddOne(Get_Test())
-}
-
-func (s *TestSlice) AddOne(newOne *Test) *Test {
-	*s = append(*s, newOne)
-	return newOne
-}
-
-func (s *TestSlice) RemoveOne(fn func(index int, element *Test) (removed bool)) {
-	for i, e := range *s {
-		if fn(i, e) {
-			*s = append((*s)[:i], (*s)[i+1:]...)
-			break
-		}
-	}
-}
-
-func (s *TestSlice) RemoveSome(fn func(index int, element *Test) (removed bool)) {
-	var left []*Test
-	for i, e := range *s {
-		if !fn(i, e) {
-			left = append(left, e)
-		}
-	}
-	*s = left
-}
-
-func (s TestSlice) Each(fn func(index int, element *Test) (continued bool)) {
-	for i, e := range s {
-		if !fn(i, e) {
-			break
-		}
-	}
-}
-
-func (s TestSlice) Size() int {
-	return len(s)
-}
-
-func (s TestSlice) Clone() (n *TestSlice) {
-	if s.Size() == 0 {
-		return nil
-	}
-	n = ToTestSlice(make([]*Test, s.Size()))
-	for i, e := range s {
-		if e != nil {
-			(*n)[i] = e.Clone()
-		} else {
-			(*n)[i] = nil
-		}
-	}
-	return n
-}
-
-func (s *TestSlice) Clear() {
-	*s = *NewTestSlice()
-}
-
-func (s TestSlice) ToMsg(n []*msg.Test) []*msg.Test {
-	if s.Size() == 0 {
-		return nil
-	}
-	n = make([]*msg.Test, s.Size())
-	for i, e := range s {
-		if e != nil {
-			n[i] = e.ToMsg(nil)
-		} else {
-			n[i] = msg.Get_Test()
-		}
-	}
 	return n
 }
 
@@ -827,8 +641,8 @@ func (m User) Update(ctx context.Context, selector interface{}, update interface
 	return SC.cli.Database.Collection(TblUser).UpdateOne(ctx, selector, update, opts...)
 }
 
-func (m User) Upsert(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
-	return SC.cli.Database.Collection(TblUser).Upsert(ctx, selector, update, opts...)
+func (m User) Upsert(ctx context.Context, selector interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	return SC.cli.Database.Collection(TblUser).Upsert(ctx, selector, m, opts...)
 }
 
 func (m User) UpdateByObjID(id string) (err error) {
