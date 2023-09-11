@@ -312,7 +312,7 @@ func (sdm staticDataMeta) generate(absSourceCodeDir string, tpl *template.Templa
 		panicf("could't format source code, %s", err)
 	}
 
-	if err := os.WriteFile(sourceCodePath, ba, 0666); err != nil {
+	if err := os.WriteFile(sourceCodePath, ba, 0600); err != nil {
 		panic(err)
 	}
 
@@ -495,7 +495,7 @@ func (sdcg *staticDataCodeGenerator) generate() error {
 	}
 
 	sourceFilePath := filepath.Join(absSourceCodeDir, "static_data.sd.go")
-	if err := os.WriteFile(sourceFilePath, ba, 0666); err != nil {
+	if err := os.WriteFile(sourceFilePath, ba, 0600); err != nil {
 		panic(err)
 	}
 
