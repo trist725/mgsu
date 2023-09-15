@@ -13,8 +13,10 @@ import (
 )
 
 func Test_Base(t *testing.T) {
-
-	Init(Endpoint)
+	if err := Init(Endpoint); err != nil {
+		t.Error(err)
+		return
+	}
 	defer Close()
 
 	key := "/service/config/"
@@ -108,7 +110,7 @@ func Test_PutGetDelete(t *testing.T) {
 			return
 		}
 
-		//fmt.Println(v)
+		// fmt.Println(v)
 
 		_, err = Delete(k)
 		if err != nil {
@@ -116,7 +118,7 @@ func Test_PutGetDelete(t *testing.T) {
 			return
 		}
 
-		//fmt.Println(n)
+		// fmt.Println(n)
 	}
 
 	fmt.Printf("consume=%v\n", time.Now().Sub(begin))
@@ -169,7 +171,7 @@ func Test_Watch(t *testing.T) {
 	defer Close()
 
 	k := "key"
-	//v := "value"
+	// v := "value"
 
 	rch := WatchWithPrefix(k)
 	go WatchLoop(rch, func(ev *clientv3.Event) {
@@ -257,7 +259,7 @@ func Test_KeepAlive(t *testing.T) {
 	time.Sleep(5 * time.Second)
 }
 
-//func Test_KeepAliveOnce(t *testing.T) {
+// func Test_KeepAliveOnce(t *testing.T) {
 //	endpoint := os.Getenv("ETCD_ENDPOINT")
 //	if endpoint == "" {
 //		t.Error("not found env ETCD_ENDPOINT or ETCD_ENDPOINT is empty string")
@@ -290,7 +292,7 @@ func Test_KeepAlive(t *testing.T) {
 //	}
 //
 //	fmt.Println("ttl:", resp.TTL)
-//}
+// }
 
 func Test_Txn(t *testing.T) {
 	endpoint := os.Getenv("ETCD_ENDPOINT")

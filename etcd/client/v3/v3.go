@@ -14,7 +14,7 @@ const (
 )
 
 var (
-	Endpoint string = "localhost:2379"
+	Endpoint string = "ip:12379"
 	gClient  *clientv3.Client
 )
 
@@ -23,8 +23,10 @@ func Init(endpoint string) error {
 	gClient, err = clientv3.New(clientv3.Config{
 		Endpoints:   []string{endpoint},
 		DialTimeout: dialTimeout,
+		Username:    "root",
+		Password:    "pwd",
 	})
-	if err != nil {
+	if gClient == nil || err != nil {
 		return err
 	}
 	return nil
@@ -44,20 +46,20 @@ func GrantLease(timeout int64) (clientv3.LeaseID, error) {
 	return resp.ID, nil
 }
 
-//func RevokeLease(leaseID clientv3.LeaseID) (*clientv3.LeaseRevokeResponse, error) {
+// func RevokeLease(leaseID clientv3.LeaseID) (*clientv3.LeaseRevokeResponse, error) {
 //	resp, err := gClient.Revoke(context.TODO(), leaseID)
 //	return resp, err
-//}
+// }
 
 func KeepAliveLease(leaseID clientv3.LeaseID) (<-chan *clientv3.LeaseKeepAliveResponse, error) {
 	rch, err := gClient.KeepAlive(context.TODO(), leaseID)
 	return rch, err
 }
 
-//func KeepAliveLeaseOnce(leaseID clientv3.LeaseID) (*clientv3.LeaseKeepAliveResponse, error) {
+// func KeepAliveLeaseOnce(leaseID clientv3.LeaseID) (*clientv3.LeaseKeepAliveResponse, error) {
 //	resp, err := gClient.KeepAliveOnce(context.TODO(), leaseID)
 //	return resp, err
-//}
+// }
 
 // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 func put(key string, value string, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {
