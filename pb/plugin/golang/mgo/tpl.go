@@ -214,11 +214,11 @@ func (m {{.Name}}) Upsert(ctx context.Context, selector interface{}, opts ...opt
 	return SC.cli.Database.Collection(Tbl{{.Name}}).Upsert(ctx, selector, m, opts...)
 }
 
-func (m {{.Name}}) UpdateByObjID(ctx context.Context, opts ...opts.UpdateOptions) (err error) {
+func (m {{.Name}}) UpdateByObjID(ctx context.Context, opts ...options.UpdateOptions) (err error) {
 	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateId(context.Background(), m.ObjID, bson.D{ {"$set", m} }, opts...)
 }
 
-func (m {{.Name}}) RemoveByObjID(ctx context.Context, opts ...opts.RemoveOptions) error {
+func (m {{.Name}}) RemoveByObjID(ctx context.Context, opts ...options.RemoveOptions) error {
 	return SC.cli.Database.Collection(Tbl{{.Name}}).RemoveId(context.Background(), m.ObjID, opts...)
 }
 {{end}}
