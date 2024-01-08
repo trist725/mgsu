@@ -448,6 +448,8 @@ func (m User) JsonString() string {
 
 func (m *User) ResetEx() {
 
+	m.ObjID = ""
+
 	m.ID = 0
 
 	m.AccountID = 0
@@ -497,6 +499,8 @@ func (m User) Clone() *User {
 	if !ok || n == nil {
 		n = &User{}
 	}
+
+	n.ObjID = m.ObjID
 
 	n.ID = m.ID
 
@@ -619,18 +623,15 @@ func (sc SimpleClient) FindSome_User(ctx context.Context, query interface{}, opt
 }
 
 func (sc SimpleClient) UpdateSome_User(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpdateOptions) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(TblUser).UpdateAll(ctx, selector, update, opts...)
-	return
+	return sc.cli.Database.Collection(TblUser).UpdateAll(ctx, selector, update, opts...)
 }
 
 func (sc SimpleClient) Upsert_User(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(TblUser).Upsert(ctx, selector, update, opts...)
-	return
+	return sc.cli.Database.Collection(TblUser).Upsert(ctx, selector, update, opts...)
 }
 
-func (sc SimpleClient) UpsertID_User(ctx context.Context, id interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(TblUser).UpsertId(ctx, id, update, opts...)
-	return
+func (sc SimpleClient) UpsertByObjID_User(ctx context.Context, objID interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	return sc.cli.Database.Collection(TblUser).UpsertId(ctx, objID, update, opts...)
 }
 
 func (m User) Insert(ctx context.Context, opts ...options.InsertOneOptions) (result *qmgo.InsertOneResult, err error) {
@@ -645,12 +646,12 @@ func (m User) Upsert(ctx context.Context, selector interface{}, opts ...options.
 	return SC.cli.Database.Collection(TblUser).Upsert(ctx, selector, m, opts...)
 }
 
-func (m User) UpdateByObjID(id string) (err error) {
-	return SC.cli.Database.Collection(TblUser).UpdateId(context.Background(), id, bson.D{{"$set", m}})
+func (m User) UpdateByObjID(ctx context.Context, opts ...opts.UpdateOptions) (err error) {
+	return SC.cli.Database.Collection(TblUser).UpdateId(context.Background(), m.ObjID, bson.D{{"$set", m}}, opts...)
 }
 
-func (m User) RemoveByID() error {
-	return SC.cli.Database.Collection(TblUser).RemoveId(context.Background(), m.ID)
+func (m User) RemoveByObjID(ctx context.Context, opts ...opts.RemoveOptions) error {
+	return SC.cli.Database.Collection(TblUser).RemoveId(context.Background(), m.ObjID, opts...)
 }
 
 func (m User) ToMsg(n *msg.User) *msg.User {

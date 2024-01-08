@@ -29,9 +29,11 @@ message Test2 {
 /// 用户数据
 //@collection
 message User {
+    /// objid
+    string ObjID = 20 [(gogoproto.moretags) = "json:\"_id\" bson:\"_id\""];
     /// 用户id
     //@msg
-    int64 ID = 1 [(gogoproto.moretags) = "bson:\"_id\""];
+    int64 ID = 1 [(gogoproto.moretags) = "json:\"id\" bson:\"id\""];
     /// 帐号id
     //@msg
     int64 AccountID = 2;
