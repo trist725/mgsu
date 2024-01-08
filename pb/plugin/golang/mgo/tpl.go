@@ -191,18 +191,15 @@ func (sc SimpleClient)FindSome_{{.Name}}(ctx context.Context, query interface{},
 }
 
 func (sc SimpleClient)UpdateSome_{{.Name}}(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpdateOptions) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).UpdateAll(ctx, selector, update, opts...)
-	return
+	return sc.cli.Database.Collection(Tbl{{.Name}}).UpdateAll(ctx, selector, update, opts...)
 }
 
 func (sc SimpleClient)Upsert_{{.Name}}(ctx context.Context, selector interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).Upsert(ctx, selector, update, opts...)
-	return
+	return sc.cli.Database.Collection(Tbl{{.Name}}).Upsert(ctx, selector, update, opts...)
 }
 
-func (sc SimpleClient)UpsertID_{{.Name}}(ctx context.Context, id interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
-	result, err = sc.cli.Database.Collection(Tbl{{.Name}}).UpsertId(ctx, id, update, opts...)
-	return
+func (sc SimpleClient)UpsertByObjID_{{.Name}}(ctx context.Context, objID interface{}, update interface{}, opts ...options.UpsertOptions) (result *qmgo.UpdateResult, err error) {
+	return sc.cli.Database.Collection(Tbl{{.Name}}).UpsertId(ctx, objID, update, opts...)
 }
 
 func (m {{.Name}}) Insert(ctx context.Context, opts ...options.InsertOneOptions) (result *qmgo.InsertOneResult, err error) {
@@ -217,12 +214,12 @@ func (m {{.Name}}) Upsert(ctx context.Context, selector interface{}, opts ...opt
 	return SC.cli.Database.Collection(Tbl{{.Name}}).Upsert(ctx, selector, m, opts...)
 }
 
-func (m {{.Name}}) UpdateByObjID(id string) (err error) {
-	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateId(context.Background(), id, bson.D{ {"$set", m} })
+func (m {{.Name}}) UpdateByObjID(ctx context.Context, opts ...opts.UpdateOptions) (err error) {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).UpdateId(context.Background(), m.ObjID, bson.D{{"$set", m}}, opts...)
 }
 
-func (m {{.Name}}) RemoveByID() error {
-	return SC.cli.Database.Collection(Tbl{{.Name}}).RemoveId(context.Background(), m.ID)
+func (m {{.Name}}) RemoveByObjID(ctx context.Context, opts ...opts.RemoveOptions) error {
+	return SC.cli.Database.Collection(Tbl{{.Name}}).RemoveId(context.Background(), m.ObjID, opts...)
 }
 {{end}}
 
