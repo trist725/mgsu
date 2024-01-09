@@ -646,12 +646,12 @@ func (m User) Upsert(ctx context.Context, selector interface{}, opts ...options.
 	return SC.cli.Database.Collection(TblUser).Upsert(ctx, selector, m, opts...)
 }
 
-func (m User) UpdateByObjID(ctx context.Context, opts ...opts.UpdateOptions) (err error) {
-	return SC.cli.Database.Collection(TblUser).UpdateId(context.Background(), m.ObjID, bson.D{{"$set", m}}, opts...)
+func (m User) UpdateByObjID(ctx context.Context, opts ...options.UpdateOptions) (err error) {
+	return SC.cli.Database.Collection(TblUser).UpdateId(ctx, m.ObjID, bson.D{{"$set", m}}, opts...)
 }
 
-func (m User) RemoveByObjID(ctx context.Context, opts ...opts.RemoveOptions) error {
-	return SC.cli.Database.Collection(TblUser).RemoveId(context.Background(), m.ObjID, opts...)
+func (m User) RemoveByObjID(ctx context.Context, opts ...options.RemoveOptions) error {
+	return SC.cli.Database.Collection(TblUser).RemoveId(ctx, m.ObjID, opts...)
 }
 
 func (m User) ToMsg(n *msg.User) *msg.User {
