@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/qiniu/qmgo v1.1.8
-	github.com/trist725/mgsu/pb/plugin v0.0.0-20240108074953-f2434616f8d8
+	github.com/trist725/mgsu/pb/plugin v0.0.0-20240108100616-1eacc21bafa6
 	go.mongodb.org/mongo-driver v1.12.1
 )
 

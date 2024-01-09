@@ -56,6 +56,8 @@ github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXl
 github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/trist725/mgsu/pb/plugin v0.0.0-20240108074953-f2434616f8d8 h1:hYGo5uy2byTefEt9XRtUkd2TdiOCGhNP6Mk6pLkYPPc=
 github.com/trist725/mgsu/pb/plugin v0.0.0-20240108074953-f2434616f8d8/go.mod h1:hHkMrgUt2YWElhzyT9eZjMzpw0mI2EeKpApSnUUxgWM=
+github.com/trist725/mgsu/pb/plugin v0.0.0-20240108100616-1eacc21bafa6 h1:Q6ESB2Hn/y2eSCv+MosV09KpYMhPnwOzuzpo4S1oNGU=
+github.com/trist725/mgsu/pb/plugin v0.0.0-20240108100616-1eacc21bafa6/go.mod h1:hHkMrgUt2YWElhzyT9eZjMzpw0mI2EeKpApSnUUxgWM=
 github.com/xdg-go/pbkdf2 v1.0.0 h1:Su7DPu48wXMwC3bs7MCNG+z4FhcyEuz5dlvchbq0B0c=
 github.com/xdg-go/pbkdf2 v1.0.0/go.mod h1:jrpuAogTd400dnrH08LKmI/xc1MbPOebTwRqcT5RDeI=
 github.com/xdg-go/scram v1.1.1/go.mod h1:RaEWvsqvNKKvBPvcKeFjrG2cJqOkHTiyTpzz23ni57g=
