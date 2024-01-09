@@ -95,6 +95,8 @@ type staticDataMeta struct {
 
 	Name       string
 	FieldMetas []fieldMeta
+	// 全局表数据
+	GlobalMetas []*globalMeta
 
 	///////////////////////////////////////////////////////////////////////
 	// 以下字段记录非自动生成代码
@@ -469,6 +471,23 @@ func (sdcg *staticDataCodeGenerator) generate() error {
 		// fmt.Println(sdm)
 
 		sdcg.StaticDataMetas = append(sdcg.StaticDataMetas, sdm)
+
+		if baseName == "global" {
+			for k, v := range dataSheet.Rows {
+				if k < 3 {
+					continue
+				}
+				if v.Cells[0].String() == "" {
+					break
+				}
+				g := newGlobalMeta()
+				g.ID, _ = v.Cells[0].Int64()
+				g.Value = v.Cells[2].String()
+				g.Name = v.Cells[1].String()
+				g.Desc = v.Cells[3].String()
+				sdm.GlobalMetas = append(sdm.GlobalMetas, g)
+			}
+		}
 
 		return nil
 	})
