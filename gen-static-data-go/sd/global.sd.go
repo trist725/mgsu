@@ -17,8 +17,8 @@ import "github.com/trist725/mgsu/util"
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 const (
-	C_Depose_Frag string = "5" // 普通品质分解获得碎片数
-
+	G_C_Depose_Frag string = "5" // 普通品质分解获得碎片数
+	G_C_xxx_Frag    string = "3" // 普通品质分解获得碎片数
 )
 
 type Global struct {

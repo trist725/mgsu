@@ -14,8 +14,8 @@ package sd
 {{if (eq .Name "Global") }}
 const (
 	{{range .GlobalMetas}}
-		{{.Name}} string = "{{.Value}}" // {{.Desc}}
-	{{end}}
+		G_{{.Name}} string = "{{.Value}}" // {{.Desc}}
+	{{- end}}
 )
 {{end}}
 
