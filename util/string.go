@@ -147,3 +147,263 @@ func StringToTime(s string) (time.Time, error) {
 func StringToBytes(s string) []byte {
 	return []byte(s)
 }
+
+func StringSliceToInt(s []string) ([]int, error) {
+	temp := make([]int, len(s))
+	for i, v := range s {
+		t, err := StringToInt(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToInt64(s []string) ([]int64, error) {
+	temp := make([]int64, len(s))
+	for i, v := range s {
+		t, err := StringToInt64(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToInt32(s []string) ([]int32, error) {
+	temp := make([]int32, len(s))
+	for i, v := range s {
+		t, err := StringToInt32(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToInt16(s []string) ([]int16, error) {
+	temp := make([]int16, len(s))
+	for i, v := range s {
+		t, err := StringToint16(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToInt8(s []string) ([]int8, error) {
+	temp := make([]int8, len(s))
+	for i, v := range s {
+		t, err := StringToInt8(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToUint(s []string) ([]uint, error) {
+	temp := make([]uint, len(s))
+	for i, v := range s {
+		t, err := StringToUint(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToUint64(s []string) ([]uint64, error) {
+	temp := make([]uint64, len(s))
+	for i, v := range s {
+		t, err := StringToUint64(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToUint32(s []string) ([]uint32, error) {
+	temp := make([]uint32, len(s))
+	for i, v := range s {
+		t, err := StringToUint32(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToUint16(s []string) ([]uint16, error) {
+	temp := make([]uint16, len(s))
+	for i, v := range s {
+		t, err := StringToUint16(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToUint8(s []string) ([]uint8, error) {
+	temp := make([]uint8, len(s))
+	for i, v := range s {
+		t, err := StringToUint8(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToFloat64(s []string) ([]float64, error) {
+	temp := make([]float64, len(s))
+	for i, v := range s {
+		t, err := StringToFloat64(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func stringSliceToFloat32(s []string) ([]float32, error) {
+	temp := make([]float32, len(s))
+	for i, v := range s {
+		t, err := StringToFloat32(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func StringSliceToBool(s []string) ([]bool, error) {
+	temp := make([]bool, len(s))
+	for i, v := range s {
+		t, err := StringToBool(v)
+		if err != nil {
+			return nil, err
+		}
+		temp[i] = t
+	}
+	return temp, nil
+}
+
+func IntSliceToString(s []int) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.Itoa(v)
+	}
+	return temp
+}
+
+func Int64SliceToString(s []int64) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatInt(v, 10)
+	}
+	return temp
+}
+
+func Int32SliceToString(s []int32) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatInt(int64(v), 10)
+	}
+	return temp
+}
+
+func Int16SliceToString(s []int16) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatInt(int64(v), 10)
+	}
+	return temp
+}
+
+func Int8SliceToString(s []int8) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatInt(int64(v), 10)
+	}
+	return temp
+}
+
+func UintSliceToString(s []uint) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatUint(uint64(v), 10)
+	}
+	return temp
+}
+
+func Uint64SliceToString(s []uint64) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatUint(v, 10)
+	}
+	return temp
+}
+
+func Uint32SliceToString(s []uint32) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatUint(uint64(v), 10)
+	}
+	return temp
+}
+
+func Uint16SliceToString(s []uint16) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatUint(uint64(v), 10)
+	}
+	return temp
+}
+
+func Uint8SliceToString(s []uint8) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatUint(uint64(v), 10)
+	}
+	return temp
+}
+
+func Float64SliceToString(s []float64) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatFloat(v, 'f', -1, 64)
+	}
+	return temp
+}
+
+func float32SliceToString(s []float32) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatFloat(float64(v), 'f', -1, 32)
+	}
+	return temp
+}
+
+func boolSliceToString(s []bool) []string {
+	temp := make([]string, len(s))
+	for i, v := range s {
+		temp[i] = strconv.FormatBool(v)
+	}
+	return temp
+}
