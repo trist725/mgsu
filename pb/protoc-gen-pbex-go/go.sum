@@ -58,10 +58,14 @@ github.com/trist725/mgsu/network v0.0.0-20200511073117-cfe989eec0db h1:8c5C+M/VZ
 github.com/trist725/mgsu/network v0.0.0-20200511073117-cfe989eec0db/go.mod h1:pJOb9U1s/fw0flO2rbcqrE1ZUx0BRctiq5Q7+4Xmpr0=
 github.com/trist725/mgsu/network v0.0.0-20230911084559-0c2f56d328fc h1:8LtSA7s88YnI3Q4YYwQoj7hs0AIM302e3iYDJImgpvU=
 github.com/trist725/mgsu/network v0.0.0-20230911084559-0c2f56d328fc/go.mod h1:t9Qi4GA8aB6XsamDa4DDMsmoUD2bPiq+StmhksZbS8g=
+github.com/trist725/mgsu/network v0.0.0-20240116072556-9fbce05e00e7 h1:LGt7j1mKUoZaJ7AP6tMYqGHc0UeYgvA9vxAmi7Euyx4=
+github.com/trist725/mgsu/network v0.0.0-20240116072556-9fbce05e00e7/go.mod h1:t9Qi4GA8aB6XsamDa4DDMsmoUD2bPiq+StmhksZbS8g=
 github.com/trist725/mgsu/pb/plugin v0.0.0-20200511073117-cfe989eec0db h1:/aRJjFB/bj2dnAcfdqQ868Rsmqx6BK5dmubYWYbXHyM=
 github.com/trist725/mgsu/pb/plugin v0.0.0-20200511073117-cfe989eec0db/go.mod h1:N5/mxFtXuPR8DfiexEemn+JZpm2AD4TLdAf9PaDpsrc=
 github.com/trist725/mgsu/pb/plugin v0.0.0-20230911084559-0c2f56d328fc h1:Q8qXpjY/8RpETk15POKZrbGnhiuJ8FY/FXn8Vvw5Mvg=
 github.com/trist725/mgsu/pb/plugin v0.0.0-20230911084559-0c2f56d328fc/go.mod h1:ZbWyUdyLMW+EJmkGXsaYHmEwisnMQEtwF52yv13qTMk=
+github.com/trist725/mgsu/pb/plugin v0.0.0-20240116072556-9fbce05e00e7 h1:eM9JbVT7BRDDfSgq97FeguSOtVWdpBgRYUUyYYvuJFs=
+github.com/trist725/mgsu/pb/plugin v0.0.0-20240116072556-9fbce05e00e7/go.mod h1:hHkMrgUt2YWElhzyT9eZjMzpw0mI2EeKpApSnUUxgWM=
 github.com/trist725/mgsu/util v0.0.0-20200423035946-dfa1f25dfaa0/go.mod h1:OJGU196y+to2DkbVAol0wALH58k8SPHzIWI437lquAk=
 github.com/trist725/mgsu/util v0.0.0-20200509033703-729ba4db1192/go.mod h1:OJGU196y+to2DkbVAol0wALH58k8SPHzIWI437lquAk=
 github.com/wendal/errors v0.0.0-20130201093226-f66c77a7882b/go.mod h1:Q12BUT7DqIlHRmgv3RskH+UCM/4eqVMgI0EMmlSpAXc=
