@@ -11,6 +11,13 @@ func TestHitProbability(t *testing.T) {
 		!HitProbability(100) {
 		t.Error("unexpected result")
 	}
+	count := 0
+	for i := 0; i < 10000; i++ {
+		if HitProbabilityThousands(uint16(16)) {
+			count++
+		}
+	}
+	t.Log(count)
 }
 
 func BenchmarkHitProbability(b *testing.B) {

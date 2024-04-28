@@ -13,7 +13,7 @@ const (
 	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
 )
 
-// 生成一定长度的随机字节数组
+// GenRandomByteArray 生成一定长度的随机字节数组
 func GenRandomByteArray(size int) []byte {
 	diceLock.Lock()
 	defer diceLock.Unlock()
@@ -34,7 +34,7 @@ func GenRandomByteArray(size int) []byte {
 	return b
 }
 
-// 生成一定长度的随机字符串
+// GenRandomString 生成一定长度的随机字符串
 func GenRandomString(size int) string {
 	return string(GenRandomByteArray(size))
 }
@@ -43,7 +43,7 @@ func GenRandomString(size int) string {
 var dice = rand.New(rand.NewSource(time.Now().UnixNano()))
 var diceLock = &sync.Mutex{}
 
-// 注意一下RandomXX函数族得到的是 [min, max)
+// RandomTimeDuration 注意一下RandomXX函数族得到的是 [min, max)
 func RandomTimeDuration(min time.Duration, max time.Duration) time.Duration {
 	if min == max {
 		return min
@@ -100,12 +100,26 @@ func RandomInt64(min int64, max int64) int64 {
 	return max + dice.Int63n(min-max)
 }
 
+// HitProbability 百分比概率
 func HitProbability(prob uint8) bool {
 	if prob > 100 || prob == 0 {
 		return false
 	}
 
 	if prob >= uint8(RandomInt(1, int(100+1))) {
+		return true
+	}
+
+	return false
+}
+
+// HitProbabilityThousands 万分比概率
+func HitProbabilityThousands(prob uint16) bool {
+	if prob > 10000 || prob == 0 {
+		return false
+	}
+
+	if prob >= uint16(RandomInt(1, 10000+1)) {
 		return true
 	}
 
