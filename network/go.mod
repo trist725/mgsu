@@ -9,21 +9,21 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/gorilla/websocket v1.5.1
 	github.com/json-iterator/go v1.1.12
-	github.com/trist725/mgsu/log v0.0.0-20240116072556-9fbce05e00e7
-	github.com/trist725/mgsu/util v0.0.0-20240116072556-9fbce05e00e7
+	github.com/trist725/mgsu/log v0.0.0-20240428084700-6b0657317e79
+	github.com/trist725/mgsu/util v0.0.0-20240428084700-6b0657317e79
 )
 
 require (
 	github.com/astaxie/beego v1.12.3 // indirect
-	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
-	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
-	github.com/ethereum/go-ethereum v1.13.10 // indirect
+	github.com/btcsuite/btcd/btcec/v2 v2.3.3 // indirect
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.3.0 // indirect
+	github.com/ethereum/go-ethereum v1.14.0 // indirect
 	github.com/holiman/uint256 v1.2.4 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/shiena/ansicolor v0.0.0-20230509054315-a9deabde6e02 // indirect
 	github.com/tealeg/xlsx v1.0.5 // indirect
-	golang.org/x/crypto v0.18.0 // indirect
-	golang.org/x/net v0.20.0 // indirect
-	golang.org/x/sys v0.16.0 // indirect
+	golang.org/x/crypto v0.22.0 // indirect
+	golang.org/x/net v0.24.0 // indirect
+	golang.org/x/sys v0.19.0 // indirect
 )

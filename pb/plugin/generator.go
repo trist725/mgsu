@@ -35,9 +35,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /*
-	The code generator for the plugin for the Google protocol buffer compiler.
-	It generates Go code from the protocol buffer description files read by the
-	main routine.
+The code generator for the plugin for the Google protocol buffer compiler.
+It generates Go code from the protocol buffer description files read by the
+main routine.
 */
 package pbplugin
 
@@ -1377,7 +1377,7 @@ func (g *Generator) GetComments(path string) (comments string) {
 		text := strings.TrimSuffix(loc.GetLeadingComments(), "\n")
 		comments = "//"
 		for i, line := range strings.Split(text, "\n") {
-			//comments += "// " + strings.TrimPrefix(line, " ")
+			// comments += "// " + strings.TrimPrefix(line, " ")
 			if i == 0 {
 				comments += strings.TrimPrefix(line, " ")
 			} else {
@@ -1428,16 +1428,16 @@ func (g *Generator) generateImports() {
 	// We almost always need a proto import.  Rather than computing when we
 	// do, which is tricky when there's a plugin, just import it and
 	// reference it later. The same argument applies to the fmt and math packages.
-	//if gogoproto.ImportsGoGoProto(g.file.FileDescriptorProto) {
+	// if gogoproto.ImportsGoGoProto(g.file.FileDescriptorProto) {
 	//	g.PrintImport(g.Pkg["proto"], g.ImportPrefix+"github.com/gogo/protobuf/proto")
 	//	if gogoproto.RegistersGolangProto(g.file.FileDescriptorProto) {
-	//		g.PrintImport(g.Pkg["golang_proto"], g.ImportPrefix+"github.com/golang/protobuf/proto")
+	//		g.PrintImport(g.Pkg["golang_proto"], g.ImportPrefix+"google.golang.org/protobuf/proto")
 	//	}
-	//} else {
-	//	g.PrintImport(g.Pkg["proto"], g.ImportPrefix+"github.com/golang/protobuf/proto")
-	//}
-	//g.PrintImport(g.Pkg["fmt"], "fmt")
-	//g.PrintImport(g.Pkg["math"], "math")
+	// } else {
+	//	g.PrintImport(g.Pkg["proto"], g.ImportPrefix+"google.golang.org/protobuf/proto")
+	// }
+	// g.PrintImport(g.Pkg["fmt"], "fmt")
+	// g.PrintImport(g.Pkg["math"], "math")
 
 	for i, s := range g.file.Dependency {
 		fd := g.fileByName(s)
@@ -1477,13 +1477,13 @@ func (g *Generator) generateImports() {
 		p.GenerateImports(g.file)
 		g.P()
 	}
-	//g.P("// Reference imports to suppress errors if they are not otherwise used.")
-	//g.P("var _ = ", g.Pkg["proto"], ".Marshal")
-	//if gogoproto.ImportsGoGoProto(g.file.FileDescriptorProto) && gogoproto.RegistersGolangProto(g.file.FileDescriptorProto) {
+	// g.P("// Reference imports to suppress errors if they are not otherwise used.")
+	// g.P("var _ = ", g.Pkg["proto"], ".Marshal")
+	// if gogoproto.ImportsGoGoProto(g.file.FileDescriptorProto) && gogoproto.RegistersGolangProto(g.file.FileDescriptorProto) {
 	//	g.P("var _ = ", g.Pkg["golang_proto"], ".Marshal")
-	//}
-	//g.P("var _ = ", g.Pkg["fmt"], ".Errorf")
-	//g.P("var _ = ", g.Pkg["math"], ".Inf")
+	// }
+	// g.P("var _ = ", g.Pkg["fmt"], ".Errorf")
+	// g.P("var _ = ", g.Pkg["math"], ".Inf")
 	for _, cimport := range g.customImports {
 		if cimport == "time" {
 			g.P("var _ = time.Kitchen")
@@ -1629,6 +1629,7 @@ func (g *Generator) generateEnum(enum *EnumDescriptor) {
 // The tag is a string like "varint,2,opt,name=fieldname,def=7" that
 // identifies details of the field for the protocol buffer marshaling and unmarshaling
 // code.  The fields are:
+//
 //	wire encoding
 //	protocol tag number
 //	opt,req,rep for optional, required, or repeated
@@ -1637,6 +1638,7 @@ func (g *Generator) generateEnum(enum *EnumDescriptor) {
 //	enum= the name of the enum type if it is an enum-typed field.
 //	proto3 if this field is in a proto3 message
 //	def= string representation of the default value, if any.
+//
 // The default value must be in a representation that can be used at run-time
 // to generate the default value. Thus bools become 0 and 1, for instance.
 func (g *Generator) goTag(message *Descriptor, field *descriptor.FieldDescriptorProto, wiretype string) string {
