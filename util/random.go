@@ -125,3 +125,17 @@ func HitProbabilityThousands(prob uint16) bool {
 
 	return false
 }
+
+// RandArrElemNoRepeat 随机从arr选count个位置不重复的元素
+// 空间复杂度O(1) 会改变arr元素顺序
+func RandArrElemNoRepeat[T any](arr []T, count int) (chosen []T) {
+	if count > len(arr) {
+		count = len(arr)
+	}
+	for i := 0; i < count; i++ {
+		rd := RandomInt(0, len(arr)-i)
+		chosen = append(chosen, arr[rd])
+		arr[rd], arr[len(arr)-i-1] = arr[len(arr)-i-1], arr[rd]
+	}
+	return chosen
+}

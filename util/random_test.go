@@ -33,3 +33,14 @@ func BenchmarkHitProbability(b *testing.B) {
 	fmt.Println("s:......", s)
 	fmt.Println("f:......", f)
 }
+
+func TestRandNoRepeat(t *testing.T) {
+	t.Log(RandArrElemNoRepeat([]int{0, 1, 2, 3, 4, 5, 6}, -100))
+	t.Log(RandArrElemNoRepeat([]int{0, 1, 2, 3, 4, 5, 6}, -1))
+	t.Log(RandArrElemNoRepeat([]int{0, 1, 2, 3, 4, 5, 6}, 0))
+	t.Log(RandArrElemNoRepeat([]int{0, 1, 2, 3, 4, 5, 6}, 1))
+	t.Log(RandArrElemNoRepeat([]int{0, 1, 2, 3, 4, 5, 6}, 2))
+	t.Log(RandArrElemNoRepeat([]int{0, 1, 2, 3, 4, 5, 6}, 3))
+	t.Log(RandArrElemNoRepeat([]int{0, 1, 2, 3, 4, 5, 6}, 7))
+	t.Log(RandArrElemNoRepeat([]int{0, 1, 2, 3, 4, 5, 6}, 99))
+}
