@@ -50,9 +50,9 @@ func TestTimeFunc(t *testing.T) {
 func TestMD5(t *testing.T) {
 	fixKey := "8aL3gmNw9bd77hRRc7sRgWSsPccxQGecybgyHFt7yfOj8LcEVcar4u2M75BebWpb"
 
-	i1 := 1 //RandomInt(1, 10000)
-	i2 := 2 //RandomInt(1, 10000)
-	//key := GenRandomString(64)
+	i1 := 1 // RandomInt(1, 10000)
+	i2 := 2 // RandomInt(1, 10000)
+	// key := GenRandomString(64)
 	log.Printf("md5 from MD5Sum=[%x]\n", MD5Sum([]byte(fmt.Sprintf("%d%d%s", i1, i2, fixKey))))
 	log.Printf("md5 from MD5Sumf=[%x]\n", MD5Sumf("%d%d%s", i1, i2, fixKey))
 }
@@ -98,4 +98,16 @@ func TestParseTimeStringInLocation(t *testing.T) {
 		return
 	}
 	fmt.Println(ti)
+}
+
+func TestGetFuncName(t *testing.T) {
+	t.Log(GetFuncName(1))
+	t.Log(GetFuncName(2))
+	t.Log(GetFuncName(3))
+	t.Log(GetFuncName(4))
+	t.Log(GetFuncName(0))
+	t.Log(GetFuncName(-1))
+	t.Log(GetFuncName(-2))
+	t.Log(GetFuncName(-3))
+	t.Log(GetFuncName(-100))
 }

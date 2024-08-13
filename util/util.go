@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"reflect"
+	"runtime"
 	"strings"
 	"syscall"
 )
@@ -29,7 +30,7 @@ func ReadLineFromConsole() (string, error) {
 	return text, nil
 }
 
-// 获取接口中存放的实例的类型名
+// GetTypeName 获取接口中存放的实例的类型名
 func GetTypeName(i interface{}) string {
 	if i == nil {
 		return ""
@@ -39,4 +40,17 @@ func GetTypeName(i interface{}) string {
 		rt = rt.Elem()
 	}
 	return rt.Name()
+}
+
+// GetFuncName 获取当前函数名
+// layer: 函数调用层数
+func GetFuncName(layer int) string {
+	pc, _, _, _ := runtime.Caller(layer)
+	name := runtime.FuncForPC(pc).Name()
+	split := strings.Split(name, ".")
+	if layer == 0 {
+		return name
+	} else {
+		return split[len(split)-1]
+	}
 }
