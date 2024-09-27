@@ -3,6 +3,12 @@
 
 package util
 
+import (
+	"os"
+	"runtime"
+	"syscall"
+)
+
 var stdErrFileHandler *os.File
 
 func RewriteStderrFile(path string) error {
