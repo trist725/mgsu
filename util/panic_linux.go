@@ -4,6 +4,7 @@
 package util
 
 import (
+	"fmt"
 	"os"
 	"runtime"
 	"syscall"
